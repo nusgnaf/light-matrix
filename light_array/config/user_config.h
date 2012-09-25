@@ -10,8 +10,8 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_USER_CONFIG_H_
-#define LIGHTMAT_USER_CONFIG_H_
+#ifndef LIGHTARR_USER_CONFIG_H_
+#define LIGHTARR_USER_CONFIG_H_
 
 
 #endif 

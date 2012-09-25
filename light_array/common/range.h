@@ -10,18 +10,18 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_RANGE_H_
-#define LIGHTMAT_RANGE_H_
+#ifndef LIGHTARR_RANGE_H_
+#define LIGHTARR_RANGE_H_
 
-#include <light_mat/core/basic_defs.h>
+#include <light_array/common/basic_defs.h>
 
-namespace lmat
+namespace larr
 {
 	template<class Derived>
 	class IRange
 	{
 	public:
-		LMAT_CRTP_REF
+		LARR_CRTP_REF
 	};
 
 
@@ -32,23 +32,23 @@ namespace lmat
 	class range : public IRange<range>
 	{
 	public:
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		range(const index_t i, const index_t n)
 		: m_begin(i), m_num(n)
 		{
 		}
 
-		LMAT_ENSURE_INLINE index_t begin_index() const
+		LARR_ENSURE_INLINE index_t begin_index() const
 		{
 			return m_begin;
 		}
 
-		LMAT_ENSURE_INLINE index_t end_index() const
+		LARR_ENSURE_INLINE index_t end_index() const
 		{
 			return m_begin + m_num;
 		}
 
-		LMAT_ENSURE_INLINE index_t num() const
+		LARR_ENSURE_INLINE index_t num() const
 		{
 			return m_num;
 		}
@@ -62,28 +62,28 @@ namespace lmat
 	class step_range : public IRange<step_range>
 	{
 	public:
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		step_range(const index_t i, const index_t n, const index_t s)
 		: m_begin(i), m_num(n), m_step(s)
 		{
 		}
 
-		LMAT_ENSURE_INLINE index_t begin_index() const
+		LARR_ENSURE_INLINE index_t begin_index() const
 		{
 			return m_begin;
 		}
 
-		LMAT_ENSURE_INLINE index_t end_index() const
+		LARR_ENSURE_INLINE index_t end_index() const
 		{
 			return m_begin + m_num * m_step;
 		}
 
-		LMAT_ENSURE_INLINE index_t num() const
+		LARR_ENSURE_INLINE index_t num() const
 		{
 			return m_num;
 		}
 
-		LMAT_ENSURE_INLINE index_t step() const
+		LARR_ENSURE_INLINE index_t step() const
 		{
 			return m_step;
 		}
@@ -109,13 +109,13 @@ namespace lmat
 	 *
 	 ********************************************/
 
-	LMAT_ENSURE_INLINE
+	LARR_ENSURE_INLINE
 	inline range colon(index_t a, index_t b)
 	{
 		return range(a, b-a);
 	}
 
-	LMAT_ENSURE_INLINE
+	LARR_ENSURE_INLINE
 	inline step_range colon(index_t a, index_t s, index_t b)
 	{
 		index_t n = a <= b ?

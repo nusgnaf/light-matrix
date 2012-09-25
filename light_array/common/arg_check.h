@@ -10,18 +10,18 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_ARG_CHECK_H_
-#define LIGHTMAT_ARG_CHECK_H_
+#ifndef LIGHTARR_ARG_CHECK_H_
+#define LIGHTARR_ARG_CHECK_H_
 
-#include <light_mat/core/lang_base.h>
+#include <light_array/common/lang_base.h>
 #include <exception>
 
-namespace lmat
+namespace larr
 {
 	class invalid_operation : public std::exception
 	{
 	public:
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		invalid_operation(const char *msg)
 		: m_msg(msg)
 		{
@@ -40,7 +40,7 @@ namespace lmat
 	class invalid_argument : public std::exception
 	{
 	public:
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		invalid_argument(const char *msg)
 		: m_msg(msg)
 		{
@@ -77,7 +77,7 @@ namespace lmat
 	// generic argument checking
 
 
-	LMAT_ENSURE_INLINE inline void check_arg(bool cond, const char* message)
+	LARR_ENSURE_INLINE inline void check_arg(bool cond, const char* message)
 	{
 		if (!cond)
 		{
@@ -85,7 +85,7 @@ namespace lmat
 		}
 	}
 
-	LMAT_ENSURE_INLINE inline void check_range(bool cond, const char *message)
+	LARR_ENSURE_INLINE inline void check_range(bool cond, const char *message)
 	{
 		if (!cond)
 		{
@@ -94,7 +94,7 @@ namespace lmat
 	}
 
 	template<typename T>
-	LMAT_ENSURE_INLINE inline const T& check_forward(const T& val, bool cond, const char *message)
+	LARR_ENSURE_INLINE inline const T& check_forward(const T& val, bool cond, const char *message)
 	{
 		check_arg(cond, message);
 		return val;
@@ -105,7 +105,7 @@ namespace lmat
 
 	template<typename T> struct conditional_enabled_value<true, T>
 	{
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		static const T& get(const T& v, const char *msg)
 		{
 			return v;
@@ -114,7 +114,7 @@ namespace lmat
 
 	template<typename T> struct conditional_enabled_value<false, T>
 	{
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		static const T& get(const T& v, const char *msg)
 		{
 			throw invalid_operation(msg);

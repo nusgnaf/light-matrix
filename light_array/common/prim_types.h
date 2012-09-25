@@ -13,27 +13,27 @@
 #ifndef LIGHTMAT_PRIM_TYPES_H_
 #define LIGHTMAT_PRIM_TYPES_H_
 
-#include <light_mat/config/config.h>
+#include <light_array/config/config.h>
 
 #include <cstddef>
 
-#ifdef LMAT_USE_C11_STDLIB
+#ifdef LARR_USE_C11_STDLIB
 #include <cstdint>
 #else
 #include <tr1/cstdint>
 #endif
 
-namespace lmat
+namespace larr
 {
-	using LMAT_TR1::int8_t;
-	using LMAT_TR1::int16_t;
-	using LMAT_TR1::int32_t;
-	using LMAT_TR1::int64_t;
+	using LARR_TR1::int8_t;
+	using LARR_TR1::int16_t;
+	using LARR_TR1::int32_t;
+	using LARR_TR1::int64_t;
 
-	using LMAT_TR1::uint8_t;
-	using LMAT_TR1::uint16_t;
-	using LMAT_TR1::uint32_t;
-	using LMAT_TR1::uint64_t;
+	using LARR_TR1::uint8_t;
+	using LARR_TR1::uint16_t;
+	using LARR_TR1::uint32_t;
+	using LARR_TR1::uint64_t;
 
 	using std::ptrdiff_t;
 	using std::size_t;

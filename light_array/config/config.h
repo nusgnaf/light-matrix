@@ -10,11 +10,11 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_CONFIG_H
-#define LIGHTMAT_CONFIG_H
+#ifndef LIGHTARR_CONFIG_H
+#define LIGHTARR_CONFIG_H
 
-#include <light_mat/config/user_config.h>
-#include <light_mat/config/platform_config.h>
+#include <light_array/config/user_config.h>
+#include <light_array/config/platform_config.h>
 
 #endif
 

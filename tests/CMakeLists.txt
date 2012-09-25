@@ -1,7 +1,7 @@
 # The CMakeLists file for Light-Matrix (Testing)
 
 cmake_minimum_required(VERSION 2.8)
-project(LightMatrix)
+project(LightArray)
 
 enable_testing()
 
@@ -29,20 +29,10 @@ set(TEST_CXX_FLAGS "${LANG_FLAGS} ${WARNING_FLAGS}")
 
 set(CMAKE_CXX_FLAGS "${TEST_CXX_FLAGS}")
 
-# Find third-party libraries
-
-set(CMAKE_MODULE_PATH "../cmake_modules" ${CMAKE_MODULE_PATH})
-
-find_package(MKL)
-
-if (NOT MKL_FOUND)
-    message(FATAL_ERROR "Intel MKL is not found")
-endif (NOT MKL_FOUND)
-
 
 # Header file groups (to be used as dependencies)
 
-set(INC ../light_mat)
+set(INC ../light_array)
 set(EXECUTABLE_OUTPUT_PATH bin)
 
 set(COMMON_BASIC_HS 
@@ -259,20 +249,10 @@ set(LMAT_TEST_NAMES
 	test_partial_reduce
 )
 
-set(LMAT_LINALG_TEST_NAMES
-    test_blasl1
-    test_gemv
-)
 	
 foreach(tname ${LMAT_TEST_NAMES})
 	target_link_libraries(${tname} test_main)
 endforeach(tname)	
-
-foreach(tname ${LMAT_LINALG_TEST_NAMES})
-    target_link_libraries(${tname} test_main
-        ${MKL_LIBRARY})
-endforeach(tname)
-
 
 # Add tests
 
@@ -280,7 +260,4 @@ foreach(tname ${LMAT_TEST_NAMES})
 	add_test(NAME ${tname} COMMAND ${tname})
 endforeach(tname)
 
-foreach(tname ${LMAT_LINALG_TEST_NAMES})
-	add_test(NAME ${tname} COMMAND ${tname})
-endforeach(tname)
 

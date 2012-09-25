@@ -10,63 +10,63 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_TYPE_TRAITS_H_
-#define LIGHTMAT_TYPE_TRAITS_H_
+#ifndef LIGHTARR_TYPE_TRAITS_H_
+#define LIGHTARR_TYPE_TRAITS_H_
 
-#include <light_mat/config/config.h>
+#include <light_array/config/config.h>
 
-#ifdef LMAT_USE_C11_STDLIB
+#ifdef LARR_USE_C11_STDLIB
 #include <type_traits>
 #else
 #include <tr1/type_traits>
 #endif
 
-namespace lmat
+namespace larr
 {
-	using LMAT_TR1::is_void;
-	using LMAT_TR1::is_integral;
-	using LMAT_TR1::is_floating_point;
-	using LMAT_TR1::is_array;
-	using LMAT_TR1::is_pointer;
-	using LMAT_TR1::is_reference;
-	using LMAT_TR1::is_member_function_pointer;
-	using LMAT_TR1::is_member_object_pointer;
-	using LMAT_TR1::is_enum;
-	using LMAT_TR1::is_union;
-	using LMAT_TR1::is_class;
-	using LMAT_TR1::is_function;
+	using LARR_TR1::is_void;
+	using LARR_TR1::is_integral;
+	using LARR_TR1::is_floating_point;
+	using LARR_TR1::is_array;
+	using LARR_TR1::is_pointer;
+	using LARR_TR1::is_reference;
+	using LARR_TR1::is_member_function_pointer;
+	using LARR_TR1::is_member_object_pointer;
+	using LARR_TR1::is_enum;
+	using LARR_TR1::is_union;
+	using LARR_TR1::is_class;
+	using LARR_TR1::is_function;
 
-	using LMAT_TR1::is_arithmetic;
-	using LMAT_TR1::is_fundamental;
-	using LMAT_TR1::is_object;
-	// using LMAT_TR1::is_scalar;
-	using LMAT_TR1::is_compound;
-	using LMAT_TR1::is_member_pointer;
+	using LARR_TR1::is_arithmetic;
+	using LARR_TR1::is_fundamental;
+	using LARR_TR1::is_object;
+	// using LARR_TR1::is_scalar;
+	using LARR_TR1::is_compound;
+	using LARR_TR1::is_member_pointer;
 
-	using LMAT_TR1::is_signed;
-	using LMAT_TR1::is_unsigned;
+	using LARR_TR1::is_signed;
+	using LARR_TR1::is_unsigned;
 
-	using LMAT_TR1::is_const;
-	using LMAT_TR1::is_volatile;
-	using LMAT_TR1::is_pod;
-	// using LMAT_TR1::is_empty;
-	using LMAT_TR1::is_polymorphic;
-	using LMAT_TR1::is_abstract;
+	using LARR_TR1::is_const;
+	using LARR_TR1::is_volatile;
+	using LARR_TR1::is_pod;
+	// using LARR_TR1::is_empty;
+	using LARR_TR1::is_polymorphic;
+	using LARR_TR1::is_abstract;
 
-	using LMAT_TR1::is_same;
-	using LMAT_TR1::is_base_of;
+	using LARR_TR1::is_same;
+	using LARR_TR1::is_base_of;
 
-	using LMAT_TR1::remove_const;
-	using LMAT_TR1::remove_volatile;
-	using LMAT_TR1::remove_cv;
-	using LMAT_TR1::remove_pointer;
-	using LMAT_TR1::remove_reference;
+	using LARR_TR1::remove_const;
+	using LARR_TR1::remove_volatile;
+	using LARR_TR1::remove_cv;
+	using LARR_TR1::remove_pointer;
+	using LARR_TR1::remove_reference;
 
-	using LMAT_TR1::add_const;
-	using LMAT_TR1::add_volatile;
-	using LMAT_TR1::add_cv;
+	using LARR_TR1::add_const;
+	using LARR_TR1::add_volatile;
+	using LARR_TR1::add_cv;
 
-	using LMAT_TR1::alignment_of;
+	using LARR_TR1::alignment_of;
 
 
 	template<typename S, typename T>

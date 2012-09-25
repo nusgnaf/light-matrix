@@ -1,7 +1,7 @@
 /**
- * @file array.h
+ * @file block.h
  *
- * Array classes
+ * Memory block classes
  *
  * @author Dahua Lin
  */
@@ -10,21 +10,21 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_ARRAY_H_
-#define LIGHTMAT_ARRAY_H_
+#ifndef LIGHTARR_BLOCK_H_
+#define LIGHTARR_BLOCK_H_
 
-#include <light_mat/core/mem_op.h>
-#include <light_mat/core/mem_alloc.h>
+#include <light_array/common/mem_op.h>
+#include <light_array/common/mem_alloc.h>
 
 #include <algorithm>
 
-namespace lmat
+namespace larr
 {
 	/**
-	 * @brief The interface for arrays.
+	 * @brief The interface for blocks.
 	 */
 	template<class Derived, typename T>
-	class IArray
+	class IBlock
 	{
 	public:
 		typedef T value_type;
@@ -39,45 +39,45 @@ namespace lmat
 
 		typedef index_t index_type;
 
-		LMAT_CRTP_REF
+		LARR_CRTP_REF
 
 	public:
-		LMAT_ENSURE_INLINE size_type size() const
+		LARR_ENSURE_INLINE size_type size() const
 		{
 			return (size_type)(derived().nelems());
 		}
 
-		LMAT_ENSURE_INLINE index_type nelems() const
+		LARR_ENSURE_INLINE index_type nelems() const
 		{
 			return derived().nelems();
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_begin() const
+		LARR_ENSURE_INLINE const_pointer ptr_begin() const
 		{
 			return derived().ptr_begin();
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_begin()
+		LARR_ENSURE_INLINE pointer ptr_begin()
 		{
 			return derived().ptr_begin();
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_end() const
+		LARR_ENSURE_INLINE const_pointer ptr_end() const
 		{
 			return derived().ptr_end();
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_end()
+		LARR_ENSURE_INLINE pointer ptr_end()
 		{
 			return derived().ptr_end();
 		}
 
-		LMAT_ENSURE_INLINE const_reference operator[] (const index_type i) const
+		LARR_ENSURE_INLINE const_reference operator[] (const index_type i) const
 		{
 			return derived().operator[](i);
 		}
 
-		LMAT_ENSURE_INLINE reference operator[] (const index_type i)
+		LARR_ENSURE_INLINE reference operator[] (const index_type i)
 		{
 			return derived().operator[](i);
 		}
@@ -85,60 +85,60 @@ namespace lmat
 	}; // end class IBlock
 
 
-	// Operations on arrays
+	// Operations on blocks
 
 	template<typename T, class Derived>
-	LMAT_ENSURE_INLINE
-	inline void copy(const T* src, IArray<Derived, T>& a)
+	LARR_ENSURE_INLINE
+	inline void copy(const T* src, IBlock<Derived, T>& a)
 	{
 		copy_mem(a.nelems(), src, a.ptr_begin());
 	}
 
 	template<typename T, class Derived>
-	LMAT_ENSURE_INLINE
-	void copy(const IArray<Derived, T>& a, T* dst)
+	LARR_ENSURE_INLINE
+	void copy(const IBlock<Derived, T>& a, T* dst)
 	{
 		copy_mem(a.nelems(), a.ptr_begin(), dst);
 	}
 
 	template<typename T, class Derived>
-	LMAT_ENSURE_INLINE
-	void fill(IArray<Derived, T>& a, const T& v)
+	LARR_ENSURE_INLINE
+	void fill(IBlock<Derived, T>& a, const T& v)
 	{
 		fill_mem(a.nelems(), a.ptr_begin(), v);
 	}
 
 	template<typename T, class Derived>
-	LMAT_ENSURE_INLINE
-	void zero(IArray<Derived, T>& a)
+	LARR_ENSURE_INLINE
+	void zero(IBlock<Derived, T>& a)
 	{
 		zero_mem(a.nelems(), a.ptr_begin());
 	}
 
 	template<typename T, class LDerived, class RDerived>
-	LMAT_ENSURE_INLINE
-	inline bool operator == (const IArray<LDerived, T>& a, const IArray<RDerived, T>& b)
+	LARR_ENSURE_INLINE
+	inline bool operator == (const IBlock<LDerived, T>& a, const IBlock<RDerived, T>& b)
 	{
 		return a.nelems() == b.nelems() && mem_equal(a.nelems(), a.ptr_begin(), b.ptr_begin());
 	}
 
 	template<typename T, class LDerived, class RDerived>
-	LMAT_ENSURE_INLINE
-	inline bool operator != (const IArray<LDerived, T>& a, const IArray<RDerived, T>& b)
+	LARR_ENSURE_INLINE
+	inline bool operator != (const IBlock<LDerived, T>& a, const IBlock<RDerived, T>& b)
 	{
 		return !(a == b);
 	}
 
 	template<typename T, class Derived>
-	LMAT_ENSURE_INLINE
-	inline bool elems_equal(const IArray<Derived, T>& B, const T& v)
+	LARR_ENSURE_INLINE
+	inline bool elems_equal(const IBlock<Derived, T>& B, const T& v)
 	{
 		return mem_equal(B.nelems(), B.ptr_begin(), v);
 	}
 
 	template<typename T, class Derived>
-	LMAT_ENSURE_INLINE
-	inline bool elems_equal(const IArray<Derived, T>& B, const T* r)
+	LARR_ENSURE_INLINE
+	inline bool elems_equal(const IBlock<Derived, T>& B, const T* r)
 	{
 		return mem_equal(B.nelems(), B.ptr_begin(), r);
 	}
@@ -146,12 +146,12 @@ namespace lmat
 
     /********************************************
      *
-     *   Dynamic array
+     *   Dynamic block
      *
      ********************************************/
 
 	template<typename T, typename Allocator=aligned_allocator<T> >
-	class darray : public IArray<darray<T, Allocator>,  T>
+	class dblock : public IBlock<dblock<T, Allocator>,  T>
 	{
 	public:
 		typedef T value_type;
@@ -168,24 +168,24 @@ namespace lmat
 		typedef index_t index_type;
 
 	public:
-		LMAT_ENSURE_INLINE
-		explicit darray(const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		explicit dblock(const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(0)
-		, m_ptr(LMAT_NULL)
+		, m_ptr(LARR_NULL)
 		{
 		}
 
-		LMAT_ENSURE_INLINE
-		explicit darray(index_type len, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		explicit dblock(index_type len, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(len)
 		, m_ptr(alloc(len))
 		{
 		}
 
-		LMAT_ENSURE_INLINE
-		darray(index_type len, const value_type& v, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		dblock(index_type len, const value_type& v, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(len)
 		, m_ptr(alloc(len))
@@ -193,8 +193,8 @@ namespace lmat
 			fill_mem(len, m_ptr, v);
 		}
 
-		LMAT_ENSURE_INLINE
-		darray(index_type len, const_pointer src, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		dblock(index_type len, const_pointer src, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(len)
 		, m_ptr(alloc(len))
@@ -202,8 +202,8 @@ namespace lmat
 			copy_mem(m_len, src, m_ptr);
 		}
 
-		LMAT_ENSURE_INLINE
-		darray(const darray& s, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		dblock(const dblock& s, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(s.nelems())
 		, m_ptr(alloc(m_len))
@@ -212,8 +212,8 @@ namespace lmat
 		}
 
 		template<class OtherDerived>
-		LMAT_ENSURE_INLINE
-		darray(const IArray<OtherDerived, T>& s, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		dblock(const IBlock<OtherDerived, T>& s, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(s.nelems())
 		, m_ptr(alloc(m_len))
@@ -221,15 +221,15 @@ namespace lmat
 			copy_mem(m_len, s.ptr_begin(), m_ptr);
 		}
 
-		LMAT_ENSURE_INLINE
-		~darray()
+		LARR_ENSURE_INLINE
+		~dblock()
 		{
 			dealloc(m_ptr);
-			m_ptr = LMAT_NULL;  // make sure that it alarms when access after destructed
+			m_ptr = LARR_NULL;  // make sure that it alarms when access after destructed
 		}
 
-		LMAT_ENSURE_INLINE
-		void swap(darray& r)
+		LARR_ENSURE_INLINE
+		void swap(dblock& r)
 		{
 			using std::swap;
 
@@ -238,28 +238,28 @@ namespace lmat
 			swap(m_ptr, r.m_ptr);
 		}
 
-		LMAT_ENSURE_INLINE
-		darray& operator = (const darray& r)
+		LARR_ENSURE_INLINE
+		dblock& operator = (const dblock& r)
 		{
 			if (this != &r) assign(r);
 			return *this;
 		}
 
 		template<class OtherDerived>
-		LMAT_ENSURE_INLINE
-		darray& operator = (const IArray<OtherDerived, T>& r)
+		LARR_ENSURE_INLINE
+		dblock& operator = (const IBlock<OtherDerived, T>& r)
 		{
 			assign(r);
 			return *this;
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		const allocator_type& get_allocator() const
 		{
 			return m_allocator;
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		void resize(index_type n)
 		{
 			if (n != this->nelems())
@@ -269,43 +269,43 @@ namespace lmat
 		}
 
 	public:
-		LMAT_ENSURE_INLINE size_type size() const
+		LARR_ENSURE_INLINE size_type size() const
 		{
 			return static_cast<size_type>(m_len);
 		}
 
-		LMAT_ENSURE_INLINE index_type nelems() const
+		LARR_ENSURE_INLINE index_type nelems() const
 		{
 			return m_len;
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_begin() const
+		LARR_ENSURE_INLINE const_pointer ptr_begin() const
 		{
 			return m_ptr;
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_begin()
+		LARR_ENSURE_INLINE pointer ptr_begin()
 		{
 			return m_ptr;
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_end() const
+		LARR_ENSURE_INLINE const_pointer ptr_end() const
 		{
 			return m_ptr + m_len;
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_end()
+		LARR_ENSURE_INLINE pointer ptr_end()
 		{
 			return m_ptr + m_len;
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		const_reference operator[] (const index_type i) const
 		{
 			return m_ptr[i];
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		reference operator[] (const index_type i)
 		{
 			return m_ptr[i];
@@ -313,30 +313,30 @@ namespace lmat
 
 
 	private:
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		pointer alloc(index_type n)
 		{
-			return n > 0 ? m_allocator.allocate(size_type(n)) : LMAT_NULL;
+			return n > 0 ? m_allocator.allocate(size_type(n)) : LARR_NULL;
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		void dealloc(pointer p)
 		{
 			if (m_ptr) m_allocator.deallocate(p, (size_type)m_len);
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		void reset_size(index_type n)
 		{
-			pointer p = n > 0 ? m_allocator.allocate(size_type(n)) : LMAT_NULL;
+			pointer p = n > 0 ? m_allocator.allocate(size_type(n)) : LARR_NULL;
 			dealloc(m_ptr);
 			m_ptr = p;
 			m_len = n;
 		}
 
 		template<class OtherDerived>
-		LMAT_ENSURE_INLINE
-		void assign(const IArray<OtherDerived, T>& r)
+		LARR_ENSURE_INLINE
+		void assign(const IBlock<OtherDerived, T>& r)
 		{
 			if (nelems() == r.nelems())  // no need to re-allocate memory
 			{
@@ -344,7 +344,7 @@ namespace lmat
 			}
 			else
 			{
-				darray tmp(r);
+				dblock tmp(r);
 				swap(tmp);
 			}
 		}
@@ -354,12 +354,12 @@ namespace lmat
 		index_type m_len;
 		pointer m_ptr;
 
-	}; // end class darray
+	}; // end class dblock
 
 
 	template<typename T, class Allocator>
-	LMAT_ENSURE_INLINE
-	void swap(darray<T, Allocator>& a, darray<T, Allocator>& b)
+	LARR_ENSURE_INLINE
+	void swap(dblock<T, Allocator>& a, dblock<T, Allocator>& b)
 	{
 		a.swap(b);
 	}
@@ -367,12 +367,12 @@ namespace lmat
 
     /********************************************
      *
-     *   Scoped Array
+     *   Scoped Block
      *
      ********************************************/
 
 	template<typename T, typename Allocator=aligned_allocator<T> >
-	class scoped_array : public IArray<scoped_array<T, Allocator>, T>, private noncopyable
+	class scoped_block : public IBlock<scoped_block<T, Allocator>, T>, private noncopyable
 	{
 	public:
 		typedef T value_type;
@@ -389,16 +389,16 @@ namespace lmat
 		typedef index_t index_type;
 
 	public:
-		LMAT_ENSURE_INLINE
-		explicit scoped_array(index_type len, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		explicit scoped_block(index_type len, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(len)
 		, m_ptr(alloc(len))
 		{
 		}
 
-		LMAT_ENSURE_INLINE
-		scoped_array(index_type len, const value_type& v, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		scoped_block(index_type len, const value_type& v, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(len)
 		, m_ptr(alloc(len))
@@ -406,8 +406,8 @@ namespace lmat
 			fill_mem(len, m_ptr, v);
 		}
 
-		LMAT_ENSURE_INLINE
-		scoped_array(index_type len, const_pointer src, const allocator_type& allocator = allocator_type())
+		LARR_ENSURE_INLINE
+		scoped_block(index_type len, const_pointer src, const allocator_type& allocator = allocator_type())
 		: m_allocator(allocator)
 		, m_len(len)
 		, m_ptr(alloc(len))
@@ -415,69 +415,69 @@ namespace lmat
 			copy_mem(len, src, m_ptr);
 		}
 
-		LMAT_ENSURE_INLINE
-		~scoped_array()
+		LARR_ENSURE_INLINE
+		~scoped_block()
 		{
 			dealloc(m_ptr);
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		const allocator_type& get_allocator() const
 		{
 			return m_allocator;
 		}
 
 	public:
-		LMAT_ENSURE_INLINE size_type size() const
+		LARR_ENSURE_INLINE size_type size() const
 		{
 			return static_cast<size_type>(m_len);
 		}
 
-		LMAT_ENSURE_INLINE index_type nelems() const
+		LARR_ENSURE_INLINE index_type nelems() const
 		{
 			return m_len;
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_begin() const
+		LARR_ENSURE_INLINE const_pointer ptr_begin() const
 		{
 			return m_ptr;
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_begin()
+		LARR_ENSURE_INLINE pointer ptr_begin()
 		{
 			return m_ptr;
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_end() const
+		LARR_ENSURE_INLINE const_pointer ptr_end() const
 		{
 			return m_ptr + m_len;
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_end()
+		LARR_ENSURE_INLINE pointer ptr_end()
 		{
 			return m_ptr + m_len;
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		const_reference operator[] (const index_type i) const
 		{
 			return m_ptr[i];
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		reference operator[] (const index_type i)
 		{
 			return m_ptr[i];
 		}
 
 	private:
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		pointer alloc(index_type n)
 		{
-			return n > 0 ? m_allocator.allocate(size_type(n)) : LMAT_NULL;
+			return n > 0 ? m_allocator.allocate(size_type(n)) : LARR_NULL;
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		void dealloc(pointer p)
 		{
 			if (m_ptr) m_allocator.deallocate(p, (size_type)m_len);
@@ -488,18 +488,18 @@ namespace lmat
 		index_type m_len;
 		pointer m_ptr;
 
-	}; // end class scoped_array
+	}; // end class scoped_block
 
 
 
     /********************************************
      *
-     *   Static Array
+     *   Static Block
      *
      ********************************************/
 
 	template<typename T, int N>
-	class sarray : public IArray<sarray<T, N>, T>
+	class sblock : public IBlock<sblock<T, N>, T>
 	{
 	public:
 		typedef T value_type;
@@ -515,38 +515,38 @@ namespace lmat
 		typedef index_t index_type;
 
 	public:
-		LMAT_ENSURE_INLINE
-		explicit sarray()
+		LARR_ENSURE_INLINE
+		explicit sblock()
 		{
 		}
 
-		LMAT_ENSURE_INLINE
-		explicit sarray(const value_type& v)
+		LARR_ENSURE_INLINE
+		explicit sblock(const value_type& v)
 		{
 			fill_mem(N, m_arr, v);
 		}
 
-		LMAT_ENSURE_INLINE
-		explicit sarray(const_pointer src)
+		LARR_ENSURE_INLINE
+		explicit sblock(const_pointer src)
 		{
 			copy_mem(N, src, m_arr);
 		}
 
-		LMAT_ENSURE_INLINE
-		sarray(const sarray& src)
+		LARR_ENSURE_INLINE
+		sblock(const sblock& src)
 		{
 			copy_mem(N, src.m_arr, m_arr);
 		}
 
 		template<class OtherDerived>
-		LMAT_ENSURE_INLINE
-		sarray(const IArray<OtherDerived, T>& src)
+		LARR_ENSURE_INLINE
+		sblock(const IBlock<OtherDerived, T>& src)
 		{
 			copy_mem(N, src.ptr_begin(), m_arr);
 		}
 
-		LMAT_ENSURE_INLINE
-		sarray& operator = (const sarray& src)
+		LARR_ENSURE_INLINE
+		sblock& operator = (const sblock& src)
 		{
 			if (this != &src)
 			{
@@ -556,15 +556,15 @@ namespace lmat
 		}
 
 		template<class OtherDerived>
-		LMAT_ENSURE_INLINE
-		sarray& operator = (const IArray<OtherDerived, T>& src)
+		LARR_ENSURE_INLINE
+		sblock& operator = (const IBlock<OtherDerived, T>& src)
 		{
 			copy_mem(N, src.ptr_begin(), m_arr);
 			return *this;
 		}
 
-		LMAT_ENSURE_INLINE
-		void swap(sarray& r)
+		LARR_ENSURE_INLINE
+		void swap(sblock& r)
 		{
 			T tmp[N];
 			copy_mem(N, m_arr, tmp);
@@ -573,43 +573,43 @@ namespace lmat
 		}
 
 	public:
-		LMAT_ENSURE_INLINE size_type size() const
+		LARR_ENSURE_INLINE size_type size() const
 		{
 			return static_cast<size_t>(N);
 		}
 
-		LMAT_ENSURE_INLINE index_type nelems() const
+		LARR_ENSURE_INLINE index_type nelems() const
 		{
 			return N;
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_begin() const
+		LARR_ENSURE_INLINE const_pointer ptr_begin() const
 		{
 			return m_arr;
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_begin()
+		LARR_ENSURE_INLINE pointer ptr_begin()
 		{
 			return m_arr;
 		}
 
-		LMAT_ENSURE_INLINE const_pointer ptr_end() const
+		LARR_ENSURE_INLINE const_pointer ptr_end() const
 		{
 			return m_arr + N;
 		}
 
-		LMAT_ENSURE_INLINE pointer ptr_end()
+		LARR_ENSURE_INLINE pointer ptr_end()
 		{
 			return m_arr + N;
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		const_reference operator[] (index_type i) const
 		{
 			return m_arr[i];
 		}
 
-		LMAT_ENSURE_INLINE
+		LARR_ENSURE_INLINE
 		reference operator[] (index_type i)
 		{
 			return m_arr[i];
@@ -618,11 +618,11 @@ namespace lmat
 	private:
 		T m_arr[N];
 
-	}; // end class sarray
+	}; // end class sblock
 
 	template<typename T, int N>
-	LMAT_ENSURE_INLINE
-	void swap(sarray<T, N>& a, sarray<T, N>& b)
+	LARR_ENSURE_INLINE
+	void swap(sblock<T, N>& a, sblock<T, N>& b)
 	{
 		a.swap(b);
 	}

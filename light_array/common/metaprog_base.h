@@ -10,12 +10,12 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_METAPROG_BASE_H_
-#define LIGHTMAT_METAPROG_BASE_H_
+#ifndef LIGHTARR_METAPROG_BASE_H_
+#define LIGHTARR_METAPROG_BASE_H_
 
-#include <light_mat/config/config.h>
+#include <light_array/config/config.h>
 
-namespace lmat
+namespace larr
 {
 	struct nil_type { };
 
