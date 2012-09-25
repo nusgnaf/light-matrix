@@ -17,7 +17,7 @@
 #include <string>
 #include <sstream>
 
-namespace lmat { namespace test {
+namespace larr { namespace test {
 
 	class simple_case : public ltest::test_case
 	{
@@ -84,20 +84,20 @@ namespace lmat { namespace test {
 
 
 #define BEGIN_MAIN_SUITE \
-	ltest::test_suite lmat_main_suite( "Main" ); \
-	void lmat_add_test_packs() {
+	ltest::test_suite larr_main_suite( "Main" ); \
+	void larr_add_test_packs() {
 
 #define END_MAIN_SUITE }
 
-#define ADD_TPACK( pname ) lmat_main_suite.add( create_tpack_##pname() );
+#define ADD_TPACK( pname ) larr_main_suite.add( create_tpack_##pname() );
 
 
 #define TCASE_CLASS( pname, tname ) pname##_##tname##_tests
 
 #define SIMPLE_CASE( pname, tname ) \
-	class TCASE_CLASS(pname, tname) : public lmat::test::simple_case { \
+	class TCASE_CLASS(pname, tname) : public larr::test::simple_case { \
 	public: \
-		TCASE_CLASS(pname, tname)() : lmat::test::simple_case( #tname ) { } \
+		TCASE_CLASS(pname, tname)() : larr::test::simple_case( #tname ) { } \
 		virtual ~TCASE_CLASS(pname, tname)() { } \
 		virtual void run(); \
 	}; \
@@ -108,9 +108,9 @@ namespace lmat { namespace test {
 
 #define N_CASE( pname, tname ) \
 	template<int N> \
-	class TCASE_CLASS(pname, tname) : public lmat::test::N_case<N> { \
+	class TCASE_CLASS(pname, tname) : public larr::test::N_case<N> { \
 	public: \
-		TCASE_CLASS(pname, tname)() : lmat::test::N_case<N>( #tname ) { } \
+		TCASE_CLASS(pname, tname)() : larr::test::N_case<N>( #tname ) { } \
 		virtual ~TCASE_CLASS(pname, tname)() { } \
 		virtual void run(); \
 	}; \
@@ -123,9 +123,9 @@ namespace lmat { namespace test {
 
 #define MN_CASE( pname, tname ) \
 	template<int M, int N> \
-	class TCASE_CLASS(pname, tname) : public lmat::test::MN_case<M, N> { \
+	class TCASE_CLASS(pname, tname) : public larr::test::MN_case<M, N> { \
 	public: \
-		TCASE_CLASS(pname, tname)() : lmat::test::MN_case<M, N>( #tname ) { } \
+		TCASE_CLASS(pname, tname)() : larr::test::MN_case<M, N>( #tname ) { } \
 		virtual ~TCASE_CLASS(pname, tname)() { } \
 		virtual void run(); \
 	}; \

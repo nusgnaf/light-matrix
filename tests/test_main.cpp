@@ -14,14 +14,14 @@
 
 using namespace ltest;
 
-extern void lmat_add_test_packs();
-extern ltest::test_suite lmat_main_suite;
+extern void larr_add_test_packs();
+extern ltest::test_suite larr_main_suite;
 
 int main(int argc, char *argv[])
 {
-	::lmat_add_test_packs();
+	::larr_add_test_packs();
 
-	if (std_test_main(lmat_main_suite))
+	if (std_test_main(larr_main_suite))
 	{
 		return 0;
 	}

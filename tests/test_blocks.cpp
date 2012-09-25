@@ -8,34 +8,33 @@
 
 #include "test_base.h"
 
-#include <light_mat/core/array.h>
+#include <light_array/common/block.h>
 #include "mon_alloc.h"
 
-using namespace lmat;
-using namespace lmat::test;
+using namespace larr;
+using namespace larr::test;
 
 // explicit instantiation
 
-template class lmat::darray<double, aligned_allocator<double> >;
-template class lmat::scoped_array<double, aligned_allocator<double> >;
-template class lmat::sarray<double, 4>;
+template class larr::dblock<double, aligned_allocator<double> >;
+template class larr::scoped_block<double, aligned_allocator<double> >;
+template class larr::sblock<double, 4>;
 
+typedef class larr::dblock<int, monitored_allocator<int> > blk_t;
+typedef class larr::scoped_block<int, monitored_allocator<int> > scblk_t;
 
-typedef class lmat::darray<int, monitored_allocator<int> > arr_t;
-typedef class lmat::scoped_array<int, monitored_allocator<int> > scarr_t;
-
-lmat::test::memory_allocation_monitor lmat::test::global_memory_allocation_monitor;
+larr::test::memory_allocation_monitor larr::test::global_memory_allocation_monitor;
 
 #define ASSERT_PENDING(k) ASSERT_EQ(k, global_memory_allocation_monitor.num_pending_sections() )
 
 #define ASSERT_NO_PENDING ASSERT_FALSE( global_memory_allocation_monitor.has_pending() );
 
-SIMPLE_CASE( darray, construct )
+SIMPLE_CASE( dblock, construct )
 {
 	ASSERT_NO_PENDING
 
 	{
-		arr_t a0;
+		blk_t a0;
 		ASSERT_PENDING( 0 );
 
 		ASSERT_EQ( a0.nelems(), 0 );
@@ -43,7 +42,7 @@ SIMPLE_CASE( darray, construct )
 		ASSERT_EQ( a0.ptr_end(), 0 );
 
 		const index_t n = 5;
-		arr_t a1(n);
+		blk_t a1(n);
 		ASSERT_PENDING( 1 );
 
 		ASSERT_EQ( a1.nelems(), n );
@@ -51,7 +50,7 @@ SIMPLE_CASE( darray, construct )
 		ASSERT_EQ( a1.ptr_end(), a1.ptr_begin() + n );
 
 		const int src[n] = {3, 4, 5, 6, 7};
-		arr_t a2(n, src);
+		blk_t a2(n, src);
 		ASSERT_PENDING( 2 );
 
 		ASSERT_EQ( a2.nelems(), n );
@@ -63,7 +62,7 @@ SIMPLE_CASE( darray, construct )
 
 		int v = 8;
 		const int csrc[n] = {v, v, v, v, v};
-		arr_t a3(n, v);
+		blk_t a3(n, v);
 		ASSERT_PENDING( 3 );
 
 		ASSERT_EQ( a3.nelems(), n );
@@ -76,7 +75,7 @@ SIMPLE_CASE( darray, construct )
 	ASSERT_NO_PENDING
 }
 
-SIMPLE_CASE( darray, copy_and_assign )
+SIMPLE_CASE( dblock, copy_and_assign )
 {
 	ASSERT_NO_PENDING
 
@@ -85,7 +84,7 @@ SIMPLE_CASE( darray, copy_and_assign )
 		const index_t n2 = 3;
 		const int src[n] = {3, 4, 5, 6, 7};
 
-		arr_t a1(n, src);
+		blk_t a1(n, src);
 		ASSERT_PENDING( 1 );
 
 		ASSERT_EQ( a1.nelems(), n );
@@ -93,7 +92,7 @@ SIMPLE_CASE( darray, copy_and_assign )
 
 		ASSERT_VEC_EQ( n, a1, src );
 
-		arr_t a2(a1);
+		blk_t a2(a1);
 		ASSERT_PENDING( 2 );
 
 		ASSERT_EQ( a2.nelems(), n );
@@ -102,7 +101,7 @@ SIMPLE_CASE( darray, copy_and_assign )
 
 		ASSERT_VEC_EQ( n, a2, src );
 
-		arr_t a3;
+		blk_t a3;
 		ASSERT_PENDING( 2 );
 
 		a3 = a1;
@@ -114,7 +113,7 @@ SIMPLE_CASE( darray, copy_and_assign )
 
 		ASSERT_VEC_EQ( n, a3, src );
 
-		arr_t a4(n);
+		blk_t a4(n);
 		ASSERT_PENDING( 4 );
 		const int *p4_0 = a4.ptr_begin();
 
@@ -126,7 +125,7 @@ SIMPLE_CASE( darray, copy_and_assign )
 
 		ASSERT_VEC_EQ( n, a4, src );
 
-		arr_t a5(n2);
+		blk_t a5(n2);
 		ASSERT_PENDING( 5 );
 
 		a5 = a1;
@@ -143,7 +142,7 @@ SIMPLE_CASE( darray, copy_and_assign )
 }
 
 
-SIMPLE_CASE( darray, swap )
+SIMPLE_CASE( dblock, swap )
 {
 	ASSERT_NO_PENDING
 
@@ -154,8 +153,8 @@ SIMPLE_CASE( darray, swap )
 		const int src1[n1] = {3, 4, 5, 6, 7};
 		const int src2[n2] = {9, 8, 7};
 
-		arr_t a0;
-		arr_t a1(n1, src1);
+		blk_t a0;
+		blk_t a1(n1, src1);
 		const int *pa1 = a1.ptr_begin();
 
 		ASSERT_PENDING(1);
@@ -173,7 +172,7 @@ SIMPLE_CASE( darray, swap )
 		ASSERT_EQ( a1.nelems(), 0 );
 		ASSERT_EQ( a1.ptr_begin(), 0 );
 
-		arr_t a2(n2, src2);
+		blk_t a2(n2, src2);
 		const int *pa2 = a2.ptr_begin();
 
 		ASSERT_PENDING(2);
@@ -195,13 +194,13 @@ SIMPLE_CASE( darray, swap )
 }
 
 
-SIMPLE_CASE( scoped_array, construct )
+SIMPLE_CASE( scoped_block, construct )
 {
 	ASSERT_NO_PENDING
 
 	{
 		const index_t n = 5;
-		scarr_t a1(n);
+		scblk_t a1(n);
 		ASSERT_PENDING( 1 );
 
 		ASSERT_EQ( a1.nelems(), n );
@@ -209,7 +208,7 @@ SIMPLE_CASE( scoped_array, construct )
 		ASSERT_EQ( a1.ptr_end(), a1.ptr_begin() + n );
 
 		const int src[n] = {3, 4, 5, 6, 7};
-		scarr_t a2(n, src);
+		scblk_t a2(n, src);
 		ASSERT_PENDING( 2 );
 
 		ASSERT_EQ( a2.nelems(), n );
@@ -221,7 +220,7 @@ SIMPLE_CASE( scoped_array, construct )
 
 		int v = 8;
 		const int csrc[n] = {v, v, v, v, v};
-		scarr_t a3(n, v);
+		scblk_t a3(n, v);
 		ASSERT_PENDING( 3 );
 
 		ASSERT_EQ( a3.nelems(), n );
@@ -235,10 +234,10 @@ SIMPLE_CASE( scoped_array, construct )
 }
 
 
-SIMPLE_CASE( sarray, construct )
+SIMPLE_CASE( sblock, construct )
 {
 	const index_t n = 5;
-	typedef sarray<int, n> sarr_t;
+	typedef sblock<int, n> sarr_t;
 
 	sarr_t a1;
 
@@ -268,10 +267,10 @@ SIMPLE_CASE( sarray, construct )
 }
 
 
-SIMPLE_CASE( sarray, copy_and_assign )
+SIMPLE_CASE( sblock, copy_and_assign )
 {
 	const index_t n = 5;
-	typedef sarray<int, n> sarr_t;
+	typedef sblock<int, n> sarr_t;
 
 	const int src[n] = {3, 4, 5, 6, 7};
 
@@ -301,10 +300,10 @@ SIMPLE_CASE( sarray, copy_and_assign )
 }
 
 
-SIMPLE_CASE( sarray, swap )
+SIMPLE_CASE( sblock, swap )
 {
 	const index_t n = 5;
-	typedef sarray<int, n> sarr_t;
+	typedef sblock<int, n> sarr_t;
 
 	const int src1[n] = {3, 4, 5, 6, 7};
 	const int src2[n] = {9, 8, 7, 6, 5};
@@ -322,13 +321,13 @@ SIMPLE_CASE( sarray, swap )
 }
 
 
-SIMPLE_CASE( array_op, copy )
+SIMPLE_CASE( block_op, copy )
 {
 	const index_t n = 5;
 	const int src[n] = {3, 4, 5, 6, 7};
 	int dst[n] = {0, 0, 0, 0, 0};
 
-	arr_t a(n, -1);
+	blk_t a(n, -1);
 
 	copy(src, a);
 
@@ -339,40 +338,40 @@ SIMPLE_CASE( array_op, copy )
 	ASSERT_VEC_EQ( n, dst, src );
 }
 
-SIMPLE_CASE( array_op, fill )
+SIMPLE_CASE( block_op, fill )
 {
 	const int n = 5;
 	const int v = 3;
 	const int r[n] = {v, v, v, v, v};
 
-	arr_t a(n);
+	blk_t a(n);
 	fill(a, v);
 
 	ASSERT_VEC_EQ( n, a, r );
 }
 
 
-SIMPLE_CASE( array_op, zero )
+SIMPLE_CASE( block_op, zero )
 {
 	const int n = 5;
 	const int r[n] = {0, 0, 0, 0, 0};
 
-	arr_t a(n, -1);
+	blk_t a(n, -1);
 	zero(a);
 
 	ASSERT_VEC_EQ( n, a, r );
 }
 
-SIMPLE_CASE( array_op, compare )
+SIMPLE_CASE( block_op, compare )
 {
 	const int n = 5;
 	const int src1[n] = {1, 2, 3, 4, 5};
 	const int src2[n] = {1, 2, 3, 4, 6};
 
-	arr_t a1(n, src1);
-	arr_t a2(n, src1);
-	arr_t a3(n-1, src1);
-	arr_t a4(n, src2);
+	blk_t a1(n, src1);
+	blk_t a2(n, src1);
+	blk_t a3(n-1, src1);
+	blk_t a4(n, src2);
 
 	ASSERT_TRUE( a1 == a2 );
 	ASSERT_FALSE( a1 != a2 );
@@ -394,35 +393,36 @@ SIMPLE_CASE( array_op, compare )
 
 
 
-BEGIN_TPACK( darray )
-	ADD_SIMPLE_CASE( darray, construct )
-	ADD_SIMPLE_CASE( darray, copy_and_assign )
-	ADD_SIMPLE_CASE( darray, swap )
+BEGIN_TPACK( dblock )
+	ADD_SIMPLE_CASE( dblock, construct )
+	ADD_SIMPLE_CASE( dblock, copy_and_assign )
+	ADD_SIMPLE_CASE( dblock, swap )
 END_TPACK
 
 
-BEGIN_TPACK( scoped_array )
-	ADD_SIMPLE_CASE( scoped_array, construct )
+BEGIN_TPACK( scoped_block )
+	ADD_SIMPLE_CASE( scoped_block, construct )
 END_TPACK
 
-BEGIN_TPACK( sarray )
-	ADD_SIMPLE_CASE( sarray, construct )
-	ADD_SIMPLE_CASE( sarray, copy_and_assign )
-	ADD_SIMPLE_CASE( sarray, swap )
+BEGIN_TPACK( sblock )
+	ADD_SIMPLE_CASE( sblock, construct )
+	ADD_SIMPLE_CASE( sblock, copy_and_assign )
+	ADD_SIMPLE_CASE( sblock, swap )
 END_TPACK
 
-BEGIN_TPACK( array_op )
-	ADD_SIMPLE_CASE( array_op, copy )
-	ADD_SIMPLE_CASE( array_op, fill )
-	ADD_SIMPLE_CASE( array_op, zero )
-	ADD_SIMPLE_CASE( array_op, compare )
+BEGIN_TPACK( block_op )
+	ADD_SIMPLE_CASE( block_op, copy )
+	ADD_SIMPLE_CASE( block_op, fill )
+	ADD_SIMPLE_CASE( block_op, zero )
+	ADD_SIMPLE_CASE( block_op, compare )
 END_TPACK
 
 
 BEGIN_MAIN_SUITE
-	ADD_TPACK( darray )
-	ADD_TPACK( scoped_array )
-	ADD_TPACK( sarray )
+	ADD_TPACK( dblock )
+	ADD_TPACK( scoped_block )
+	ADD_TPACK( sblock )
+	ADD_TPACK( block_op )
 END_MAIN_SUITE
 
 

@@ -13,11 +13,11 @@
 #ifndef MON_ALLOC_H_
 #define MON_ALLOC_H_
 
-#include <light_mat/core/basic_defs.h>
+#include <light_array/common/basic_defs.h>
 #include <map>
 #include <stdexcept>
 
-namespace lmat { namespace test {
+namespace larr { namespace test {
 
 	class memory_allocation_monitor : private noncopyable
 	{
