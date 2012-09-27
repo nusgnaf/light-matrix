@@ -50,13 +50,15 @@ set(COMMON_HS
     ${INC}/common/block.h
     ${INC}/common/expr_base.h)
     
+set(ARRAY_BASE_HS
+    ${INC}/array/array_layout.h)
+    
 set(MATRIX_BASE_HS
     ${INC}/matrix/matrix_fwd.h 
     ${INC}/matrix/matrix_meta.h
     ${INC}/matrix/matrix_shape.h
     ${INC}/matrix/matrix_concepts.h
     ${INC}/matrix/matrix_properties.h
-    ${INC}/matrix/array_memset.h
     ${INC}/matrix/bits/matrix_fill_internal.h
     ${INC}/matrix/bits/matrix_copy_internal.h
     ${INC}/matrix/bits/matrix_compare_internal.h
@@ -113,7 +115,11 @@ set(BLAS_HS
     ${INC}/linalg/linalg_base.h
     ${INC}/linalg/blas_extern.h
     ${INC}/linalg/bits/matrix_blasl1_internal.h
-    ${INC}/linalg/matrix_blasl1.h)    
+    ${INC}/linalg/matrix_blasl1.h)
+    
+set(ARRAY_HS
+    ${COMMON_HS}
+    ${ARRAY_BASE_HS})    
               
 set(MATRIX_HS
     ${COMMON_HS}
@@ -134,6 +140,13 @@ set(MATRIX_EVAL_HS
 add_library(test_main STATIC test_main.cpp)
 
 add_executable(test_blocks ${COMMON_HS} test_blocks.cpp)
+
+set(ARRAY_LAYOUT_HS
+    ${COMMON_HS}
+    ${ARRAY_BASE_HS})
+
+add_executable(test_array_shape ${ARRAY_LAYOUT_HS} test_array_shape.cpp) 
+add_executable(test_array_layout ${ARRAY_LAYOUT_HS} test_array_layout.cpp) 
 
 set(DENSE_MAT_HS
     ${COMMON_HS}
@@ -209,6 +222,8 @@ add_executable(test_partial_reduce ${MAT_REDUC_HS} test_partial_reduce.cpp)
 
 set(LMAT_TEST_NAMES
 	test_blocks
+	test_array_shape
+	test_array_layout
 	test_dense_mat
 	test_dense_col
 	test_dense_row

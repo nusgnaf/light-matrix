@@ -380,7 +380,7 @@ namespace lmat
 				detail::_ct_binary_dim<LD, RD, are_compatible_dims<LD, RD>::value>::value;
 	};
 
-	template<int L, int R>
+	template<class L, class R>
 	struct ct_binary_shape
 	{
 		static const int nrows = ct_binary_dim<ct_nrows<L>::value, ct_nrows<R>::value>::value;
@@ -512,6 +512,12 @@ namespace lmat
 
 	public:
 		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return true;
+		}
+
+		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
 			return this->nrows();
@@ -547,6 +553,12 @@ namespace lmat
 		continuous_column_major_layout(index_t m, index_t n) : base_t(m, n) { }
 
 	public:
+		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return true;
+		}
+
 		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
@@ -584,6 +596,12 @@ namespace lmat
 
 	public:
 		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return true;
+		}
+
+		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
 			return 1;
@@ -620,6 +638,12 @@ namespace lmat
 
 	public:
 		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return true;
+		}
+
+		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
 			return 1;
@@ -653,6 +677,12 @@ namespace lmat
 		: base_t(m, n), m_ldim(ldim) { }
 
 	public:
+		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return m_ldim == this->nrows();
+		}
+
 		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
@@ -691,6 +721,12 @@ namespace lmat
 
 	public:
 		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return true;
+		}
+
+		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
 			return m_ldim;
@@ -727,6 +763,12 @@ namespace lmat
 		: base_t(m, n), m_ldim(ldim) { }
 
 	public:
+		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return m_ldim == 1;
+		}
+
 		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
@@ -765,6 +807,12 @@ namespace lmat
 
 	public:
 		LMAT_ENSURE_INLINE
+		bool is_continuous() const
+		{
+			return true;
+		}
+
+		LMAT_ENSURE_INLINE
 		index_t lead_dim() const
 		{
 			return m_ldim;
@@ -786,6 +834,51 @@ namespace lmat
 
 	private:
 		index_t m_ldim;
+	};
+
+
+
+	/********************************************
+	 *
+	 *  Array layout compile time properties
+	 *
+	 ********************************************/
+
+	template<class A>
+	struct is_layout_class
+	{
+		static const bool value = false;
+	};
+
+	template<int M, int N>
+	struct is_layout_class<continuous_column_major_layout<M, N> >
+	{
+		static const bool value = true;
+	};
+
+	template<int M, int N>
+	struct is_layout_class<column_major_layout<M, N> >
+	{
+		static const bool value = true;
+	};
+
+
+	template<class Layout>
+	struct ct_is_continuous_layout
+	{
+		static const bool value = false;
+	};
+
+	template<int M, int N>
+	struct ct_is_continuous_layout<continuous_column_major_layout<M, N> >
+	{
+		static const bool value = false;
+	};
+
+	template<int M, int N>
+	struct ct_is_continuous_layout<column_major_layout<M, N> >
+	{
+		static const bool value = (N == 1);
 	};
 
 
