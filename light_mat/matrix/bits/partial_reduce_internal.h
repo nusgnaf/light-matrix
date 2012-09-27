@@ -31,7 +31,7 @@ namespace lmat { namespace detail {
 			typedef matrix_visit_setting<
 					percol_vis,
 					scalar_kernel_t,
-					ct_rows<Arg>::value,
+					ct_nrows<Arg>::value,
 					binary_ct_cols<Arg, Dst>::value> setting_t;
 
 			const index_t m = arg.nrows();
@@ -45,7 +45,7 @@ namespace lmat { namespace detail {
 				typename matrix_visitor_state<visitor_t>::type s = visitor.col_state(j);
 
 				dst.elem(0, j) = single_vec_reduce<
-							ct_rows<Arg>::value,
+							ct_nrows<Arg>::value,
 							scalar_kernel_t>::eval(fun, m, visitor, s);
 			}
 		}
@@ -162,13 +162,13 @@ namespace lmat { namespace detail {
 		inline
 		static void eval(const Fun& fun, const Arg& arg, Dst& dst)
 		{
-			typedef accum_col<ct_rows<Arg>::value, scalar_kernel_t> accum_t;
+			typedef accum_col<ct_nrows<Arg>::value, scalar_kernel_t> accum_t;
 
 			typedef matrix_visit_setting<
 					percol_vis,
 					scalar_kernel_t,
 					binary_ct_rows<Arg, Dst>::value,
-					ct_cols<Arg>::value> setting_t;
+					ct_ncols<Arg>::value> setting_t;
 
 			typedef typename matrix_vismap<Arg, setting_t>::type visitor_t;
 			typedef typename matrix_visitor_state<visitor_t>::type state_t;

@@ -57,11 +57,11 @@ MN_CASE( arr_shape, ct_properties )
 {
 	typedef array_shape<M, N> shape_t;
 
-	ASSERT_EQ( ct_nrows<shape_t>::value, M );
-	ASSERT_EQ( ct_ncols<shape_t>::value, N );
+	ASSERT_EQ( ct_shape_nrows<shape_t>::value, M );
+	ASSERT_EQ( ct_shape_ncols<shape_t>::value, N );
 
 	int ct_ne = M > 0 && N > 0 ? M * N : 0;
-	ASSERT_EQ( ct_nelems<shape_t>::value, ct_ne );
+	ASSERT_EQ( ct_shape_nelems<shape_t>::value, ct_ne );
 
 	ASSERT_EQ( is_array_shape<shape_t>::value, true );
 

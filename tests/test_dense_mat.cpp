@@ -15,16 +15,16 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-template class lmat::dense_matrix<double, 0, 0>;
-template class lmat::dense_matrix<double, 0, 4>;
-template class lmat::dense_matrix<double, 3, 0>;
-template class lmat::dense_matrix<double, 3, 4>;
+template class lmat::tarray<double, 0, 0>;
+template class lmat::tarray<double, 0, 4>;
+template class lmat::tarray<double, 3, 0>;
+template class lmat::tarray<double, 3, 4>;
 
 #ifdef LMAT_USE_STATIC_ASSERT
 
-static_assert(lmat::is_mat_xpr<lmat::dense_matrix<double> >::value, "Interface verification failed.");
-static_assert(lmat::is_mat_view<lmat::dense_matrix<double> >::value, "Interface verification failed.");
-static_assert(lmat::is_dense_mat<lmat::dense_matrix<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_array_xpr<lmat::tarray<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_mat_view<lmat::tarray<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_dense_array<lmat::tarray<double> >::value, "Interface verification failed.");
 
 #endif
 
@@ -33,7 +33,7 @@ MN_CASE( dense_mat, constructs )
 {
 	// default construction
 
-	dense_matrix<double, M, N> a0;
+	tarray<double, M, N> a0;
 
 	ASSERT_EQ(a0.nrows(), M);
 	ASSERT_EQ(a0.ncolumns(), N);
@@ -56,7 +56,7 @@ MN_CASE( dense_mat, constructs )
 	const index_t m = M == 0 ? 3 : M;
 	const index_t n = N == 0 ? 4 : N;
 
-	dense_matrix<double, M, N> a1(m, n);
+	tarray<double, M, N> a1(m, n);
 
 	ASSERT_EQ(a1.nrows(), m);
 	ASSERT_EQ(a1.ncolumns(), n);
@@ -78,7 +78,7 @@ MN_CASE( dense_mat, generates )
 
 	// zeros
 
-	dense_matrix<double, M, N> a0(m, n, zero());
+	tarray<double, M, N> a0(m, n, zero());
 	for (index_t i = 0; i < m * n; ++i) ref[i] = double(0);
 
 	ASSERT_EQ(a0.nrows(), m);
@@ -90,7 +90,7 @@ MN_CASE( dense_mat, generates )
 	// fill_value
 
 	const double v1 = 2.5;
-	dense_matrix<double, M, N> a1(m, n, fill(v1));
+	tarray<double, M, N> a1(m, n, fill(v1));
 	for (index_t i = 0; i < m * n; ++i) ref[i] = v1;
 
 	ASSERT_EQ(a1.nrows(), m);
@@ -102,7 +102,7 @@ MN_CASE( dense_mat, generates )
 	// copy_value
 
 	for (index_t i = 0; i < m * n; ++i) ref[i] = double(i + 2);
-	dense_matrix<double, M, N> a2(m, n, copy_from(ref.ptr_data()));
+	tarray<double, M, N> a2(m, n, copy_from(ref.ptr_data()));
 
 	ASSERT_EQ(a2.nrows(), m);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -120,9 +120,9 @@ MN_CASE( dense_mat, copy_constructs )
 	dblock<double> ref(m * n);
 
 	for (index_t i = 0; i < m * n; ++i) ref[i] = double(i + 2);
-	dense_matrix<double, M, N> a(m, n, copy_from(ref.ptr_data()));
+	tarray<double, M, N> a(m, n, copy_from(ref.ptr_data()));
 
-	dense_matrix<double, M, N> a2(a);
+	tarray<double, M, N> a2(a);
 
 	ASSERT_EQ(a2.nrows(), m);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -143,8 +143,8 @@ MN_CASE( dense_mat, access )
 	dblock<double> ref(m * n);
 
 	for (index_t i = 0; i < m * n; ++i) ref[i] = double(i + 2);
-	dense_matrix<double, M, N> a(m, n, copy_from(ref.ptr_data()));
-	const dense_matrix<double, M, N>& ac = a;
+	tarray<double, M, N> a(m, n, copy_from(ref.ptr_data()));
+	const tarray<double, M, N>& ac = a;
 
 	ASSERT_VEC_EQ(m * n, a, ref);
 
@@ -182,7 +182,7 @@ MN_CASE( dense_mat, resize )
 	const index_t m3 = M == 0 ? 5 : M;
 	const index_t n3 = N == 0 ? 6 : N;
 
-	dense_matrix<double, M, N> a(m, n);
+	tarray<double, M, N> a(m, n);
 
 	ASSERT_EQ(a.nrows(), m);
 	ASSERT_EQ(a.ncolumns(), n);
@@ -237,9 +237,9 @@ MN_CASE( dense_mat, assign )
 	dblock<double> ref(m * n);
 
 	for (index_t i = 0; i < m * n; ++i) ref[i] = double(i + 2);
-	dense_matrix<double, M, N> s(m, n, copy_from(ref.ptr_data()));
+	tarray<double, M, N> s(m, n, copy_from(ref.ptr_data()));
 
-	dense_matrix<double, M, N> a;
+	tarray<double, M, N> a;
 
 	a = s;
 
@@ -252,7 +252,7 @@ MN_CASE( dense_mat, assign )
 
 	ASSERT_VEC_EQ( m * n, a, s );
 
-	dense_matrix<double, M, N> b(m, n, zero());
+	tarray<double, M, N> b(m, n, zero());
 
 	const double *pb = b.ptr_data();
 
@@ -272,7 +272,7 @@ MN_CASE( dense_mat, assign )
 	const index_t m2 = M == 0 ? 5 : M;
 	const index_t n2 = N == 0 ? 6 : N;
 
-	dense_matrix<double, M, N> c(m2, n2, zero());
+	tarray<double, M, N> c(m2, n2, zero());
 
 	c = s;
 
@@ -293,7 +293,7 @@ MN_CASE( dense_mat, import )
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> ref(m * n);
-	dense_matrix<double, M, N> a(m, n, fill(-1.0));
+	tarray<double, M, N> a(m, n, fill(-1.0));
 
 	// fill_value
 
@@ -333,8 +333,8 @@ MN_CASE( dense_mat, swap )
 	dblock<double> s2(m2 * n2);
 	for (index_t i = 0; i < m2 * n2; ++i) s2[i] = double(2 * i + 3);
 
-	dense_matrix<double, M, N> a(m, n, copy_from(s.ptr_data()));
-	dense_matrix<double, M, N> a2(m2, n2, copy_from(s2.ptr_data()));
+	tarray<double, M, N> a(m, n, copy_from(s.ptr_data()));
+	tarray<double, M, N> a2(m2, n2, copy_from(s2.ptr_data()));
 
 	const double *p = a.ptr_data();
 	const double *p2 = a2.ptr_data();

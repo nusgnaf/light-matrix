@@ -21,8 +21,8 @@ const index_t LDim = 12;
 
 MN_CASE( mat_ecomp, eq )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_matrix<bool, M, N> bmat_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray<bool, M, N> bmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -74,8 +74,8 @@ MN_CASE( mat_ecomp, eq )
 
 MN_CASE( mat_ecomp, ne )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_matrix<bool, M, N> bmat_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray<bool, M, N> bmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -127,8 +127,8 @@ MN_CASE( mat_ecomp, ne )
 
 MN_CASE( mat_ecomp, le )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_matrix<bool, M, N> bmat_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray<bool, M, N> bmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -180,8 +180,8 @@ MN_CASE( mat_ecomp, le )
 
 MN_CASE( mat_ecomp, lt )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_matrix<bool, M, N> bmat_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray<bool, M, N> bmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -233,8 +233,8 @@ MN_CASE( mat_ecomp, lt )
 
 MN_CASE( mat_ecomp, ge )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_matrix<bool, M, N> bmat_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray<bool, M, N> bmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -286,8 +286,8 @@ MN_CASE( mat_ecomp, ge )
 
 MN_CASE( mat_ecomp, gt )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_matrix<bool, M, N> bmat_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray<bool, M, N> bmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;

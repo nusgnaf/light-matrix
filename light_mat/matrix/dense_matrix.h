@@ -25,7 +25,7 @@ namespace lmat
 	 ********************************************/
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct matrix_traits<dense_matrix<T, CTRows, CTCols, Align> >
+	struct matrix_traits<tarray<T, CTRows, CTCols, Align> >
 	{
 		static const int num_dimensions = 2;
 		static const int compile_time_num_rows = CTRows;
@@ -38,31 +38,31 @@ namespace lmat
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct ct_has_continuous_layout<dense_matrix<T, CTRows, CTCols, Align> >
+	struct ct_has_continuous_layout<tarray<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = true;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_base_aligned<dense_matrix<T, CTRows, CTCols, Align> >
+	struct is_base_aligned<tarray<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = true;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_percol_aligned<dense_matrix<T, CTRows, CTCols, Align> >
+	struct is_percol_aligned<tarray<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = is_same<Align, percol_aligned>::value;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_linear_accessible<dense_matrix<T, CTRows, CTCols, Align> >
+	struct is_linear_accessible<tarray<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = true;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align, class DMat>
-	struct default_matrix_eval_policy<dense_matrix<T, CTRows, CTCols, Align>, DMat>
+	struct default_array_eval_policy<tarray<T, CTRows, CTCols, Align>, DMat>
 	{
 		typedef matrix_copy_policy type;
 	};
@@ -75,7 +75,7 @@ namespace lmat
 	 ********************************************/
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	class dense_matrix : public IDenseMatrix<dense_matrix<T, CTRows, CTCols, Align>, T>
+	class tarray : public IDenseArray<tarray<T, CTRows, CTCols, Align>, T>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_supported_matrix_value_type<T>::value,
@@ -92,17 +92,17 @@ namespace lmat
 		LMAT_MAT_TRAITS_DEFS(T)
 
 	public:
-		LMAT_ENSURE_INLINE dense_matrix()
+		LMAT_ENSURE_INLINE tarray()
 		: m_internal()
 		{
 		}
 
-		LMAT_ENSURE_INLINE dense_matrix(index_t m, index_t n)
+		LMAT_ENSURE_INLINE tarray(index_t m, index_t n)
 		: m_internal(m, n)
 		{
 		}
 
-		LMAT_ENSURE_INLINE dense_matrix(index_t m, index_t n, zero_t)
+		LMAT_ENSURE_INLINE tarray(index_t m, index_t n, zero_t)
 		: m_internal(m, n)
 		{
 			zero_mem(m * n, m_internal.ptr_data());
@@ -116,26 +116,26 @@ namespace lmat
 			setter.set(m * n, m_internal.ptr_data());
 		}
 
-		LMAT_ENSURE_INLINE dense_matrix(const dense_matrix& s)
+		LMAT_ENSURE_INLINE tarray(const tarray& s)
 		: m_internal(s.m_internal)
 		{
 		}
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE dense_matrix(const IMatrixXpr<Expr, T>& r)
+		LMAT_ENSURE_INLINE dense_matrix(const IArrayXpr<Expr, T>& r)
 		: m_internal(r.nrows(), r.ncolumns())
 		{
 			default_evaluate(r, *this);
 		}
 
-		LMAT_ENSURE_INLINE void swap(dense_matrix& s)
+		LMAT_ENSURE_INLINE void swap(tarray& s)
 		{
 			m_internal.swap(s.m_internal);
 		}
 
 	public:
 
-		LMAT_ENSURE_INLINE dense_matrix& operator = (const dense_matrix& r)
+		LMAT_ENSURE_INLINE tarray& operator = (const tarray& r)
 		{
 			if (this != &r)
 			{
@@ -146,7 +146,7 @@ namespace lmat
 		}
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE dense_matrix& operator = (const IMatrixXpr<Expr, T>& r)
+		LMAT_ENSURE_INLINE tarray& operator = (const IArrayXpr<Expr, T>& r)
 		{
 			default_assign(*this, r);
 			return *this;
@@ -235,7 +235,7 @@ namespace lmat
 
 	template<typename T, int CTRows, int CTCols>
 	LMAT_ENSURE_INLINE
-	inline void swap(dense_matrix<T, CTRows, CTCols>& a, dense_matrix<T, CTRows, CTCols>& b)
+	inline void swap(tarray<T, CTRows, CTCols>& a, tarray<T, CTRows, CTCols>& b)
 	{
 		a.swap(b);
 	}
@@ -248,41 +248,41 @@ namespace lmat
 	 ********************************************/
 
 	template<typename T, int CTRows, typename Align>
-	class dense_col : public dense_matrix<T, CTRows, 1, Align>
+	class tcol : public tarray<T, CTRows, 1, Align>
 	{
-		typedef dense_matrix<T, CTRows, 1, Align> base_mat_t;
+		typedef tarray<T, CTRows, 1, Align> base_mat_t;
 
 	public:
-		LMAT_ENSURE_INLINE dense_col() : base_mat_t(CTRows, 1) { }
+		LMAT_ENSURE_INLINE tcol() : base_mat_t(CTRows, 1) { }
 
-		LMAT_ENSURE_INLINE explicit dense_col(index_t m) : base_mat_t(m, 1) { }
+		LMAT_ENSURE_INLINE explicit tcol(index_t m) : base_mat_t(m, 1) { }
 
-		LMAT_ENSURE_INLINE dense_col(index_t m, zero_t) : base_mat_t(m, 1, zero_t()) { }
+		LMAT_ENSURE_INLINE tcol(index_t m, zero_t) : base_mat_t(m, 1, zero_t()) { }
 
 		template<class Setter>
 		LMAT_ENSURE_INLINE
-		dense_col(index_t m, const IMemorySetter<Setter, T>& setter) : base_mat_t(m, 1, setter) { }
+		tcol(index_t m, const IMemorySetter<Setter, T>& setter) : base_mat_t(m, 1, setter) { }
 
-		LMAT_ENSURE_INLINE dense_col(const base_mat_t& s) : base_mat_t(s) { }
+		LMAT_ENSURE_INLINE tcol(const base_mat_t& s) : base_mat_t(s) { }
 
-		LMAT_ENSURE_INLINE dense_col(const dense_col& s) : base_mat_t(s) { }
+		LMAT_ENSURE_INLINE tcol(const tcol& s) : base_mat_t(s) { }
 
 		template<class Other>
-		LMAT_ENSURE_INLINE dense_col(const IMatrixView<Other, T>& r) : base_mat_t(r) { }
+		LMAT_ENSURE_INLINE tcol(const IMatrixView<Other, T>& r) : base_mat_t(r) { }
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE dense_col(const IMatrixXpr<Expr, T>& r) : base_mat_t(r) { }
+		LMAT_ENSURE_INLINE tcol(const IArrayXpr<Expr, T>& r) : base_mat_t(r) { }
 
 	public:
 
-		LMAT_ENSURE_INLINE dense_col& operator = (const base_mat_t& r)
+		LMAT_ENSURE_INLINE tcol& operator = (const base_mat_t& r)
 		{
 			base_mat_t::operator = (r);
 			return *this;
 		}
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE dense_col& operator = (const IMatrixXpr<Expr, T>& r)
+		LMAT_ENSURE_INLINE tcol& operator = (const IArrayXpr<Expr, T>& r)
 		{
 			base_mat_t::operator = (r);
 			return *this;
@@ -304,38 +304,38 @@ namespace lmat
 
 
 	template<typename T, int CTCols, typename Align>
-	class dense_row : public dense_matrix<T, 1, CTCols, Align>
+	class trow : public tarray<T, 1, CTCols, Align>
 	{
-		typedef dense_matrix<T, 1, CTCols, Align> base_mat_t;
+		typedef tarray<T, 1, CTCols, Align> base_mat_t;
 
 	public:
-		LMAT_ENSURE_INLINE dense_row() : base_mat_t(1, CTCols) { }
+		LMAT_ENSURE_INLINE trow() : base_mat_t(1, CTCols) { }
 
-		LMAT_ENSURE_INLINE explicit dense_row(index_t n) : base_mat_t(1, n) { }
+		LMAT_ENSURE_INLINE explicit trow(index_t n) : base_mat_t(1, n) { }
 
-		LMAT_ENSURE_INLINE dense_row(index_t n, zero_t) : base_mat_t(1, n, zero_t()) { }
+		LMAT_ENSURE_INLINE trow(index_t n, zero_t) : base_mat_t(1, n, zero_t()) { }
 
 		template<class Setter>
 		LMAT_ENSURE_INLINE
-		dense_row(index_t n, const IMemorySetter<Setter,T>& setter) : base_mat_t(1, n, setter) { }
+		trow(index_t n, const IMemorySetter<Setter,T>& setter) : base_mat_t(1, n, setter) { }
 
-		LMAT_ENSURE_INLINE dense_row(const base_mat_t& s) : base_mat_t(s) { }
+		LMAT_ENSURE_INLINE trow(const base_mat_t& s) : base_mat_t(s) { }
 
-		LMAT_ENSURE_INLINE dense_row(const dense_row& s) : base_mat_t(s) { }
+		LMAT_ENSURE_INLINE trow(const trow& s) : base_mat_t(s) { }
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE dense_row(const IMatrixXpr<Expr, T>& r) : base_mat_t(r) { }
+		LMAT_ENSURE_INLINE trow(const IArrayXpr<Expr, T>& r) : base_mat_t(r) { }
 
 	public:
 
-		LMAT_ENSURE_INLINE dense_row& operator = (const base_mat_t& r)
+		LMAT_ENSURE_INLINE trow& operator = (const base_mat_t& r)
 		{
 			base_mat_t::operator = (r);
 			return *this;
 		}
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE dense_row& operator = (const IMatrixXpr<Expr, T>& r)
+		LMAT_ENSURE_INLINE trow& operator = (const IArrayXpr<Expr, T>& r)
 		{
 			base_mat_t::operator = (r);
 			return *this;
@@ -364,27 +364,27 @@ namespace lmat
 
 	template<typename T, class Expr>
 	LMAT_ENSURE_INLINE
-	dense_matrix<T, ct_rows<Expr>::value, ct_cols<Expr>::value>
-	eval(const IMatrixXpr<Expr, T>& expr)
+	tarray<T, ct_nrows<Expr>::value, ct_ncols<Expr>::value>
+	eval(const IArrayXpr<Expr, T>& expr)
 	{
-		return dense_matrix<T, ct_rows<Expr>::value, ct_cols<Expr>::value>(
+		return tarray<T, ct_nrows<Expr>::value, ct_ncols<Expr>::value>(
 				expr.derived());
 	}
 
 	template<typename T, class Expr, class Context>
 	LMAT_ENSURE_INLINE
-	dense_matrix<T, ct_rows<Expr>::value, ct_cols<Expr>::value>
-	eval(const IMatrixXpr<Expr, T>& expr, const Context& ctx)
+	tarray<T, ct_nrows<Expr>::value, ct_ncols<Expr>::value>
+	eval(const IArrayXpr<Expr, T>& expr, const Context& ctx)
 	{
-		dense_matrix<T, ct_rows<Expr>::value, ct_cols<Expr>::value> r(expr.nrows(), expr.ncolumns());
+		tarray<T, ct_nrows<Expr>::value, ct_ncols<Expr>::value> r(expr.nrows(), expr.ncolumns());
 		evaluate(expr.derived(), r, ctx);
 	}
 
 	template<typename T, class Expr>
 	LMAT_ENSURE_INLINE
-	T to_scalar(const IMatrixXpr<Expr, T>& expr)
+	T to_scalar(const IArrayXpr<Expr, T>& expr)
 	{
-		dense_matrix<T,1,1> r(expr);
+		tarray<T,1,1> r(expr);
 		return r[0];
 	}
 
@@ -395,19 +395,19 @@ namespace lmat
 	 *
 	 ********************************************/
 
-	LMAT_MATRIX_TYPEDEFS2(dense_matrix, mat, 0, 0)
-	LMAT_MATRIX_TYPEDEFS2(dense_matrix, mat22, 2, 2)
-	LMAT_MATRIX_TYPEDEFS2(dense_matrix, mat23, 2, 3)
-	LMAT_MATRIX_TYPEDEFS2(dense_matrix, mat32, 3, 2)
-	LMAT_MATRIX_TYPEDEFS2(dense_matrix, mat33, 3, 3)
+	LMAT_MATRIX_TYPEDEFS2(tarray, mat, 0, 0)
+	LMAT_MATRIX_TYPEDEFS2(tarray, mat22, 2, 2)
+	LMAT_MATRIX_TYPEDEFS2(tarray, mat23, 2, 3)
+	LMAT_MATRIX_TYPEDEFS2(tarray, mat32, 3, 2)
+	LMAT_MATRIX_TYPEDEFS2(tarray, mat33, 3, 3)
 
-	LMAT_MATRIX_TYPEDEFS1(dense_col, col, 0)
-	LMAT_MATRIX_TYPEDEFS1(dense_col, col2, 2)
-	LMAT_MATRIX_TYPEDEFS1(dense_col, col3, 3)
+	LMAT_MATRIX_TYPEDEFS1(tcol, col, 0)
+	LMAT_MATRIX_TYPEDEFS1(tcol, col2, 2)
+	LMAT_MATRIX_TYPEDEFS1(tcol, col3, 3)
 
-	LMAT_MATRIX_TYPEDEFS1(dense_row, row, 0)
-	LMAT_MATRIX_TYPEDEFS1(dense_row, row2, 2)
-	LMAT_MATRIX_TYPEDEFS1(dense_row, row3, 3)
+	LMAT_MATRIX_TYPEDEFS1(trow, row, 0)
+	LMAT_MATRIX_TYPEDEFS1(trow, row2, 2)
+	LMAT_MATRIX_TYPEDEFS1(trow, row3, 3)
 
 }
 

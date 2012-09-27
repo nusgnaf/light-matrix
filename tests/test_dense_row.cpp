@@ -16,26 +16,26 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-template class lmat::dense_row<double, 0>;
-template class lmat::dense_row<double, 4>;
+template class lmat::trow<double, 0>;
+template class lmat::trow<double, 4>;
 
 #ifdef LMAT_USE_STATIC_ASSERT
 
 static_assert(lmat::is_base_of<
 		lmat::dense_matrix<double, 1, 0>,
-		lmat::dense_row<double, 0> >::value, "Base verification failed.");
+		lmat::trow<double, 0> >::value, "Base verification failed.");
 
 static_assert(lmat::is_base_of<
 		lmat::dense_matrix<double, 1, 4>,
-		lmat::dense_row<double, 4> >::value, "Base verification failed.");
+		lmat::trow<double, 4> >::value, "Base verification failed.");
 #endif
 
 
-N_CASE( dense_row, constructs )
+N_CASE( trow, constructs )
 {
 	// default construction
 
-	dense_row<double, N> a0;
+	trow<double, N> a0;
 
 	ASSERT_EQ(a0.nrows(), 1);
 	ASSERT_EQ(a0.ncolumns(), N);
@@ -57,7 +57,7 @@ N_CASE( dense_row, constructs )
 
 	const index_t n = N == 0 ? 4 : N;
 
-	dense_row<double, N> a1(n);
+	trow<double, N> a1(n);
 
 	ASSERT_EQ(a1.nrows(), 1);
 	ASSERT_EQ(a1.ncolumns(), n);
@@ -69,7 +69,7 @@ N_CASE( dense_row, constructs )
 }
 
 
-N_CASE( dense_row, generates )
+N_CASE( trow, generates )
 {
 	const index_t n = N == 0 ? 4 : N;
 
@@ -77,7 +77,7 @@ N_CASE( dense_row, generates )
 
 	// zeros
 
-	dense_row<double, N> a0(n, zero());
+	trow<double, N> a0(n, zero());
 	for (index_t i = 0; i < n; ++i) ref[i] = double(0);
 
 	ASSERT_EQ(a0.nrows(), 1);
@@ -89,7 +89,7 @@ N_CASE( dense_row, generates )
 	// fill_value
 
 	const double v1 = 2.5;
-	dense_row<double, N> a1(n, fill(v1));
+	trow<double, N> a1(n, fill(v1));
 	for (index_t i = 0; i < n; ++i) ref[i] = v1;
 
 	ASSERT_EQ(a1.nrows(), 1);
@@ -101,7 +101,7 @@ N_CASE( dense_row, generates )
 	// copy_value
 
 	for (index_t i = 0; i < n; ++i) ref[i] = double(i + 2);
-	dense_row<double, N> a2(n, copy_from(ref.ptr_data()));
+	trow<double, N> a2(n, copy_from(ref.ptr_data()));
 
 	ASSERT_EQ(a2.nrows(), 1);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -110,16 +110,16 @@ N_CASE( dense_row, generates )
 	ASSERT_VEC_EQ(n, a2, ref);
 }
 
-N_CASE( dense_row, copy_constructs )
+N_CASE( trow, copy_constructs )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> ref(n);
 
 	for (index_t i = 0; i < n; ++i) ref[i] = double(i + 2);
-	dense_row<double, N> a(n, copy_from(ref.ptr_data()));
+	trow<double, N> a(n, copy_from(ref.ptr_data()));
 
-	dense_row<double, N> a2(a);
+	trow<double, N> a2(a);
 
 	ASSERT_EQ(a2.nrows(), 1);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -131,12 +131,12 @@ N_CASE( dense_row, copy_constructs )
 	ASSERT_VEC_EQ(n, a, a2);
 }
 
-N_CASE( dense_row, resize )
+N_CASE( trow, resize )
 {
 	const index_t n = N == 0 ? 4 : N;
 	const index_t n2 = N == 0 ? 5 : N;
 
-	dense_row<double, N> a(n);
+	trow<double, N> a(n);
 	const double *p1 = a.ptr_data();
 
 	a.require_size(1, n);
@@ -178,16 +178,16 @@ N_CASE( dense_row, resize )
 }
 
 
-N_CASE( dense_row, assign )
+N_CASE( trow, assign )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> ref(n);
 
 	for (index_t i = 0; i < n; ++i) ref[i] = double(i + 2);
-	dense_row<double, N> s(n, copy_from(ref.ptr_data()));
+	trow<double, N> s(n, copy_from(ref.ptr_data()));
 
-	dense_row<double, N> a;
+	trow<double, N> a;
 
 	a = s;
 
@@ -200,7 +200,7 @@ N_CASE( dense_row, assign )
 
 	ASSERT_VEC_EQ( n, a, s );
 
-	dense_row<double, N> b(n, zero());
+	trow<double, N> b(n, zero());
 
 	const double *pb = b.ptr_data();
 
@@ -219,7 +219,7 @@ N_CASE( dense_row, assign )
 
 	const index_t n2 = N == 0 ? 6 : N;
 
-	dense_row<double, N> c(n2, zero());
+	trow<double, N> c(n2, zero());
 
 	c = s;
 
@@ -233,12 +233,12 @@ N_CASE( dense_row, assign )
 	ASSERT_VEC_EQ( n, c, s );
 }
 
-N_CASE( dense_row, import )
+N_CASE( trow, import )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> ref(n);
-	dense_row<double, N> a(n, fill(-1.0));
+	trow<double, N> a(n, fill(-1.0));
 
 	// fill_value
 
@@ -264,7 +264,7 @@ N_CASE( dense_row, import )
 	ASSERT_VEC_EQ(n, a, ref);
 }
 
-N_CASE( dense_row, swap )
+N_CASE( trow, swap )
 {
 	const index_t n = N == 0 ? 4 : N;
 	const index_t n2 = N == 0 ? 5 : N;
@@ -275,8 +275,8 @@ N_CASE( dense_row, swap )
 	dblock<double> s2(n2);
 	for (index_t i = 0; i < n2; ++i) s2[i] = double(2 * i + 3);
 
-	dense_row<double, N> a(n, copy_from(s.ptr_data()));
-	dense_row<double, N> a2(n2, copy_from(s2.ptr_data()));
+	trow<double, N> a(n, copy_from(s.ptr_data()));
+	trow<double, N> a2(n2, copy_from(s2.ptr_data()));
 
 	const double *p = a.ptr_data();
 	const double *p2 = a2.ptr_data();
@@ -309,45 +309,45 @@ N_CASE( dense_row, swap )
 
 
 BEGIN_TPACK( dense_row_constructs )
-	ADD_N_CASE( dense_row, constructs, 0 )
-	ADD_N_CASE( dense_row, constructs, 1 )
-	ADD_N_CASE( dense_row, constructs, 4 )
+	ADD_N_CASE( trow, constructs, 0 )
+	ADD_N_CASE( trow, constructs, 1 )
+	ADD_N_CASE( trow, constructs, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_row_generates )
-	ADD_N_CASE( dense_row, generates, 0 )
-	ADD_N_CASE( dense_row, generates, 1 )
-	ADD_N_CASE( dense_row, generates, 4 )
+	ADD_N_CASE( trow, generates, 0 )
+	ADD_N_CASE( trow, generates, 1 )
+	ADD_N_CASE( trow, generates, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_row_copycon )
-	ADD_N_CASE( dense_row, copy_constructs, 0 )
-	ADD_N_CASE( dense_row, copy_constructs, 1 )
-	ADD_N_CASE( dense_row, copy_constructs, 4 )
+	ADD_N_CASE( trow, copy_constructs, 0 )
+	ADD_N_CASE( trow, copy_constructs, 1 )
+	ADD_N_CASE( trow, copy_constructs, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_row_resize )
-	ADD_N_CASE( dense_row, resize, 0 )
-	ADD_N_CASE( dense_row, resize, 1 )
-	ADD_N_CASE( dense_row, resize, 4 )
+	ADD_N_CASE( trow, resize, 0 )
+	ADD_N_CASE( trow, resize, 1 )
+	ADD_N_CASE( trow, resize, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_row_assign )
-	ADD_N_CASE( dense_row, assign, 0 )
-	ADD_N_CASE( dense_row, assign, 1 )
-	ADD_N_CASE( dense_row, assign, 4 )
+	ADD_N_CASE( trow, assign, 0 )
+	ADD_N_CASE( trow, assign, 1 )
+	ADD_N_CASE( trow, assign, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_row_import )
-	ADD_N_CASE( dense_row, import, 0 )
-	ADD_N_CASE( dense_row, import, 1 )
-	ADD_N_CASE( dense_row, import, 4 )
+	ADD_N_CASE( trow, import, 0 )
+	ADD_N_CASE( trow, import, 1 )
+	ADD_N_CASE( trow, import, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_row_swap )
-	ADD_N_CASE( dense_row, swap, 0 )
-	ADD_N_CASE( dense_row, swap, 1 )
-	ADD_N_CASE( dense_row, swap, 4 )
+	ADD_N_CASE( trow, swap, 0 )
+	ADD_N_CASE( trow, swap, 1 )
+	ADD_N_CASE( trow, swap, 4 )
 END_TPACK
 
 BEGIN_MAIN_SUITE

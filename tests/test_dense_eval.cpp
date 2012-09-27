@@ -27,8 +27,8 @@ MN_CASE( mat_eval, dense_mat )
 	dblock<double> s(m * n);
 	fill_lin(s);
 
-	dense_matrix<double, M, N> a(m, n, copy_from(s.ptr_data()));
-	dense_matrix<double, M, N> r = eval(a);
+	tarray<double, M, N> a(m, n, copy_from(s.ptr_data()));
+	tarray<double, M, N> r = eval(a);
 
 	ASSERT_EQ( r.nrows(), m );
 	ASSERT_EQ( r.ncolumns(), n );
@@ -45,8 +45,8 @@ MN_CASE( mat_eval, ref_mat )
 	dblock<double> s(m * n);
 	fill_lin(s);
 
-	ref_matrix<double, M, N> a(s.ptr_data(), m, n);
-	dense_matrix<double, M, N> r = eval(a);
+	tarray_ref<double, M, N> a(s.ptr_data(), m, n);
+	tarray<double, M, N> r = eval(a);
 
 	ASSERT_EQ( r.nrows(), m );
 	ASSERT_EQ( r.ncolumns(), n );
@@ -64,8 +64,8 @@ MN_CASE( mat_eval, ref_mat_ex )
 	dblock<double> s(ldim * n);
 	fill_lin(s);
 
-	ref_matrix_ex<double, M, N> a(s.ptr_data(), m, n, ldim);
-	dense_matrix<double, M, N> r = eval(a);
+	tarray_ref_ex<double, M, N> a(s.ptr_data(), m, n, ldim);
+	tarray<double, M, N> r = eval(a);
 
 	ASSERT_EQ( r.nrows(), m );
 	ASSERT_EQ( r.ncolumns(), n );

@@ -17,29 +17,29 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-template class lmat::ref_row<double, 0>;
-template class lmat::ref_row<double, 4>;
+template class lmat::trow_ref<double, 0>;
+template class lmat::trow_ref<double, 4>;
 
 #ifdef LMAT_USE_STATIC_ASSERT
 
 static_assert(lmat::is_base_of<
-		lmat::ref_matrix<double, 1, 0>,
-		lmat::ref_row<double, 0> >::value, "Base verification failed.");
+		lmat::tarray_ref<double, 1, 0>,
+		lmat::trow_ref<double, 0> >::value, "Base verification failed.");
 
 static_assert(lmat::is_base_of<
-		lmat::ref_matrix<double, 1, 4>,
-		lmat::ref_row<double, 4> >::value, "Base verification failed.");
+		lmat::tarray_ref<double, 1, 4>,
+		lmat::trow_ref<double, 4> >::value, "Base verification failed.");
 
 #endif
 
-N_CASE( cref_row, constructs )
+N_CASE( trow_cref, constructs )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> s(n);
 	const double *ps = s.ptr_data();
 
-	cref_row<double, N> a(ps, n);
+	trow_cref<double, N> a(ps, n);
 
 	ASSERT_EQ(a.nrows(), 1);
 	ASSERT_EQ(a.ncolumns(), n);
@@ -49,7 +49,7 @@ N_CASE( cref_row, constructs )
 
 	ASSERT_EQ(a.ptr_data(), ps);
 
-	cref_row<double, N> a2(a);
+	trow_cref<double, N> a2(a);
 
 	ASSERT_EQ(a2.nrows(), 1);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -61,14 +61,14 @@ N_CASE( cref_row, constructs )
 }
 
 
-N_CASE( ref_row, constructs )
+N_CASE( trow_ref, constructs )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> s(n);
 	double *ps = s.ptr_data();
 
-	ref_row<double, N> a(ps, n);
+	trow_ref<double, N> a(ps, n);
 
 	ASSERT_EQ(a.nrows(), 1);
 	ASSERT_EQ(a.ncolumns(), n);
@@ -78,7 +78,7 @@ N_CASE( ref_row, constructs )
 
 	ASSERT_EQ(a.ptr_data(), ps);
 
-	ref_row<double, N> a2(a);
+	trow_ref<double, N> a2(a);
 
 	ASSERT_EQ(a2.nrows(), 1);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -90,7 +90,7 @@ N_CASE( ref_row, constructs )
 }
 
 
-N_CASE( ref_row, assign )
+N_CASE( trow_ref, assign )
 {
 	const index_t n = N == 0 ? 4 : N;
 
@@ -103,8 +103,8 @@ N_CASE( ref_row, assign )
 	for (index_t i = 0; i < n; ++i) s1[i] = double(i + 2);
 	for (index_t i = 0; i < n; ++i) s2[i] = double(2 * i + 3);
 
-	ref_row<double, N> a1(ps1, n);
-	ref_row<double, N> a2(ps2, n);
+	trow_ref<double, N> a1(ps1, n);
+	trow_ref<double, N> a2(ps2, n);
 
 	ASSERT_EQ( a1.ptr_data(), ps1 );
 	ASSERT_EQ( a2.ptr_data(), ps2 );
@@ -119,7 +119,7 @@ N_CASE( ref_row, assign )
 }
 
 
-N_CASE( ref_row, import )
+N_CASE( trow_ref, import )
 {
 	const index_t n = N == 0 ? 4 : N;
 
@@ -127,7 +127,7 @@ N_CASE( ref_row, import )
 	dblock<double> s(n, fill(-1.0));
 
 	double *ps = s.ptr_data();
-	ref_row<double, N> a(ps, n);
+	trow_ref<double, N> a(ps, n);
 
 	// fill_value
 
@@ -149,27 +149,27 @@ N_CASE( ref_row, import )
 
 
 BEGIN_TPACK( cref_row_constructs )
-	ADD_N_CASE( cref_row, constructs, 0 )
-	ADD_N_CASE( cref_row, constructs, 1 )
-	ADD_N_CASE( cref_row, constructs, 4 )
+	ADD_N_CASE( trow_cref, constructs, 0 )
+	ADD_N_CASE( trow_cref, constructs, 1 )
+	ADD_N_CASE( trow_cref, constructs, 4 )
 END_TPACK
 
 BEGIN_TPACK( ref_row_constructs )
-	ADD_N_CASE( ref_row, constructs, 0 )
-	ADD_N_CASE( ref_row, constructs, 1 )
-	ADD_N_CASE( ref_row, constructs, 4 )
+	ADD_N_CASE( trow_ref, constructs, 0 )
+	ADD_N_CASE( trow_ref, constructs, 1 )
+	ADD_N_CASE( trow_ref, constructs, 4 )
 END_TPACK
 
 BEGIN_TPACK( ref_row_assign )
-	ADD_N_CASE( ref_row, assign, 0 )
-	ADD_N_CASE( ref_row, assign, 1 )
-	ADD_N_CASE( ref_row, assign, 4 )
+	ADD_N_CASE( trow_ref, assign, 0 )
+	ADD_N_CASE( trow_ref, assign, 1 )
+	ADD_N_CASE( trow_ref, assign, 4 )
 END_TPACK
 
 BEGIN_TPACK( ref_row_import )
-	ADD_N_CASE( ref_row, import, 0 )
-	ADD_N_CASE( ref_row, import, 1 )
-	ADD_N_CASE( ref_row, import, 4 )
+	ADD_N_CASE( trow_ref, import, 0 )
+	ADD_N_CASE( trow_ref, import, 1 )
+	ADD_N_CASE( trow_ref, import, 4 )
 END_TPACK
 
 

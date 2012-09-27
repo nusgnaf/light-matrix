@@ -16,27 +16,27 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-template class lmat::dense_col<double, 0>;
-template class lmat::dense_col<double, 4>;
+template class lmat::tcol<double, 0>;
+template class lmat::tcol<double, 4>;
 
 #ifdef LMAT_USE_STATIC_ASSERT
 
 static_assert(lmat::is_base_of<
 		lmat::dense_matrix<double, 0, 1>,
-		lmat::dense_col<double, 0> >::value, "Base verification failed.");
+		lmat::tcol<double, 0> >::value, "Base verification failed.");
 
 static_assert(lmat::is_base_of<
 		lmat::dense_matrix<double, 4, 1>,
-		lmat::dense_col<double, 4> >::value, "Base verification failed.");
+		lmat::tcol<double, 4> >::value, "Base verification failed.");
 
 #endif
 
 
-N_CASE( dense_col, constructs )
+N_CASE( tcol, constructs )
 {
 	// default construction
 
-	dense_col<double, N> a0;
+	tcol<double, N> a0;
 
 	ASSERT_EQ(a0.nrows(), N);
 	ASSERT_EQ(a0.ncolumns(), 1);
@@ -58,7 +58,7 @@ N_CASE( dense_col, constructs )
 
 	const index_t n = N == 0 ? 4 : N;
 
-	dense_col<double, N> a1(n);
+	tcol<double, N> a1(n);
 
 	ASSERT_EQ(a1.nrows(), n);
 	ASSERT_EQ(a1.ncolumns(), 1);
@@ -70,7 +70,7 @@ N_CASE( dense_col, constructs )
 }
 
 
-N_CASE( dense_col, generates )
+N_CASE( tcol, generates )
 {
 	const index_t n = N == 0 ? 4 : N;
 
@@ -78,7 +78,7 @@ N_CASE( dense_col, generates )
 
 	// zeros
 
-	dense_col<double, N> a0(n, zero());
+	tcol<double, N> a0(n, zero());
 	for (index_t i = 0; i < n; ++i) ref[i] = double(0);
 
 	ASSERT_EQ(a0.nrows(), n);
@@ -90,7 +90,7 @@ N_CASE( dense_col, generates )
 	// fill_value
 
 	const double v1 = 2.5;
-	dense_col<double, N> a1(n, fill(v1));
+	tcol<double, N> a1(n, fill(v1));
 	for (index_t i = 0; i < n; ++i) ref[i] = v1;
 
 	ASSERT_EQ(a1.nrows(), n);
@@ -102,7 +102,7 @@ N_CASE( dense_col, generates )
 	// copy_value
 
 	for (index_t i = 0; i < n; ++i) ref[i] = double(i + 2);
-	dense_col<double, N> a2(n, copy_from(ref.ptr_data()));
+	tcol<double, N> a2(n, copy_from(ref.ptr_data()));
 
 	ASSERT_EQ(a2.nrows(), n);
 	ASSERT_EQ(a2.ncolumns(), 1);
@@ -111,16 +111,16 @@ N_CASE( dense_col, generates )
 	ASSERT_VEC_EQ(n, a2, ref);
 }
 
-N_CASE( dense_col, copy_constructs )
+N_CASE( tcol, copy_constructs )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> ref(n);
 
 	for (index_t i = 0; i < n; ++i) ref[i] = double(i + 2);
-	dense_col<double, N> a(n, copy_from(ref.ptr_data()));
+	tcol<double, N> a(n, copy_from(ref.ptr_data()));
 
-	dense_col<double, N> a2(a);
+	tcol<double, N> a2(a);
 
 	ASSERT_EQ(a2.nrows(), n);
 	ASSERT_EQ(a2.ncolumns(), 1);
@@ -133,12 +133,12 @@ N_CASE( dense_col, copy_constructs )
 }
 
 
-N_CASE( dense_col, resize )
+N_CASE( tcol, resize )
 {
 	const index_t n = N == 0 ? 4 : N;
 	const index_t n2 = N == 0 ? 5 : N;
 
-	dense_col<double, N> a(n);
+	tcol<double, N> a(n);
 	const double *p1 = a.ptr_data();
 
 	a.require_size(n, 1);
@@ -179,16 +179,16 @@ N_CASE( dense_col, resize )
 }
 
 
-N_CASE( dense_col, assign )
+N_CASE( tcol, assign )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> ref(n);
 
 	for (index_t i = 0; i < n; ++i) ref[i] = double(i + 2);
-	dense_col<double, N> s(n, copy_from(ref.ptr_data()));
+	tcol<double, N> s(n, copy_from(ref.ptr_data()));
 
-	dense_col<double, N> a;
+	tcol<double, N> a;
 
 	a = s;
 
@@ -201,7 +201,7 @@ N_CASE( dense_col, assign )
 
 	ASSERT_VEC_EQ( n, a, s );
 
-	dense_col<double, N> b(n, zero());
+	tcol<double, N> b(n, zero());
 
 	const double *pb = b.ptr_data();
 
@@ -220,7 +220,7 @@ N_CASE( dense_col, assign )
 
 	const index_t n2 = N == 0 ? 6 : N;
 
-	dense_col<double, N> c(n2, zero());
+	tcol<double, N> c(n2, zero());
 
 	c = s;
 
@@ -235,13 +235,13 @@ N_CASE( dense_col, assign )
 }
 
 
-N_CASE( dense_col, import )
+N_CASE( tcol, import )
 {
 	const index_t n = N == 0 ? 4 : N;
 
 	dblock<double> ref(n);
 
-	dense_col<double, N> a(n, fill(-1.0));
+	tcol<double, N> a(n, fill(-1.0));
 
 	// fill_value
 
@@ -267,7 +267,7 @@ N_CASE( dense_col, import )
 	ASSERT_VEC_EQ(n, a, ref);
 }
 
-N_CASE( dense_col, swap )
+N_CASE( tcol, swap )
 {
 	const index_t n = N == 0 ? 4 : N;
 	const index_t n2 = N == 0 ? 5 : N;
@@ -278,8 +278,8 @@ N_CASE( dense_col, swap )
 	dblock<double> s2(n2);
 	for (index_t i = 0; i < n2; ++i) s2[i] = double(2 * i + 3);
 
-	dense_col<double, N> a(n, copy_from(s.ptr_data()));
-	dense_col<double, N> a2(n2, copy_from(s2.ptr_data()));
+	tcol<double, N> a(n, copy_from(s.ptr_data()));
+	tcol<double, N> a2(n2, copy_from(s2.ptr_data()));
 
 	const double *p = a.ptr_data();
 	const double *p2 = a2.ptr_data();
@@ -313,45 +313,45 @@ N_CASE( dense_col, swap )
 
 
 BEGIN_TPACK( dense_col_constructs )
-	ADD_N_CASE( dense_col, constructs, 0 )
-	ADD_N_CASE( dense_col, constructs, 1 )
-	ADD_N_CASE( dense_col, constructs, 4 )
+	ADD_N_CASE( tcol, constructs, 0 )
+	ADD_N_CASE( tcol, constructs, 1 )
+	ADD_N_CASE( tcol, constructs, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_col_generates )
-	ADD_N_CASE( dense_col, generates, 0 )
-	ADD_N_CASE( dense_col, generates, 1 )
-	ADD_N_CASE( dense_col, generates, 4 )
+	ADD_N_CASE( tcol, generates, 0 )
+	ADD_N_CASE( tcol, generates, 1 )
+	ADD_N_CASE( tcol, generates, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_col_copycon )
-	ADD_N_CASE( dense_col, copy_constructs, 0 )
-	ADD_N_CASE( dense_col, copy_constructs, 1 )
-	ADD_N_CASE( dense_col, copy_constructs, 4 )
+	ADD_N_CASE( tcol, copy_constructs, 0 )
+	ADD_N_CASE( tcol, copy_constructs, 1 )
+	ADD_N_CASE( tcol, copy_constructs, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_col_resize )
-	ADD_N_CASE( dense_col, resize, 0 )
-	ADD_N_CASE( dense_col, resize, 1 )
-	ADD_N_CASE( dense_col, resize, 4 )
+	ADD_N_CASE( tcol, resize, 0 )
+	ADD_N_CASE( tcol, resize, 1 )
+	ADD_N_CASE( tcol, resize, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_col_assign )
-	ADD_N_CASE( dense_col, assign, 0 )
-	ADD_N_CASE( dense_col, assign, 1 )
-	ADD_N_CASE( dense_col, assign, 4 )
+	ADD_N_CASE( tcol, assign, 0 )
+	ADD_N_CASE( tcol, assign, 1 )
+	ADD_N_CASE( tcol, assign, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_col_import )
-	ADD_N_CASE( dense_col, import, 0 )
-	ADD_N_CASE( dense_col, import, 1 )
-	ADD_N_CASE( dense_col, import, 4 )
+	ADD_N_CASE( tcol, import, 0 )
+	ADD_N_CASE( tcol, import, 1 )
+	ADD_N_CASE( tcol, import, 4 )
 END_TPACK
 
 BEGIN_TPACK( dense_col_swap )
-	ADD_N_CASE( dense_col, swap, 0 )
-	ADD_N_CASE( dense_col, swap, 1 )
-	ADD_N_CASE( dense_col, swap, 4 )
+	ADD_N_CASE( tcol, swap, 0 )
+	ADD_N_CASE( tcol, swap, 1 )
+	ADD_N_CASE( tcol, swap, 4 )
 END_TPACK
 
 BEGIN_MAIN_SUITE

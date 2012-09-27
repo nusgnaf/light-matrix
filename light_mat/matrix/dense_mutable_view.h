@@ -22,7 +22,7 @@ namespace lmat
 	class dense_mutable_view : public Mat
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
-		static_assert(is_dense_mat<Mat>::value, "Mat should be a dense matrix class");
+		static_assert(is_dense_array<Mat>::value, "Mat should be a dense matrix class");
 #endif
 
 	public:
@@ -36,7 +36,7 @@ namespace lmat
 
 	public:
 		template<class Expr>
-		LMAT_ENSURE_INLINE const dense_mutable_view& operator = (const IMatrixXpr<Expr, value_type>& r) const
+		LMAT_ENSURE_INLINE const dense_mutable_view& operator = (const IArrayXpr<Expr, value_type>& r) const
 		{
 			default_assign(const_cast<dense_mutable_view&>(*this), r);
 			return *this;

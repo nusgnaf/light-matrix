@@ -19,7 +19,7 @@ MN_CASE( linear_veval, continu_linear )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef dense_matrix<double, M, N> mat;
+	typedef tarray<double, M, N> mat;
 
 	typedef continuous_linear_mvisitor<double> visitor_t;
 
@@ -48,7 +48,7 @@ MN_CASE( linear_veval, cached_linear )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef ref_matrix_ex<double, M, N> mat_ex;
+	typedef tarray_ref_ex<double, M, N> mat_ex;
 
 	typedef typename
 			if_c<N == 1,
@@ -70,7 +70,7 @@ MN_CASE( linear_veval, cached_linear )
 	visitor_t visitor(a);
 	const ILinearMatrixScalarVisitor<visitor_t, double>& vis_r = visitor;
 
-	dense_matrix<double, M, N> ar(a);
+	tarray<double, M, N> ar(a);
 
 	for (index_t i = 0; i < m * n; ++i)
 	{
@@ -84,7 +84,7 @@ MN_CASE( linear_veval, const_linear )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef const_matrix<double, M, N> mat;
+	typedef const_array<double, M, N> mat;
 	typedef const_linear_mvisitor<double> visitor_t;
 
 #ifdef LMAT_USE_STATIC_ASSERT
@@ -113,7 +113,7 @@ MN_CASE( percol_veval, dense_percol )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef ref_matrix_ex<double, M, N> mat_ex;
+	typedef tarray_ref_ex<double, M, N> mat_ex;
 	typedef dense_percol_mvisitor<double> visitor_t;
 
 #ifdef LMAT_USE_STATIC_ASSERT
@@ -147,7 +147,7 @@ MN_CASE( percol_veval, cached_percol )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef ref_matrix_ex<double, M, N> mat_ex;
+	typedef tarray_ref_ex<double, M, N> mat_ex;
 	typedef cached_percol_mvisitor<double, M, N> visitor_t;
 
 	dblock<double> s(ldim * n);
@@ -172,7 +172,7 @@ MN_CASE( percol_veval, const_percol )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef const_matrix<double, M, N> mat;
+	typedef const_array<double, M, N> mat;
 	typedef const_percol_mvisitor<double> visitor_t;
 
 #ifdef LMAT_USE_STATIC_ASSERT
@@ -204,10 +204,10 @@ MN_CASE( eval_by_scalars, cont_to_cont )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	dense_matrix<double, M, N> a(m, n);
+	tarray<double, M, N> a(m, n);
 	for (index_t i = 0; i < m * n; ++i) a[i] = double(i+2);
 
-	dense_matrix<double, M, N> b(m, n, zero());
+	tarray<double, M, N> b(m, n, zero());
 
 	linear_by_scalars_evaluate(a, b);
 	ASSERT_MAT_EQ(m, n, a, b);
@@ -224,11 +224,11 @@ MN_CASE( eval_by_scalars, cont_to_ext )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	dense_matrix<double, M, N> a(m, n);
+	tarray<double, M, N> a(m, n);
 	for (index_t i = 0; i < m * n; ++i) a[i] = double(i+2);
 
 	dblock<double> sb(ldim_b * n, fill(0.0));
-	ref_matrix_ex<double, M, N> b(sb.ptr_data(), m, n, ldim_b);
+	tarray_ref_ex<double, M, N> b(sb.ptr_data(), m, n, ldim_b);
 
 	percol_by_scalars_evaluate(a, b);
 	ASSERT_MAT_EQ(m, n, a, b);
@@ -243,8 +243,8 @@ MN_CASE( eval_by_scalars, ext_to_cont )
 	dblock<double> sa(ldim_a * n);
 	for (index_t i = 0; i < ldim_a * n; ++i) sa[i] = double(i+2);
 
-	ref_matrix_ex<double, M, N> a(sa.ptr_data(), m, n, ldim_a);
-	dense_matrix<double, M, N> b(m, n, fill(0.0));
+	tarray_ref_ex<double, M, N> a(sa.ptr_data(), m, n, ldim_a);
+	tarray<double, M, N> b(m, n, fill(0.0));
 
 	linear_by_scalars_evaluate(a, b);
 	ASSERT_MAT_EQ(m, n, a, b);
@@ -267,8 +267,8 @@ MN_CASE( eval_by_scalars, ext_to_ext )
 
 	dblock<double> sb(ldim_b * n, fill(0.0));
 
-	ref_matrix_ex<double, M, N> a(sa.ptr_data(), m, n, ldim_a);
-	ref_matrix_ex<double, M, N> b(sb.ptr_data(), m, n, ldim_b);
+	tarray_ref_ex<double, M, N> a(sa.ptr_data(), m, n, ldim_a);
+	tarray_ref_ex<double, M, N> b(sb.ptr_data(), m, n, ldim_b);
 
 	percol_by_scalars_evaluate(a, b);
 	ASSERT_MAT_EQ(m, n, a, b);

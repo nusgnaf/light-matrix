@@ -20,11 +20,11 @@ namespace lmat
 {
 	template<typename T, class Mat>
 	LMAT_ENSURE_INLINE
-	void zero(IDenseMatrix<Mat, T>& dst)
+	void zero(IDenseArray<Mat, T>& dst)
 	{
 		typedef typename detail::mat_filler<T,
-				ct_rows<Mat>::value,
-				ct_cols<Mat>::value>::type filler_t;
+				ct_nrows<Mat>::value,
+				ct_ncols<Mat>::value>::type filler_t;
 
 		if (has_continuous_layout(dst))
 		{
@@ -39,11 +39,11 @@ namespace lmat
 
 	template<typename T, class Mat>
 	LMAT_ENSURE_INLINE
-	void fill(IDenseMatrix<Mat, T>& dst, const T& val)
+	void fill(IDenseArray<Mat, T>& dst, const T& val)
 	{
 		typedef typename detail::mat_filler<T,
-				ct_rows<Mat>::value,
-				ct_cols<Mat>::value>::type filler_t;
+				ct_nrows<Mat>::value,
+				ct_ncols<Mat>::value>::type filler_t;
 
 		if (has_continuous_layout(dst))
 		{
@@ -59,7 +59,7 @@ namespace lmat
 
 	template<typename T, class DMat>
 	LMAT_ENSURE_INLINE
-	DMat& operator << (IDenseMatrix<DMat, T>& dmat, const T& v)
+	DMat& operator << (IDenseArray<DMat, T>& dmat, const T& v)
 	{
 		fill(dmat.derived(), v);
 		return dmat.derived();

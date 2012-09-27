@@ -21,7 +21,7 @@ namespace lmat
 {
 	template<typename T, class LMat, class RMat>
 	LMAT_ENSURE_INLINE
-	bool is_equal(const IDenseMatrix<LMat, T>& a, const IDenseMatrix<RMat, T>& b)
+	bool is_equal(const IDenseArray<LMat, T>& a, const IDenseArray<RMat, T>& b)
 	{
 		const int M = binary_ct_rows<LMat, RMat>::value;
 		const int N = binary_ct_cols<LMat, RMat>::value;
@@ -42,7 +42,7 @@ namespace lmat
 
 	template<typename T, class LMat, class RMat>
 	inline
-	bool is_approx(const IDenseMatrix<LMat, T>& a, const IDenseMatrix<RMat, T>& b, const T& tol)
+	bool is_approx(const IDenseArray<LMat, T>& a, const IDenseArray<RMat, T>& b, const T& tol)
 	{
 		if (has_same_size(a, b))
 		{

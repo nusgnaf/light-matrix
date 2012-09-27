@@ -35,8 +35,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				IDenseMatrix<VecY, float>& y)
 		{
 			eval(1.0f, A, x, 0.0f, y);
@@ -45,8 +45,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const float alpha, const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const float alpha, const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				IDenseMatrix<VecY, float>& y)
 		{
 			eval(alpha, A, x, 0.0f, y);
@@ -55,8 +55,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				const float beta, IDenseMatrix<VecY, float>& y)
 		{
 			eval(1.0f, A, x, beta, y);
@@ -65,8 +65,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const float alpha, const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const float alpha, const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				const float beta, IDenseMatrix<VecY, float>& y)
 		{
 			typename lmat::detail::blas_mat_proxy<MatA>::type A_(A.derived());
@@ -90,8 +90,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				IDenseMatrix<VecY, double>& y)
 		{
 			eval(1.0f, A, x, 0.0f, y);
@@ -100,8 +100,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const double alpha, const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const double alpha, const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				IDenseMatrix<VecY, double>& y)
 		{
 			eval(alpha, A, x, 0.0f, y);
@@ -110,8 +110,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				const double beta, IDenseMatrix<VecY, double>& y)
 		{
 			eval(1.0f, A, x, beta, y);
@@ -120,8 +120,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const double alpha, const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const double alpha, const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				const double beta, IDenseMatrix<VecY, double>& y)
 		{
 			typename lmat::detail::blas_mat_proxy<MatA>::type A_(A.derived());
@@ -144,8 +144,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				IDenseMatrix<VecY, float>& y)
 		{
 			eval(1.0f, A, x, 0.0f, y);
@@ -154,8 +154,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const float alpha, const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const float alpha, const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				IDenseMatrix<VecY, float>& y)
 		{
 			eval(alpha, A, x, 0.0f, y);
@@ -164,8 +164,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				const float beta, IDenseMatrix<VecY, float>& y)
 		{
 			eval(1.0f, A, x, beta, y);
@@ -174,8 +174,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const float alpha, const IMatrixXpr<MatA, float>& A,
-				const IMatrixXpr<VecX, float>& x,
+				const float alpha, const IArrayXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
 				const float beta, IDenseMatrix<VecY, float>& y)
 		{
 			typename lmat::detail::blas_mat_proxy<MatA>::type A_(A.derived());
@@ -198,8 +198,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				IDenseMatrix<VecY, double>& y)
 		{
 			eval(1.0f, A, x, 0.0f, y);
@@ -208,8 +208,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const double alpha, const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const double alpha, const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				IDenseMatrix<VecY, double>& y)
 		{
 			eval(alpha, A, x, 0.0f, y);
@@ -218,8 +218,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				const double beta, IDenseMatrix<VecY, double>& y)
 		{
 			eval(1.0f, A, x, beta, y);
@@ -228,8 +228,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const double alpha, const IMatrixXpr<MatA, double>& A,
-				const IMatrixXpr<VecX, double>& x,
+				const double alpha, const IArrayXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
 				const double beta, IDenseMatrix<VecY, double>& y)
 		{
 			typename lmat::detail::blas_mat_proxy<MatA>::type A_(A.derived());
@@ -250,8 +250,8 @@ namespace lmat { namespace detail {
 	struct gemv_n_internal_map
 	{
 		typedef typename matrix_traits<MatA>::value_type T;
-		static const int M = binary_ctdim<ct_rows<MatA>::value, ct_rows<VecY>::value>::value;
-		static const int N = binary_ctdim<ct_cols<MatA>::value, ct_rows<VecX>::value>::value;
+		static const int M = binary_ctdim<ct_nrows<MatA>::value, ct_nrows<VecY>::value>::value;
+		static const int N = binary_ctdim<ct_ncols<MatA>::value, ct_nrows<VecX>::value>::value;
 
 		typedef gemv_n_internal<T, M, N> type;
 	};
@@ -260,8 +260,8 @@ namespace lmat { namespace detail {
 	struct gemv_t_internal_map
 	{
 		typedef typename matrix_traits<MatA>::value_type T;
-		static const int M = binary_ctdim<ct_rows<MatA>::value, ct_rows<VecX>::value>::value;
-		static const int N = binary_ctdim<ct_cols<MatA>::value, ct_rows<VecY>::value>::value;
+		static const int M = binary_ctdim<ct_nrows<MatA>::value, ct_nrows<VecX>::value>::value;
+		static const int N = binary_ctdim<ct_ncols<MatA>::value, ct_nrows<VecY>::value>::value;
 
 		typedef gemv_t_internal<T, M, N> type;
 	};
@@ -283,8 +283,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<VecX, float>& x,
-				const IMatrixXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
 				IDenseMatrix<VecY, float>& y)
 		{
 			eval(1.0f, x, A, 0.0f, y);
@@ -293,8 +293,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const float alpha, const IMatrixXpr<VecX, float>& x,
-				const IMatrixXpr<MatA, float>& A,
+				const float alpha, const IArrayXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
 				IDenseMatrix<VecY, float>& y)
 		{
 			eval(alpha, x, A, 0.0f, y);
@@ -303,8 +303,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<VecX, float>& x,
-				const IMatrixXpr<MatA, float>& A,
+				const IArrayXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
 				const float beta, IDenseMatrix<VecY, float>& y)
 		{
 			eval(1.0f, x, A, beta, y);
@@ -313,8 +313,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const float alpha, const IMatrixXpr<VecX, float>& x,
-				const IMatrixXpr<MatA, float>& A,
+				const float alpha, const IArrayXpr<VecX, float>& x,
+				const IArrayXpr<MatA, float>& A,
 				const float beta, IDenseMatrix<VecY, float>& y)
 		{
 			typename lmat::detail::blas_mat_proxy<MatA>::type A_(A.derived());
@@ -337,8 +337,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<VecX, double>& x,
-				const IMatrixXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
 				IDenseMatrix<VecY, double>& y)
 		{
 			eval(1.0f, x, A, 0.0f, y);
@@ -347,8 +347,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const double alpha, const IMatrixXpr<VecX, double>& x,
-				const IMatrixXpr<MatA, double>& A,
+				const double alpha, const IArrayXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
 				IDenseMatrix<VecY, double>& y)
 		{
 			eval(alpha, x, A, 0.0f, y);
@@ -357,8 +357,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const IMatrixXpr<VecX, double>& x,
-				const IMatrixXpr<MatA, double>& A,
+				const IArrayXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
 				const double beta, IDenseMatrix<VecY, double>& y)
 		{
 			eval(1.0f, x, A, beta, y);
@@ -367,8 +367,8 @@ namespace lmat { namespace detail {
 		template<class MatA, class VecX, class VecY>
 		LMAT_ENSURE_INLINE
 		static void eval(
-				const double alpha, const IMatrixXpr<VecX, double>& x,
-				const IMatrixXpr<MatA, double>& A,
+				const double alpha, const IArrayXpr<VecX, double>& x,
+				const IArrayXpr<MatA, double>& A,
 				const double beta, IDenseMatrix<VecY, double>& y)
 		{
 			typename lmat::detail::blas_mat_proxy<MatA>::type A_(A.derived());
@@ -392,8 +392,8 @@ namespace lmat { namespace detail {
 	struct gevm_n_internal_map
 	{
 		typedef typename matrix_traits<MatA>::value_type T;
-		static const int M = binary_ctdim<ct_rows<MatA>::value, ct_cols<VecX>::value>::value;
-		static const int N = binary_ctdim<ct_cols<MatA>::value, ct_cols<VecY>::value>::value;
+		static const int M = binary_ctdim<ct_nrows<MatA>::value, ct_ncols<VecX>::value>::value;
+		static const int N = binary_ctdim<ct_ncols<MatA>::value, ct_ncols<VecY>::value>::value;
 
 		typedef gevm_n_internal<T, M, N> type;
 	};
@@ -402,8 +402,8 @@ namespace lmat { namespace detail {
 	struct gevm_t_internal_map
 	{
 		typedef typename matrix_traits<MatA>::value_type T;
-		static const int M = binary_ctdim<ct_rows<MatA>::value, ct_cols<VecY>::value>::value;
-		static const int N = binary_ctdim<ct_cols<MatA>::value, ct_cols<VecX>::value>::value;
+		static const int M = binary_ctdim<ct_nrows<MatA>::value, ct_ncols<VecY>::value>::value;
+		static const int N = binary_ctdim<ct_ncols<MatA>::value, ct_ncols<VecX>::value>::value;
 
 		typedef gevm_t_internal<T, M, N> type;
 	};

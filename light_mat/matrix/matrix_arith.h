@@ -48,56 +48,56 @@ namespace lmat
 	 ********************************************/
 
 	template<typename T, class LArg, class RArg>
-	LArg& operator += (IDenseMatrix<LArg, T>& A, const IMatrixXpr<RArg, T>& B)
+	LArg& operator += (IDenseArray<LArg, T>& A, const IArrayXpr<RArg, T>& B)
 	{
 		A.derived() = A.derived() + B.derived();
 		return A.derived();
 	}
 
 	template<typename T, class LArg>
-	LArg& operator += (IDenseMatrix<LArg, T>& A, const T& b)
+	LArg& operator += (IDenseArray<LArg, T>& A, const T& b)
 	{
 		A.derived() = A.derived() + b;
 		return A.derived();
 	}
 
 	template<typename T, class LArg, class RArg>
-	LArg& operator -= (IDenseMatrix<LArg, T>& A, const IMatrixXpr<RArg, T>& B)
+	LArg& operator -= (IDenseArray<LArg, T>& A, const IArrayXpr<RArg, T>& B)
 	{
 		A.derived() = A.derived() - B.derived();
 		return A.derived();
 	}
 
 	template<typename T, class LArg>
-	LArg& operator -= (IDenseMatrix<LArg, T>& A, const T& b)
+	LArg& operator -= (IDenseArray<LArg, T>& A, const T& b)
 	{
 		A.derived() = A.derived() - b;
 		return A.derived();
 	}
 
 	template<typename T, class LArg, class RArg>
-	LArg& operator *= (IDenseMatrix<LArg, T>& A, const IMatrixXpr<RArg, T>& B)
+	LArg& operator *= (IDenseArray<LArg, T>& A, const IArrayXpr<RArg, T>& B)
 	{
 		A.derived() = A.derived() * B.derived();
 		return A.derived();
 	}
 
 	template<typename T, class LArg>
-	LArg& operator *= (IDenseMatrix<LArg, T>& A, const T& b)
+	LArg& operator *= (IDenseArray<LArg, T>& A, const T& b)
 	{
 		A.derived() = A.derived() * b;
 		return A.derived();
 	}
 
 	template<typename T, class LArg, class RArg>
-	LArg& operator /= (IDenseMatrix<LArg, T>& A, const IMatrixXpr<RArg, T>& B)
+	LArg& operator /= (IDenseArray<LArg, T>& A, const IArrayXpr<RArg, T>& B)
 	{
 		A.derived() = A.derived() / B.derived();
 		return A.derived();
 	}
 
 	template<typename T, class LArg>
-	LArg& operator /= (IDenseMatrix<LArg, T>& A, const T& b)
+	LArg& operator /= (IDenseArray<LArg, T>& A, const T& b)
 	{
 		A.derived() = A.derived() / b;
 		return A.derived();

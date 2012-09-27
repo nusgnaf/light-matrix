@@ -79,7 +79,7 @@ namespace lmat { namespace detail {
 		}
 
 	private:
-		dense_matrix<T, ct_rows<Vec>::value, 1> m_cache;
+		tarray<T, ct_nrows<Vec>::value, 1> m_cache;
 	};
 
 
@@ -146,7 +146,7 @@ namespace lmat { namespace detail {
 		}
 
 	private:
-		dense_matrix<T, 1, ct_cols<Vec>::value> m_cache;
+		tarray<T, 1, ct_ncols<Vec>::value> m_cache;
 	};
 
 
@@ -224,7 +224,7 @@ namespace lmat { namespace detail {
 		}
 
 	private:
-		dense_matrix<T, ct_rows<Mat>::value, ct_cols<Mat>::value> m_cache;
+		tarray<T, ct_nrows<Mat>::value, ct_ncols<Mat>::value> m_cache;
 	};
 
 
@@ -232,7 +232,7 @@ namespace lmat { namespace detail {
 	struct blas_col_proxy
 	{
 		typedef typename
-				if_<is_dense_mat<Vec>,
+				if_<is_dense_array<Vec>,
 					blas_densecol_proxy<Vec>,
 					blas_colxpr_proxy<Vec> >::type type;
 
@@ -242,7 +242,7 @@ namespace lmat { namespace detail {
 	struct blas_row_proxy
 	{
 		typedef typename
-				if_<is_dense_mat<Vec>,
+				if_<is_dense_array<Vec>,
 					blas_denserow_proxy<Vec>,
 					blas_rowxpr_proxy<Vec> >::type type;
 
@@ -252,7 +252,7 @@ namespace lmat { namespace detail {
 	struct blas_mat_proxy
 	{
 		typedef typename
-				if_<is_dense_mat<Mat>,
+				if_<is_dense_array<Mat>,
 					blas_densemat_proxy<Mat>,
 					blas_matxpr_proxy<Mat> >::type type;
 

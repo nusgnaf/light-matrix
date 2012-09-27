@@ -25,7 +25,7 @@ namespace lmat
 	inline typename unary_expr_map<
 		ewise_t<mask_not_op<T> >,
 		ref_arg_t, Mat >::type
-	operator ~ (const IMatrixXpr<Mat, mask_t<T> >& A)
+	operator ~ (const IArrayXpr<Mat, mask_t<T> >& A)
 	{
 		return ewise(mask_not_op<T>(), A.derived());
 	}
@@ -38,7 +38,7 @@ namespace lmat
 		ewise_t<mask_and_op<T> >,
 		ref_arg_t, LMat,
 		ref_arg_t, RMat >::type
-	operator & (const IMatrixXpr<LMat, mask_t<T> >& A, const IMatrixXpr<RMat, mask_t<T> >& B)
+	operator & (const IArrayXpr<LMat, mask_t<T> >& A, const IArrayXpr<RMat, mask_t<T> >& B)
 	{
 		return ewise(mask_and_op<T>(), A.derived(), B.derived());
 	}
@@ -51,7 +51,7 @@ namespace lmat
 		ewise_t<mask_or_op<T> >,
 		ref_arg_t, LMat,
 		ref_arg_t, RMat >::type
-	operator | (const IMatrixXpr<LMat, mask_t<T> >& A, const IMatrixXpr<RMat, mask_t<T> >& B)
+	operator | (const IArrayXpr<LMat, mask_t<T> >& A, const IArrayXpr<RMat, mask_t<T> >& B)
 	{
 		return ewise(mask_or_op<T>(), A.derived(), B.derived());
 	}
@@ -64,7 +64,7 @@ namespace lmat
 		ewise_t<mask_xor_op<T> >,
 		ref_arg_t, LMat,
 		ref_arg_t, RMat >::type
-	operator ^ (const IMatrixXpr<LMat, mask_t<T> >& A, const IMatrixXpr<RMat, mask_t<T> >& B)
+	operator ^ (const IArrayXpr<LMat, mask_t<T> >& A, const IArrayXpr<RMat, mask_t<T> >& B)
 	{
 		return ewise(mask_xor_op<T>(), A.derived(), B.derived());
 	}

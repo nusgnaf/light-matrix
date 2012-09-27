@@ -277,24 +277,24 @@ namespace lmat
 
 	// intrinsic values
 
-	template<class Shape> struct ct_nrows;
-	template<class Shape> struct ct_ncols;
-	template<class Shape> struct ct_nelems;
+	template<class Shape> struct ct_shape_nrows;
+	template<class Shape> struct ct_shape_ncols;
+	template<class Shape> struct ct_shape_nelems;
 
 	template<int M, int N>
-	struct ct_nrows<array_shape<M, N> >
+	struct ct_shape_nrows<array_shape<M, N> >
 	{
 		static const int value = M;
 	};
 
 	template<int M, int N>
-	struct ct_ncols<array_shape<M, N> >
+	struct ct_shape_ncols<array_shape<M, N> >
 	{
 		static const int value = N;
 	};
 
 	template<int M, int N>
-	struct ct_nelems<array_shape<M, N> >
+	struct ct_shape_nelems<array_shape<M, N> >
 	{
 		static const int value = M * N;
 	};
@@ -319,28 +319,28 @@ namespace lmat
 	{
 		static const bool value =
 				ct_is_matrix_shape<S>::value &&
-				(ct_nrows<S>::value == 1 || ct_ncols<S>::value == 1);
+				(ct_shape_nrows<S>::value == 1 || ct_shape_ncols<S>::value == 1);
 	};
 
 	template<class S> struct ct_is_scalar_shape
 	{
 		static const bool value =
 				ct_is_matrix_shape<S>::value &&
-				(ct_nrows<S>::value == 1 && ct_ncols<S>::value == 1);
+				(ct_shape_nrows<S>::value == 1 && ct_shape_ncols<S>::value == 1);
 	};
 
 	template<class S> struct ct_is_row_shape
 	{
 		static const bool value =
 				ct_is_matrix_shape<S>::value &&
-				(ct_nrows<S>::value == 1);
+				(ct_shape_nrows<S>::value == 1);
 	};
 
 	template<class S> struct ct_is_column_shape
 	{
 		static const bool value =
 				ct_is_matrix_shape<S>::value &&
-				(ct_ncols<S>::value == 1);
+				(ct_shape_ncols<S>::value == 1);
 	};
 
 
@@ -357,8 +357,8 @@ namespace lmat
 	struct are_compatible_shapes
 	{
 		static const bool value =
-				are_compatible_dims<ct_nrows<L>::value, ct_nrows<R>::value>::value &&
-				are_compatible_dims<ct_ncols<L>::value, ct_ncols<R>::value>::value;
+				are_compatible_dims<ct_shape_nrows<L>::value, ct_shape_nrows<R>::value>::value &&
+				are_compatible_dims<ct_shape_ncols<L>::value, ct_shape_ncols<R>::value>::value;
 	};
 
 	namespace detail
@@ -383,8 +383,8 @@ namespace lmat
 	template<class L, class R>
 	struct ct_binary_shape
 	{
-		static const int nrows = ct_binary_dim<ct_nrows<L>::value, ct_nrows<R>::value>::value;
-		static const int ncols = ct_binary_dim<ct_ncols<L>::value, ct_ncols<R>::value>::value;
+		static const int nrows = ct_binary_dim<ct_shape_nrows<L>::value, ct_shape_nrows<R>::value>::value;
+		static const int ncols = ct_binary_dim<ct_shape_ncols<L>::value, ct_shape_ncols<R>::value>::value;
 
 		typedef array_shape<nrows, ncols> type;
 	};

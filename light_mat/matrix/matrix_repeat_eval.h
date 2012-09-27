@@ -26,13 +26,13 @@ namespace lmat
 	 ********************************************/
 
 	template<typename Arg_HP, class Arg, int N, class Dst>
-	struct default_matrix_eval_policy<horizontal_repeat_expr<Arg_HP, Arg, N>, Dst>
+	struct default_array_eval_policy<horizontal_repeat_expr<Arg_HP, Arg, N>, Dst>
 	{
 		typedef matrix_copy_policy type;
 	};
 
 	template<typename Arg_HP, class Arg, int M, class Dst>
-	struct default_matrix_eval_policy<vertical_repeat_expr<Arg_HP, Arg, M>, Dst>
+	struct default_array_eval_policy<vertical_repeat_expr<Arg_HP, Arg, M>, Dst>
 	{
 		typedef matrix_copy_policy type;
 	};
@@ -40,7 +40,7 @@ namespace lmat
 
 	template<typename Arg_HP, class Arg, int N, class Dst>
 	inline void evaluate(const horizontal_repeat_expr<Arg_HP, Arg, N>& expr,
-			IDenseMatrix<Dst, typename matrix_traits<Arg>::value_type >& dst,
+			IDenseArray<Dst, typename matrix_traits<Arg>::value_type >& dst,
 			matrix_copy_policy)
 	{
 		const Arg& s = expr.arg();
@@ -49,7 +49,7 @@ namespace lmat
 		if ( is_column(expr) )
 		{
 			const int M = binary_ct_rows<Arg, Dst>::value;
-			ref_col<T, M> dview(dst.ptr_data(), s.nrows());
+			tcol_ref<T, M> dview(dst.ptr_data(), s.nrows());
 			default_evaluate(s, dview);
 		}
 		else
@@ -77,7 +77,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class Dst>
 	LMAT_ENSURE_INLINE
 	inline void evaluate(const horizontal_repeat_expr<Arg_HP, Arg, 1>& expr,
-			IDenseMatrix<Dst, typename matrix_traits<Arg>::value_type >& dst,
+			IDenseArray<Dst, typename matrix_traits<Arg>::value_type >& dst,
 			matrix_copy_policy)
 	{
 
@@ -87,7 +87,7 @@ namespace lmat
 
 	template<typename Arg_HP, class Arg, int M, class Dst>
 	inline void evaluate(const vertical_repeat_expr<Arg_HP, Arg, M>& expr,
-			IDenseMatrix<Dst, typename matrix_traits<Arg>::value_type >& dst,
+			IDenseArray<Dst, typename matrix_traits<Arg>::value_type >& dst,
 			matrix_copy_policy)
 	{
 		const Arg& s = expr.arg();
@@ -98,12 +98,12 @@ namespace lmat
 			const int N = binary_ct_cols<Arg, Dst>::value;
 			if (has_continuous_layout(dst))
 			{
-				ref_row<T, N> dview(dst.ptr_data(), s.ncolumns());
+				trow_ref<T, N> dview(dst.ptr_data(), s.ncolumns());
 				default_evaluate(s, dview);
 			}
 			else
 			{
-				ref_matrix_ex<T, 1, N> dview(dst.ptr_data(), 1, s.ncolumns(), dst.lead_dim());
+				tarray_ref_ex<T, 1, N> dview(dst.ptr_data(), 1, s.ncolumns(), dst.lead_dim());
 				default_evaluate(s, dview);
 			}
 		}
@@ -147,7 +147,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class Dst>
 	LMAT_ENSURE_INLINE
 	inline void evaluate(const vertical_repeat_expr<Arg_HP, Arg, 1>& expr,
-			IDenseMatrix<Dst, typename matrix_traits<Arg>::value_type>& dst,
+			IDenseArray<Dst, typename matrix_traits<Arg>::value_type>& dst,
 			matrix_copy_policy)
 	{
 
@@ -435,7 +435,7 @@ namespace lmat
 		matrix_visit_setting<linear_vis, scalar_kernel_t, ME, NE> >
 	{
 		typedef typename matrix_traits<Arg>::value_type T;
-		static const int M = ct_rows<Arg>::value;
+		static const int M = ct_nrows<Arg>::value;
 
 		typedef typename
 				if_c<N == 1,
@@ -456,7 +456,7 @@ namespace lmat
 		matrix_visit_setting<linear_vis, scalar_kernel_t, ME, NE> >
 	{
 		typedef typename matrix_traits<Arg>::value_type T;
-		static const int N = ct_cols<Arg>::value;
+		static const int N = ct_ncols<Arg>::value;
 
 		typedef typename
 				if_c<M == 1,
@@ -478,7 +478,7 @@ namespace lmat
 		matrix_visit_setting<percol_vis, scalar_kernel_t, ME, NE> >
 	{
 		typedef typename matrix_traits<Arg>::value_type T;
-		static const int M = ct_rows<Arg>::value;
+		static const int M = ct_nrows<Arg>::value;
 
 		typedef typename
 				if_c<N == 1,
@@ -502,7 +502,7 @@ namespace lmat
 		matrix_visit_setting<percol_vis, scalar_kernel_t, ME, NE> >
 	{
 		typedef typename matrix_traits<Arg>::value_type T;
-		static const int N = ct_cols<Arg>::value;
+		static const int N = ct_ncols<Arg>::value;
 
 		typedef typename
 				if_c<M == 1,

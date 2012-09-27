@@ -150,7 +150,7 @@ namespace lmat { namespace detail {
 		const T* pdata() const { return m_cache.ptr_data(); }
 
 	private:
-		dense_matrix<T, ct_rows<Mat>::value, ct_cols<Mat>::value> m_cache;
+		tarray<T, ct_nrows<Mat>::value, ct_ncols<Mat>::value> m_cache;
 		lmat_blas_int m_len;
 		lmat_blas_int m_inc;
 	};
@@ -162,7 +162,7 @@ namespace lmat { namespace detail {
 		static const bool is_contmat = ct_is_col<Mat>::value || ct_has_continuous_layout<Mat>::value;
 
 		typedef typename
-				if_<is_dense_mat<Mat>,
+				if_<is_dense_array<Mat>,
 					typename
 					if_c<is_contmat,
 						contmat_blasl1_wrapper<Mat>,
@@ -186,7 +186,7 @@ namespace lmat { namespace detail {
 	{
 		template<class Mat>
 		LMAT_ENSURE_INLINE
-		static float asum(const IMatrixXpr<Mat, float>& x)
+		static float asum(const IArrayXpr<Mat, float>& x)
 		{
 			typename blasl1_wrapper_map<Mat>::type xw(x.derived());
 			return LMAT_SASUM(xw.plength(), xw.pdata(), xw.pinc());
@@ -194,7 +194,7 @@ namespace lmat { namespace detail {
 
 		template<class XMat, class YMat>
 		LMAT_ENSURE_INLINE
-		static void axpy(const float a, const IMatrixXpr<XMat, float>& x,
+		static void axpy(const float a, const IArrayXpr<XMat, float>& x,
 				IDenseMatrix<YMat, float>& y)
 		{
 			typename blasl1_wrapper_map<XMat>::type xw(x.derived());
@@ -204,7 +204,7 @@ namespace lmat { namespace detail {
 
 		template<class XMat, class YMat>
 		LMAT_ENSURE_INLINE
-		static float dot(const IMatrixXpr<XMat, float>& x, const IMatrixXpr<YMat, float>& y)
+		static float dot(const IArrayXpr<XMat, float>& x, const IArrayXpr<YMat, float>& y)
 		{
 			typename blasl1_wrapper_map<XMat>::type xw(x.derived());
 			typename blasl1_wrapper_map<YMat>::type yw(y.derived());
@@ -214,7 +214,7 @@ namespace lmat { namespace detail {
 
 		template<class Mat>
 		LMAT_ENSURE_INLINE
-		static float nrm2(const IMatrixXpr<Mat, float>& x)
+		static float nrm2(const IArrayXpr<Mat, float>& x)
 		{
 			typename blasl1_wrapper_map<Mat>::type xw(x.derived());
 			return LMAT_SNRM2(xw.plength(), xw.pdata(), xw.pinc());
@@ -237,7 +237,7 @@ namespace lmat { namespace detail {
 	{
 		template<class Mat>
 		LMAT_ENSURE_INLINE
-		static double asum(const IMatrixXpr<Mat, double>& x)
+		static double asum(const IArrayXpr<Mat, double>& x)
 		{
 			typename blasl1_wrapper_map<Mat>::type xw(x.derived());
 			return LMAT_DASUM(xw.plength(), xw.pdata(), xw.pinc());
@@ -245,7 +245,7 @@ namespace lmat { namespace detail {
 
 		template<class XMat, class YMat>
 		LMAT_ENSURE_INLINE
-		static void axpy(const double a, const IMatrixXpr<XMat, double>& x,
+		static void axpy(const double a, const IArrayXpr<XMat, double>& x,
 				IDenseMatrix<YMat, double>& y)
 		{
 			typename blasl1_wrapper_map<XMat>::type xw(x.derived());
@@ -255,7 +255,7 @@ namespace lmat { namespace detail {
 
 		template<class XMat, class YMat>
 		LMAT_ENSURE_INLINE
-		static double dot(const IMatrixXpr<XMat, double>& x, const IMatrixXpr<YMat, double>& y)
+		static double dot(const IArrayXpr<XMat, double>& x, const IArrayXpr<YMat, double>& y)
 		{
 			typename blasl1_wrapper_map<XMat>::type xw(x.derived());
 			typename blasl1_wrapper_map<YMat>::type yw(y.derived());
@@ -265,7 +265,7 @@ namespace lmat { namespace detail {
 
 		template<class Mat>
 		LMAT_ENSURE_INLINE
-		static double nrm2(const IMatrixXpr<Mat, double>& x)
+		static double nrm2(const IArrayXpr<Mat, double>& x)
 		{
 			typename blasl1_wrapper_map<Mat>::type xw(x.derived());
 			return LMAT_DNRM2(xw.plength(), xw.pdata(), xw.pinc());
@@ -287,8 +287,8 @@ namespace lmat { namespace detail {
 	struct unary_blasl1_internal_map
 	{
 		typedef typename matrix_traits<Mat>::value_type T;
-		static const int M = ct_rows<Mat>::value;
-		static const int N = ct_cols<Mat>::value;
+		static const int M = ct_nrows<Mat>::value;
+		static const int N = ct_ncols<Mat>::value;
 		typedef blasl1_internal<T, M, N> type;
 	};
 

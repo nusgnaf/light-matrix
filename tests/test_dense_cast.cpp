@@ -21,8 +21,8 @@ MN_CASE( dense_cast, explicit_cast )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	dense_matrix<double, M, N> A(m, n);
-	dense_matrix<float,  M, N> Br(m, n);
+	tarray<double, M, N> A(m, n);
+	tarray<float,  M, N> Br(m, n);
 
 	for (index_t i = 0; i < m * n; ++i)
 	{
@@ -31,7 +31,7 @@ MN_CASE( dense_cast, explicit_cast )
 		Br[i] = float(v);
 	}
 
-	dense_matrix<float, M, N> B = to_f32(A);
+	tarray<float, M, N> B = to_f32(A);
 
 	ASSERT_TRUE( is_equal(B, Br) );
 }
@@ -45,8 +45,8 @@ MN_CASE( ref_cast, explicit_cast )
 	dblock<double> sA(m * n);
 	dblock<float> sB(m * n);
 
-	ref_matrix<double, M, N> A(sA.ptr_data(), m, n);
-	dense_matrix<float, M, N> Br(m, n);
+	tarray_ref<double, M, N> A(sA.ptr_data(), m, n);
+	tarray<float, M, N> Br(m, n);
 
 	for (index_t i = 0; i < m * n; ++i)
 	{
@@ -55,7 +55,7 @@ MN_CASE( ref_cast, explicit_cast )
 		Br[i] = float(v);
 	}
 
-	ref_matrix<float, M, N> B(sB.ptr_data(), m, n);
+	tarray_ref<float, M, N> B(sB.ptr_data(), m, n);
 	B = to_f32(A);
 
 	ASSERT_TRUE( is_equal(B, Br) );
@@ -73,8 +73,8 @@ MN_CASE( ref_ex_cast, explicit_cast )
 	dblock<double> sA(ldim_a * n, zero());
 	dblock<float> sB(ldim_b * n, zero());
 
-	ref_matrix_ex<double,  M, N> A(sA.ptr_data(), m, n, ldim_a);
-	dense_matrix<float, M, N> Br(m, n);
+	tarray_ref_ex<double,  M, N> A(sA.ptr_data(), m, n, ldim_a);
+	tarray<float, M, N> Br(m, n);
 
 	for (index_t j = 0; j < n; ++j)
 	{
@@ -86,7 +86,7 @@ MN_CASE( ref_ex_cast, explicit_cast )
 		}
 	}
 
-	ref_matrix_ex<float, M, N> B(sB.ptr_data(), m, n, ldim_b);
+	tarray_ref_ex<float, M, N> B(sB.ptr_data(), m, n, ldim_b);
 	B = to_f32(A);
 
 	ASSERT_TRUE( is_equal(B, Br) );

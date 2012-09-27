@@ -82,7 +82,7 @@ namespace lmat
 	 ********************************************/
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct matrix_traits<cref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct matrix_traits<tarray_cref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const int num_dimensions = 2;
 		static const int compile_time_num_rows = CTRows;
@@ -95,38 +95,38 @@ namespace lmat
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct ct_has_continuous_layout<cref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct ct_has_continuous_layout<tarray_cref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = (CTCols == 1);
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_base_aligned<cref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct is_base_aligned<tarray_cref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = is_base_aligned_from_tag<Align>::value;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_percol_aligned<cref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct is_percol_aligned<tarray_cref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = is_percol_aligned_from_tag<Align>::value;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_linear_accessible<cref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct is_linear_accessible<tarray_cref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = (CTRows == 1 || CTCols == 1);
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align, class DMat>
-	struct default_matrix_eval_policy<cref_matrix_ex<T, CTRows, CTCols, Align>, DMat>
+	struct default_array_eval_policy<tarray_cref_ex<T, CTRows, CTCols, Align>, DMat>
 	{
 		typedef matrix_copy_policy type;
 	};
 
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	class cref_matrix_ex : public IDenseMatrix<cref_matrix_ex<T, CTRows, CTCols, Align>, T>
+	class tarray_cref_ex : public IDenseArray<tarray_cref_ex<T, CTRows, CTCols, Align>, T>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_supported_matrix_value_type<T>::value,
@@ -139,13 +139,13 @@ namespace lmat
 	public:
 
 		LMAT_ENSURE_INLINE
-		cref_matrix_ex(const T* pdata, index_type m, index_type n, index_type ldim)
+		tarray_cref_ex(const T* pdata, index_type m, index_type n, index_type ldim)
 		: m_data(pdata), m_shape(m, n), m_ldim(ldim)
 		{
 		}
 
 	private:
-		cref_matrix_ex& operator = (const cref_matrix_ex& );  // no assignment
+		tarray_cref_ex& operator = (const tarray_cref_ex& );  // no assignment
 
 	public:
 		LMAT_ENSURE_INLINE index_type nelems() const
@@ -215,7 +215,7 @@ namespace lmat
 
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct matrix_traits<ref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct matrix_traits<tarray_ref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const int num_dimensions = 2;
 		static const int compile_time_num_rows = CTRows;
@@ -228,38 +228,38 @@ namespace lmat
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct ct_has_continuous_layout<ref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct ct_has_continuous_layout<tarray_ref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = (CTCols == 1);
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_base_aligned<ref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct is_base_aligned<tarray_ref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = is_base_aligned_from_tag<Align>::value;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_percol_aligned<ref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct is_percol_aligned<tarray_ref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = is_percol_aligned_from_tag<Align>::value;
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_linear_accessible<ref_matrix_ex<T, CTRows, CTCols, Align> >
+	struct is_linear_accessible<tarray_ref_ex<T, CTRows, CTCols, Align> >
 	{
 		static const bool value = (CTRows == 1 || CTCols == 1);
 	};
 
 	template<typename T, int CTRows, int CTCols, typename Align, class DMat>
-	struct default_matrix_eval_policy<ref_matrix_ex<T, CTRows, CTCols, Align>, DMat>
+	struct default_array_eval_policy<tarray_ref_ex<T, CTRows, CTCols, Align>, DMat>
 	{
 		typedef matrix_copy_policy type;
 	};
 
 
 	template<typename T, int CTRows, int CTCols, typename Align>
-	class ref_matrix_ex : public IDenseMatrix<ref_matrix_ex<T, CTRows, CTCols, Align>, T>
+	class tarray_ref_ex : public IDenseArray<tarray_ref_ex<T, CTRows, CTCols, Align>, T>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_supported_matrix_value_type<T>::value,
@@ -271,13 +271,13 @@ namespace lmat
 
 	public:
 		LMAT_ENSURE_INLINE
-		ref_matrix_ex(T* pdata, index_type m, index_type n, index_type ldim)
+		tarray_ref_ex(T* pdata, index_type m, index_type n, index_type ldim)
 		: m_data(pdata), m_shape(m, n), m_ldim(ldim)
 		{
 		}
 
 	public:
-		LMAT_ENSURE_INLINE ref_matrix_ex& operator = (const ref_matrix_ex& r)
+		LMAT_ENSURE_INLINE tarray_ref_ex& operator = (const tarray_ref_ex& r)
 		{
 			if (this != &r)
 			{
@@ -287,7 +287,7 @@ namespace lmat
 		}
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE ref_matrix_ex& operator = (const IMatrixXpr<Expr, T>& r)
+		LMAT_ENSURE_INLINE tarray_ref_ex& operator = (const IArrayXpr<Expr, T>& r)
 		{
 			default_assign(*this, r);
 			return *this;

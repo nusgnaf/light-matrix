@@ -20,8 +20,8 @@ const index_t LDim = 8;
 
 MN_CASE( colwise_reduce, sum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -50,8 +50,8 @@ MN_CASE( colwise_reduce, sum )
 
 MN_CASE( rowwise_reduce, sum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -81,8 +81,8 @@ MN_CASE( rowwise_reduce, sum )
 
 MN_CASE( colwise_reduce, mean )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -111,8 +111,8 @@ MN_CASE( colwise_reduce, mean )
 
 MN_CASE( rowwise_reduce, mean )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -141,8 +141,8 @@ MN_CASE( rowwise_reduce, mean )
 
 MN_CASE( colwise_reduce, maximum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -171,8 +171,8 @@ MN_CASE( colwise_reduce, maximum )
 
 MN_CASE( rowwise_reduce, maximum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -203,8 +203,8 @@ MN_CASE( rowwise_reduce, maximum )
 
 MN_CASE( colwise_reduce, minimum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -233,8 +233,8 @@ MN_CASE( colwise_reduce, minimum )
 
 MN_CASE( rowwise_reduce, minimum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -265,8 +265,8 @@ MN_CASE( rowwise_reduce, minimum )
 
 MN_CASE( colwise_reduce, dot )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -299,8 +299,8 @@ MN_CASE( colwise_reduce, dot )
 
 MN_CASE( rowwise_reduce, dot )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -334,8 +334,8 @@ MN_CASE( rowwise_reduce, dot )
 
 MN_CASE( colwise_reduce, L1norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -366,8 +366,8 @@ MN_CASE( colwise_reduce, L1norm )
 
 MN_CASE( rowwise_reduce, L1norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -400,8 +400,8 @@ MN_CASE( rowwise_reduce, L1norm )
 
 MN_CASE( colwise_reduce, sqL2norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -429,8 +429,8 @@ MN_CASE( colwise_reduce, sqL2norm )
 
 MN_CASE( rowwise_reduce, sqL2norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -459,8 +459,8 @@ MN_CASE( rowwise_reduce, sqL2norm )
 
 MN_CASE( colwise_reduce, L2norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -488,8 +488,8 @@ MN_CASE( colwise_reduce, L2norm )
 
 MN_CASE( rowwise_reduce, L2norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -518,8 +518,8 @@ MN_CASE( rowwise_reduce, L2norm )
 
 MN_CASE( colwise_reduce, Linfnorm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -553,8 +553,8 @@ MN_CASE( colwise_reduce, Linfnorm )
 
 MN_CASE( rowwise_reduce, Linfnorm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -589,8 +589,8 @@ MN_CASE( rowwise_reduce, Linfnorm )
 
 MN_CASE( colwise_reduce, nrmdot )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_row<double, N> row_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef trow<double, N> row_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -632,8 +632,8 @@ MN_CASE( colwise_reduce, nrmdot )
 
 MN_CASE( rowwise_reduce, nrmdot )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef dense_col<double, M> col_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tcol<double, M> col_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;

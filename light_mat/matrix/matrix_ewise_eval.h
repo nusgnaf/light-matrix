@@ -262,14 +262,14 @@ namespace lmat
 
 
 	template<typename Fun, typename Arg_HP, class Arg, class Dst>
-	struct default_matrix_eval_policy<unary_ewise_expr<Fun, Arg_HP, Arg>, Dst>
+	struct default_array_eval_policy<unary_ewise_expr<Fun, Arg_HP, Arg>, Dst>
 	{
 		typedef unary_ewise_expr<Fun, Arg_HP, Arg> expr_t;
 		typedef typename default_matrix_visit_policy<expr_t, Dst>::type type;
 	};
 
 	template<typename Fun, typename Arg1_HP, class Arg1, typename Arg2_HP, class Arg2, class Dst>
-	struct default_matrix_eval_policy<binary_ewise_expr<Fun, Arg1_HP, Arg1, Arg2_HP, Arg2>, Dst>
+	struct default_array_eval_policy<binary_ewise_expr<Fun, Arg1_HP, Arg1, Arg2_HP, Arg2>, Dst>
 	{
 		typedef binary_ewise_expr<Fun, Arg1_HP, Arg1, Arg2_HP, Arg2> expr_t;
 		typedef typename default_matrix_visit_policy<expr_t, Dst>::type type;

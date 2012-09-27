@@ -54,7 +54,7 @@ namespace lmat
 		LMAT_ENSURE_INLINE
 		static void evaluate(
 				const ILinearMatrixScalarVisitor<Visitor, T>& visitor,
-				IDenseMatrix<Mat, T>& dst)
+				IDenseArray<Mat, T>& dst)
 		{
 			T* pd = dst.ptr_data();
 
@@ -72,7 +72,7 @@ namespace lmat
 		LMAT_ENSURE_INLINE
 		static void evaluate(
 				const ILinearMatrixScalarVisitor<Visitor, T>& visitor,
-				IDenseMatrix<Mat, T>& dst)
+				IDenseArray<Mat, T>& dst)
 		{
 
 			T* pd = dst.ptr_data();
@@ -97,7 +97,7 @@ namespace lmat
 		LMAT_ENSURE_INLINE
 		static void evaluate(
 				IPerColMatrixScalarVisitor<Visitor, T>& visitor,
-				IDenseMatrix<Mat, T>& dst)
+				IDenseArray<Mat, T>& dst)
 		{
 			const index_t ncols = dst.ncolumns();
 			const index_t ldim = dst.lead_dim();
@@ -123,7 +123,7 @@ namespace lmat
 		LMAT_ENSURE_INLINE
 		static void evaluate(
 				IPerColMatrixScalarVisitor<Visitor, T>& visitor,
-				IDenseMatrix<Mat, T>& dst)
+				IDenseArray<Mat, T>& dst)
 		{
 			const index_t nrows = dst.nrows();
 			const index_t ncols = dst.ncolumns();
@@ -151,7 +151,7 @@ namespace lmat
 
 	template<typename T, class Expr, class Dst, typename VisCate, typename KerCate>
 	LMAT_ENSURE_INLINE
-	void evaluate(const IMatrixXpr<Expr, T>& src, IDenseMatrix<Dst, T>& dst,
+	void evaluate(const IArrayXpr<Expr, T>& src, IDenseArray<Dst, T>& dst,
 			matrix_visit_policy<VisCate, KerCate>)
 	{
 		typedef matrix_visit_setting<VisCate, KerCate,
@@ -165,14 +165,14 @@ namespace lmat
 
 	template<typename T, class Expr, class Dst>
 	LMAT_ENSURE_INLINE
-	void linear_by_scalars_evaluate(const IMatrixXpr<Expr, T>& expr, IDenseMatrix<Dst, T>& dst)
+	void linear_by_scalars_evaluate(const IArrayXpr<Expr, T>& expr, IDenseArray<Dst, T>& dst)
 	{
 		evaluate(expr.derived(), dst.derived(), matrix_visit_policy<linear_vis, scalar_kernel_t>());
 	}
 
 	template<typename T, class Expr, class Dst>
 	LMAT_ENSURE_INLINE
-	void percol_by_scalars_evaluate(const IMatrixXpr<Expr, T>& expr, IDenseMatrix<Dst, T>& dst)
+	void percol_by_scalars_evaluate(const IArrayXpr<Expr, T>& expr, IDenseArray<Dst, T>& dst)
 	{
 		evaluate(expr.derived(), dst.derived(), matrix_visit_policy<percol_vis, scalar_kernel_t>());
 	}

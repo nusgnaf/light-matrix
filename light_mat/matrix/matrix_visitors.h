@@ -127,7 +127,7 @@ namespace lmat
 	public:
 		template<class Mat>
 		LMAT_ENSURE_INLINE
-		continuous_linear_mvisitor(const IDenseMatrix<Mat, T>& X)
+		continuous_linear_mvisitor(const IDenseArray<Mat, T>& X)
 		{
 #ifdef LMAT_USE_STATIC_ASSERT
 			static_assert(ct_has_continuous_layout<Mat>::value,
@@ -162,7 +162,7 @@ namespace lmat
 	public:
 		template<class Mat>
 		LMAT_ENSURE_INLINE
-		dense_percol_mvisitor(const IDenseMatrix<Mat, T>& X)
+		dense_percol_mvisitor(const IDenseArray<Mat, T>& X)
 		: m_ldim(X.lead_dim())
 		, m_data(X.ptr_data())
 		{
@@ -192,7 +192,7 @@ namespace lmat
 	public:
 		template<int CTRows, int CTCols>
 		LMAT_ENSURE_INLINE
-		const_linear_mvisitor(const const_matrix<T, CTRows, CTCols>& X)
+		const_linear_mvisitor(const const_array<T, CTRows, CTCols>& X)
 		: m_val(X.value())
 		{
 		}
@@ -222,7 +222,7 @@ namespace lmat
 	public:
 		template<int CTRows, int CTCols>
 		LMAT_ENSURE_INLINE
-		const_percol_mvisitor(const const_matrix<T, CTRows, CTCols>& X)
+		const_percol_mvisitor(const const_array<T, CTRows, CTCols>& X)
 		: m_val(X.value())
 		{
 		}
@@ -251,7 +251,7 @@ namespace lmat
 	public:
 		template<class Expr>
 		LMAT_ENSURE_INLINE
-		cached_linear_mvisitor(const IMatrixXpr<Expr, T>& X)
+		cached_linear_mvisitor(const IArrayXpr<Expr, T>& X)
 		: m_cache(X), m_data(m_cache.ptr_data())
 		{
 		}
@@ -262,7 +262,7 @@ namespace lmat
 			return m_data[i];
 		}
 	private:
-		dense_matrix<T, M, N> m_cache;
+		tarray<T, M, N> m_cache;
 		const T* m_data;
 	};
 
@@ -282,7 +282,7 @@ namespace lmat
 	public:
 		template<class Expr>
 		LMAT_ENSURE_INLINE
-		cached_percol_mvisitor(const IMatrixXpr<Expr, T>& X)
+		cached_percol_mvisitor(const IArrayXpr<Expr, T>& X)
 		: m_cache(X)
 		{
 		}
@@ -298,7 +298,7 @@ namespace lmat
 		}
 
 	private:
-		dense_matrix<T, M, N> m_cache;
+		tarray<T, M, N> m_cache;
 	};
 
 
@@ -325,7 +325,7 @@ namespace lmat
 		struct _default_vismap<Expr, linear_vis, scalar_kernel_t, ME, NE>
 		{
 			typedef typename matrix_traits<Expr>::value_type T;
-			typedef cached_linear_mvisitor<T, ct_rows<Expr>::value, ct_cols<Expr>::value> cached_vis_type;
+			typedef cached_linear_mvisitor<T, ct_nrows<Expr>::value, ct_ncols<Expr>::value> cached_vis_type;
 
 			typedef typename
 					if_<is_linear_memory_accessible<Expr>,
@@ -342,14 +342,14 @@ namespace lmat
 		struct _default_vismap<Expr, percol_vis, scalar_kernel_t, ME, NE>
 		{
 			typedef typename matrix_traits<Expr>::value_type T;
-			typedef cached_percol_mvisitor<T, ct_rows<Expr>::value, ct_cols<Expr>::value> cached_vis_type;
+			typedef cached_percol_mvisitor<T, ct_nrows<Expr>::value, ct_ncols<Expr>::value> cached_vis_type;
 
 			typedef typename
-					if_<is_dense_mat<Expr>,
+					if_<is_dense_array<Expr>,
 						dense_percol_mvisitor<T>,
 						cached_vis_type>::type visitor_type;
 
-			static const int normal_cost = is_dense_mat<Expr>::value ? 0 : MVISIT_CACHE_COST;
+			static const int normal_cost = is_dense_array<Expr>::value ? 0 : MVISIT_CACHE_COST;
 			static const int shortv_cost = SHORTVEC_PERCOL_COST + normal_cost;
 
 			static const int cost = ME < SHORTVEC_LENGTH_THRESHOLD ? shortv_cost : normal_cost;
@@ -378,7 +378,7 @@ namespace lmat
 
 	template<typename T, int CTRows, int CTCols, int ME, int NE>
 	struct matrix_vismap<
-		const_matrix<T, CTRows, CTCols>,
+		const_array<T, CTRows, CTCols>,
 		matrix_visit_setting<linear_vis, scalar_kernel_t, ME, NE> >
 	{
 		typedef const_linear_mvisitor<T> type;
@@ -387,7 +387,7 @@ namespace lmat
 
 	template<typename T, int CTRows, int CTCols, int ME, int NE>
 	struct matrix_vismap<
-		const_matrix<T, CTRows, CTCols>,
+		const_array<T, CTRows, CTCols>,
 		matrix_visit_setting<percol_vis, scalar_kernel_t, ME, NE> >
 	{
 		typedef const_percol_mvisitor<T> type;

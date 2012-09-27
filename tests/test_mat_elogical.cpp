@@ -22,7 +22,7 @@ typedef mask_t<double> dmask_t;
 
 MN_CASE( mat_elogical, not )
 {
-	typedef dense_matrix<dmask_t, M, N> mmat_t;
+	typedef tarray<dmask_t, M, N> mmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -45,7 +45,7 @@ MN_CASE( mat_elogical, not )
 
 MN_CASE( mat_elogical, and )
 {
-	typedef dense_matrix<dmask_t, M, N> mmat_t;
+	typedef tarray<dmask_t, M, N> mmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -70,7 +70,7 @@ MN_CASE( mat_elogical, and )
 
 MN_CASE( mat_elogical, or )
 {
-	typedef dense_matrix<dmask_t, M, N> mmat_t;
+	typedef tarray<dmask_t, M, N> mmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -95,7 +95,7 @@ MN_CASE( mat_elogical, or )
 
 MN_CASE( mat_elogical, xor )
 {
-	typedef dense_matrix<dmask_t, M, N> mmat_t;
+	typedef tarray<dmask_t, M, N> mmat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;

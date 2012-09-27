@@ -1,7 +1,7 @@
 /*
- * @file matrix_copy.h
+ * @file array_copy.h
  *
- * Functions to copy or cast matrices
+ * Functions to copy arrays
  *
  * @author Dahua Lin
  */
@@ -10,21 +10,21 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_MATRIX_COPY_H_
-#define LIGHTMAT_MATRIX_COPY_H_
+#ifndef LIGHTMAT_ARRAY_COPY_H_
+#define LIGHTMAT_ARRAY_COPY_H_
 
-#include <light_mat/matrix/matrix_properties.h>
-#include "bits/matrix_copy_internal.h"
+#include <light_mat/array/array_interf.h>
+#include "bits/array_copy_internal.h"
 
 namespace lmat
 {
 	template<typename T, class RMat>
 	LMAT_ENSURE_INLINE
-	void copy(const T *ps, IDenseMatrix<RMat, T>& dst)
+	void copy(const T *ps, IDenseArray<RMat, T>& dst)
 	{
 		typedef typename detail::mat_copier<T,
-				ct_rows<RMat>::value,
-				ct_cols<RMat>::value>::type copier_t;
+				ct_nrows<RMat>::value,
+				ct_ncols<RMat>::value>::type copier_t;
 
 		if (has_continuous_layout(dst))
 		{
@@ -40,11 +40,11 @@ namespace lmat
 
 	template<typename T, class LMat>
 	LMAT_ENSURE_INLINE
-	void copy(const IDenseMatrix<LMat, T>& src, T* pd)
+	void copy(const IDenseArray<LMat, T>& src, T* pd)
 	{
 		typedef typename detail::mat_copier<T,
-				ct_rows<LMat>::value,
-				ct_cols<LMat>::value>::type copier_t;
+				ct_nrows<LMat>::value,
+				ct_ncols<LMat>::value>::type copier_t;
 
 		if (has_continuous_layout(src))
 		{
@@ -61,7 +61,7 @@ namespace lmat
 
 	template<typename T, class LMat, class RMat>
 	inline
-	void copy(const IDenseMatrix<LMat, T>& src, IDenseMatrix<RMat, T>& dst)
+	void copy(const IDenseArray<LMat, T>& src, IDenseArray<RMat, T>& dst)
 	{
 		check_same_size(src, dst, "copy: inconsistent sizes of src and dst.");
 
@@ -101,7 +101,7 @@ namespace lmat
 
 	template<typename T, class DMat>
 	LMAT_ENSURE_INLINE
-	DMat& operator << (IDenseMatrix<DMat, T>& dmat, const T *src)
+	DMat& operator << (IDenseArray<DMat, T>& dmat, const T *src)
 	{
 		copy(src, dmat.derived());
 		return dmat.derived();
@@ -112,7 +112,7 @@ namespace lmat
 
 	template<typename T, class LMat, class RMat>
 	LMAT_ENSURE_INLINE
-	void evaluate(const IDenseMatrix<LMat, T>& src, IDenseMatrix<RMat, T>& dst, matrix_copy_policy)
+	void evaluate(const IDenseArray<LMat, T>& src, IDenseArray<RMat, T>& dst, matrix_copy_policy)
 	{
 		copy(src.derived(), dst.derived());
 	}

@@ -20,7 +20,7 @@ namespace lmat
 {
 
 	template<typename T, int CTRows, int CTCols>
-	struct matrix_traits<const_matrix<T, CTRows, CTCols> >
+	struct matrix_traits<const_array<T, CTRows, CTCols> >
 	{
 		static const int num_dimensions = 2;
 		static const int compile_time_num_rows = CTRows;
@@ -33,7 +33,7 @@ namespace lmat
 	};
 
 	template<typename T, int CTRows, int CTCols>
-	struct is_linear_accessible<const_matrix<T, CTRows, CTCols> >
+	struct is_linear_accessible<const_array<T, CTRows, CTCols> >
 	{
 		static const bool value = true;
 	};
@@ -41,14 +41,14 @@ namespace lmat
 	struct matrix_fill_policy { };
 
 	template<typename T, int CTRows, int CTCols, class DMat>
-	struct default_matrix_eval_policy<const_matrix<T, CTRows, CTCols>, DMat>
+	struct default_array_eval_policy<const_array<T, CTRows, CTCols>, DMat>
 	{
 		typedef matrix_fill_policy type;
 	};
 
 
 	template<typename T, int CTRows, int CTCols>
-	class const_matrix : public IMatrixView<const_matrix<T, CTRows, CTCols>, T>
+	class const_array : public IMatrixView<const_array<T, CTRows, CTCols>, T>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_supported_matrix_value_type<T>::value,
@@ -58,7 +58,7 @@ namespace lmat
 	public:
 		LMAT_MAT_TRAITS_DEFS(T)
 
-		LMAT_ENSURE_INLINE const_matrix(const index_type m, const index_type n, const T& val)
+		LMAT_ENSURE_INLINE const_array(const index_type m, const index_type n, const T& val)
 		: m_shape(m, n), m_val(val) { }
 
 		LMAT_ENSURE_INLINE index_type nelems() const
@@ -106,7 +106,7 @@ namespace lmat
 
 	template<typename T, int M, int N, class Dst>
 	LMAT_ENSURE_INLINE
-	void evaluate(const const_matrix<T, M, N>& mat, IDenseMatrix<Dst, T>& dst, matrix_fill_policy)
+	void evaluate(const const_array<T, M, N>& mat, IDenseArray<Dst, T>& dst, matrix_fill_policy)
 	{
 		fill(dst, mat.value());
 	}
@@ -115,14 +115,14 @@ namespace lmat
 	// Transpose
 
 	template<typename T, int M, int N, typename Arg_HP>
-	struct unary_expr_map<transpose_t, Arg_HP, const_matrix<T, M, N> >
+	struct unary_expr_map<transpose_t, Arg_HP, const_array<T, M, N> >
 	{
-		typedef const_matrix<T, N, M> type;
+		typedef const_array<T, N, M> type;
 
 		LMAT_ENSURE_INLINE
-		static type get(transpose_t, const arg_forwarder<Arg_HP, const_matrix<T, M, N> >& arg_fwd)
+		static type get(transpose_t, const arg_forwarder<Arg_HP, const_array<T, M, N> >& arg_fwd)
 		{
-			const const_matrix<T, M, N>& arg = arg_fwd.arg;
+			const const_array<T, M, N>& arg = arg_fwd.arg;
 			return type(arg.ncolumns(), arg.nrows(), arg.value());
 		}
 	};

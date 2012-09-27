@@ -21,7 +21,7 @@ namespace lmat { namespace detail {
 	struct repcol_cached_ewrapper
 	{
 		typedef typename matrix_traits<Col>::value_type T;
-		typedef dense_matrix<T, ct_rows<Col>::value, 1> col_t;
+		typedef tarray<T, ct_nrows<Col>::value, 1> col_t;
 		col_t m_col;
 
 		LMAT_ENSURE_INLINE
@@ -69,7 +69,7 @@ namespace lmat { namespace detail {
 	struct reprow_cached_ewrapper
 	{
 		typedef typename matrix_traits<Row>::value_type T;
-		typedef dense_matrix<T, 1, ct_cols<Row>::value> row_t;
+		typedef tarray<T, 1, ct_ncols<Row>::value> row_t;
 		row_t m_row;
 
 		LMAT_ENSURE_INLINE
@@ -106,7 +106,7 @@ namespace lmat { namespace detail {
 	struct repcol_ewrapper_map
 	{
 		typedef typename
-				if_<is_dense_mat<Col>,
+				if_<is_dense_array<Col>,
 					repcol_ref_ewrapper<Col>,
 					repcol_cached_ewrapper<Col> >::type type;
 	};
@@ -115,7 +115,7 @@ namespace lmat { namespace detail {
 	struct reprow_ewrapper_map
 	{
 		typedef typename
-				if_<is_dense_mat<Row>,
+				if_<is_dense_array<Row>,
 					reprow_ref_ewrapper<Row>,
 					reprow_cached_ewrapper<Row> >::type type;
 	};

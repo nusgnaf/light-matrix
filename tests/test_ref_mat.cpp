@@ -17,25 +17,25 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-template class lmat::cref_matrix<double, 0, 0>;
-template class lmat::cref_matrix<double, 0, 4>;
-template class lmat::cref_matrix<double, 3, 0>;
-template class lmat::cref_matrix<double, 3, 4>;
+template class lmat::tarray_cref<double, 0, 0>;
+template class lmat::tarray_cref<double, 0, 4>;
+template class lmat::tarray_cref<double, 3, 0>;
+template class lmat::tarray_cref<double, 3, 4>;
 
-template class lmat::ref_matrix<double, 0, 0>;
-template class lmat::ref_matrix<double, 0, 4>;
-template class lmat::ref_matrix<double, 3, 0>;
-template class lmat::ref_matrix<double, 3, 4>;
+template class lmat::tarray_ref<double, 0, 0>;
+template class lmat::tarray_ref<double, 0, 4>;
+template class lmat::tarray_ref<double, 3, 0>;
+template class lmat::tarray_ref<double, 3, 4>;
 
 #ifdef LMAT_USE_STATIC_ASSERT
 
-static_assert(lmat::is_mat_xpr<lmat::cref_matrix<double> >::value, "Interface verification failed.");
-static_assert(lmat::is_mat_view<lmat::cref_matrix<double> >::value, "Interface verification failed.");
-static_assert(lmat::is_dense_mat<lmat::cref_matrix<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_array_xpr<lmat::tarray_cref<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_mat_view<lmat::tarray_cref<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_dense_array<lmat::tarray_cref<double> >::value, "Interface verification failed.");
 
-static_assert(lmat::is_mat_xpr<lmat::ref_matrix<double> >::value, "Interface verification failed.");
-static_assert(lmat::is_mat_view<lmat::ref_matrix<double> >::value, "Interface verification failed.");
-static_assert(lmat::is_dense_mat<lmat::ref_matrix<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_array_xpr<lmat::tarray_ref<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_mat_view<lmat::tarray_ref<double> >::value, "Interface verification failed.");
+static_assert(lmat::is_dense_array<lmat::tarray_ref<double> >::value, "Interface verification failed.");
 
 #endif
 
@@ -47,7 +47,7 @@ MN_CASE( cref_mat, constructs )
 	dblock<double> s(m * n);
 	const double *ps = s.ptr_data();
 
-	cref_matrix<double, M, N> a(ps, m, n);
+	tarray_cref<double, M, N> a(ps, m, n);
 
 	ASSERT_EQ(a.nrows(), m);
 	ASSERT_EQ(a.ncolumns(), n);
@@ -57,7 +57,7 @@ MN_CASE( cref_mat, constructs )
 
 	ASSERT_EQ(a.ptr_data(), ps);
 
-	cref_matrix<double, M, N> a2(a);
+	tarray_cref<double, M, N> a2(a);
 
 	ASSERT_EQ(a2.nrows(), m);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -76,7 +76,7 @@ MN_CASE( ref_mat, constructs )
 	dblock<double> s(m * n);
 	double *ps = s.ptr_data();
 
-	ref_matrix<double, M, N> a(ps, m, n);
+	tarray_ref<double, M, N> a(ps, m, n);
 
 	ASSERT_EQ(a.nrows(), m);
 	ASSERT_EQ(a.ncolumns(), n);
@@ -86,7 +86,7 @@ MN_CASE( ref_mat, constructs )
 
 	ASSERT_EQ(a.ptr_data(), ps);
 
-	ref_matrix<double, M, N> a2(a);
+	tarray_ref<double, M, N> a2(a);
 
 	ASSERT_EQ(a2.nrows(), m);
 	ASSERT_EQ(a2.ncolumns(), n);
@@ -106,8 +106,8 @@ MN_CASE( cref_mat, access )
 	dblock<double> ref(m * n);
 
 	for (index_t i = 0; i < m * n; ++i) ref[i] = double(i + 2);
-	cref_matrix<double, M, N> a(ref.ptr_data(), m, n);
-	const cref_matrix<double, M, N>& ac = a;
+	tarray_cref<double, M, N> a(ref.ptr_data(), m, n);
+	const tarray_cref<double, M, N>& ac = a;
 
 	for (index_t j = 0; j < n; ++j)
 	{
@@ -141,8 +141,8 @@ MN_CASE( ref_mat, access )
 	dblock<double> ref(m * n);
 
 	for (index_t i = 0; i < m * n; ++i) ref[i] = double(i + 2);
-	ref_matrix<double, M, N> a(ref.ptr_data(), m, n);
-	const ref_matrix<double, M, N>& ac = a;
+	tarray_ref<double, M, N> a(ref.ptr_data(), m, n);
+	const tarray_ref<double, M, N>& ac = a;
 
 	for (index_t j = 0; j < n; ++j)
 	{
@@ -182,8 +182,8 @@ MN_CASE( ref_mat, assign )
 	for (index_t i = 0; i < m * n; ++i) s1[i] = double(i + 2);
 	for (index_t i = 0; i < m * n; ++i) s2[i] = double(2 * i + 3);
 
-	ref_matrix<double, M, N> a1(ps1, m, n);
-	ref_matrix<double, M, N> a2(ps2, m, n);
+	tarray_ref<double, M, N> a1(ps1, m, n);
+	tarray_ref<double, M, N> a2(ps2, m, n);
 
 	ASSERT_EQ( a1.ptr_data(), ps1 );
 	ASSERT_EQ( a2.ptr_data(), ps2 );
@@ -205,7 +205,7 @@ MN_CASE( ref_mat, import )
 	dblock<double> ref(m * n);
 	dblock<double> s(m * n, fill(-1.0));
 
-	ref_matrix<double, M, N> a(s.ptr_data(), m, n);
+	tarray_ref<double, M, N> a(s.ptr_data(), m, n);
 
 	// fill_value
 

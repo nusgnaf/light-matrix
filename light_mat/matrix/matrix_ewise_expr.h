@@ -28,8 +28,8 @@ namespace lmat
 	struct matrix_traits<unary_ewise_expr<Fun, Arg_HP, Arg> >
 	{
 		static const int num_dimensions = 2;
-		static const int compile_time_num_rows = ct_rows<Arg>::value;
-		static const int compile_time_num_cols = ct_cols<Arg>::value;
+		static const int compile_time_num_rows = ct_nrows<Arg>::value;
+		static const int compile_time_num_cols = ct_ncols<Arg>::value;
 
 		static const bool is_readonly = true;
 
@@ -59,11 +59,11 @@ namespace lmat
 	template<class Fun, typename Arg_HP, class Arg>
 	class unary_ewise_expr
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<unary_ewise_expr<Fun, Arg_HP, Arg>, typename Fun::result_type>
+	, public IArrayXpr<unary_ewise_expr<Fun, Arg_HP, Arg>, typename Fun::result_type>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_unary_ewise_functor<Fun>::value, "Fun must be a unary_ewise_functor");
-		static_assert(is_mat_xpr<Arg>::value, "Arg must be a matrix expression class.");
+		static_assert(is_array_xpr<Arg>::value, "Arg must be a matrix expression class.");
 #endif
 
 	public:
@@ -108,12 +108,12 @@ namespace lmat
 	template<class Fun, typename Arg1_HP, class Arg1, typename Arg2_HP, class Arg2>
 	class binary_ewise_expr
 	: public binary_expr_base<Arg1_HP, Arg1, Arg2_HP, Arg2>
-	, public IMatrixXpr<binary_ewise_expr<Fun, Arg1_HP, Arg1, Arg2_HP, Arg2>, typename Fun::result_type>
+	, public IArrayXpr<binary_ewise_expr<Fun, Arg1_HP, Arg1, Arg2_HP, Arg2>, typename Fun::result_type>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_binary_ewise_functor<Fun>::value, "Fun must be a binary_ewise_functor");
-		static_assert(is_mat_xpr<Arg1>::value, "Arg1 must be a matrix expression class.");
-		static_assert(is_mat_xpr<Arg2>::value, "Arg2 must be a matrix expression class.");
+		static_assert(is_array_xpr<Arg1>::value, "Arg1 must be a matrix expression class.");
+		static_assert(is_array_xpr<Arg2>::value, "Arg2 must be a matrix expression class.");
 #endif
 
 	public:
@@ -186,13 +186,13 @@ namespace lmat
 	template<class Fun, class Arg>
 	struct unary_expr_verifier<ewise_t<Fun>, Arg>
 	{
-		static const bool value = is_mat_xpr<Arg>::value;
+		static const bool value = is_array_xpr<Arg>::value;
 	};
 
 	template<class Fun, class Arg1, class Arg2>
 	struct binary_expr_verifier<ewise_t<Fun>, Arg1, Arg2>
 	{
-		static const bool value = is_mat_xpr<Arg1>::value && is_mat_xpr<Arg2>::value;
+		static const bool value = is_array_xpr<Arg1>::value && is_array_xpr<Arg2>::value;
 	};
 
 	template<class Fun, typename Arg_HP, class Arg>
@@ -226,7 +226,7 @@ namespace lmat
 	struct binary_fix2_ewise_expr_map
 	{
 		typedef typename Fun::second_arg_type T2;
-		typedef const_matrix<T2, ct_rows<Arg1>::value, ct_cols<Arg1>::value> Arg2;
+		typedef const_array<T2, ct_nrows<Arg1>::value, ct_ncols<Arg1>::value> Arg2;
 
 		typedef typename binary_expr_map<ewise_t<Fun>,
 				Arg1_HP, Arg1, copy_arg_t, Arg2>::type type;
@@ -236,7 +236,7 @@ namespace lmat
 	struct binary_fix1_ewise_expr_map
 	{
 		typedef typename Fun::first_arg_type T1;
-		typedef const_matrix<T1, ct_rows<Arg2>::value, ct_cols<Arg2>::value> Arg1;
+		typedef const_array<T1, ct_nrows<Arg2>::value, ct_ncols<Arg2>::value> Arg1;
 
 		typedef typename binary_expr_map<ewise_t<Fun>,
 				copy_arg_t, Arg1, Arg2_HP, Arg2>::type type;
@@ -248,7 +248,7 @@ namespace lmat
 	inline typename unary_expr_map<ewise_t<Fun>,
 		ref_arg_t, Arg
 	>::type
-	ewise(const Fun& fun, const IMatrixXpr<Arg, typename Fun::arg_type>& arg)
+	ewise(const Fun& fun, const IArrayXpr<Arg, typename Fun::arg_type>& arg)
 	{
 		return make_expr(ewise(fun), ref_arg(arg.derived()) );
 	}
@@ -260,8 +260,8 @@ namespace lmat
 		ref_arg_t, Arg2
 	>::type
 	ewise(  const Fun& fun,
-			const IMatrixXpr<Arg1, typename Fun::first_arg_type>& arg1,
-			const IMatrixXpr<Arg2, typename Fun::second_arg_type>& arg2 )
+			const IArrayXpr<Arg1, typename Fun::first_arg_type>& arg1,
+			const IArrayXpr<Arg2, typename Fun::second_arg_type>& arg2 )
 	{
 		return make_expr(ewise(fun),
 				ref_arg(arg1.derived()),
@@ -273,12 +273,12 @@ namespace lmat
 	LMAT_ENSURE_INLINE
 	inline typename binary_fix2_ewise_expr_map<Fun, ref_arg_t, Arg1>::type
 	ewise(  const Fun& fun,
-			const IMatrixXpr<Arg1, typename Fun::first_arg_type>& arg1,
+			const IArrayXpr<Arg1, typename Fun::first_arg_type>& arg1,
 			const typename Fun::second_arg_type& arg2v )
 	{
-		const_matrix<typename Fun::second_arg_type,
-			ct_rows<Arg1>::value,
-			ct_cols<Arg1>::value>
+		const_array<typename Fun::second_arg_type,
+			ct_nrows<Arg1>::value,
+			ct_ncols<Arg1>::value>
 		arg2(arg1.nrows(), arg1.ncolumns(), arg2v);
 
 		return make_expr(ewise(fun),
@@ -292,11 +292,11 @@ namespace lmat
 	inline typename binary_fix1_ewise_expr_map<Fun, ref_arg_t, Arg2>::type
 	ewise(  const Fun& fun,
 			const typename Fun::first_arg_type& arg1v,
-			const IMatrixXpr<Arg2, typename Fun::second_arg_type>& arg2 )
+			const IArrayXpr<Arg2, typename Fun::second_arg_type>& arg2 )
 	{
-		const_matrix<typename Fun::first_arg_type,
-			ct_rows<Arg2>::value,
-			ct_cols<Arg2>::value>
+		const_array<typename Fun::first_arg_type,
+			ct_nrows<Arg2>::value,
+			ct_ncols<Arg2>::value>
 		arg1(arg2.nrows(), arg2.ncolumns(), arg1v);
 
 		return make_expr(ewise(fun),
@@ -376,23 +376,23 @@ namespace lmat
 		typename CExpr_HP, typename Tc, int Mc, int Nc>
 	struct binary_expr_map<ewise_t<Fun>,
 		TExpr1_HP, transpose_expr<Arg1_HP, Arg1>,
-		CExpr_HP, const_matrix<Tc, Mc, Nc> >
+		CExpr_HP, const_array<Tc, Mc, Nc> >
 	{
 		typedef typename unary_expr_map<
 					transpose_t,
 					copy_arg_t,
 					typename binary_expr_map<ewise_t<Fun>,
 						Arg1_HP, Arg1,
-						CExpr_HP, const_matrix<Tc, Nc, Mc> >::type
+						CExpr_HP, const_array<Tc, Nc, Mc> >::type
 				>::type type;
 
 		LMAT_ENSURE_INLINE
 		static type get(const ewise_t<Fun>& spec,
 				const arg_forwarder<TExpr1_HP, transpose_expr<Arg1_HP, Arg1> >& texpr1_fwd,
-				const arg_forwarder<CExpr_HP, const_matrix<Tc, Mc, Nc> >& cexpr_fwd)
+				const arg_forwarder<CExpr_HP, const_array<Tc, Mc, Nc> >& cexpr_fwd)
 		{
 			const transpose_expr<Arg1_HP, Arg1>& texpr1 = texpr1_fwd.arg;
-			const const_matrix<Tc, Mc, Nc>& cexpr = cexpr_fwd.arg;
+			const const_array<Tc, Mc, Nc>& cexpr = cexpr_fwd.arg;
 
 			return make_expr(
 						transpose_t(),
@@ -400,7 +400,7 @@ namespace lmat
 							make_expr(
 								ewise(spec.fun),
 								arg_forwarder<Arg1_HP, Arg1>(texpr1.arg()),
-								copy_arg( const_matrix<Tc, Nc, Mc>(
+								copy_arg( const_array<Tc, Nc, Mc>(
 										cexpr.ncolumns(), cexpr.nrows(), cexpr.value())
 								)
 							)
@@ -413,23 +413,23 @@ namespace lmat
 	typename CExpr_HP, typename Tc, int Mc, int Nc,
 		typename TExpr2_HP, typename Arg2_HP, class Arg2>
 	struct binary_expr_map<ewise_t<Fun>,
-		CExpr_HP, const_matrix<Tc, Mc, Nc>,
+		CExpr_HP, const_array<Tc, Mc, Nc>,
 		TExpr2_HP, transpose_expr<Arg2_HP, Arg2> >
 	{
 		typedef typename unary_expr_map<
 					transpose_t,
 					copy_arg_t,
 					typename binary_expr_map<ewise_t<Fun>,
-						CExpr_HP, const_matrix<Tc, Nc, Mc>,
+						CExpr_HP, const_array<Tc, Nc, Mc>,
 						Arg2_HP, Arg2>::type
 				>::type type;
 
 		LMAT_ENSURE_INLINE
 		static type get(const ewise_t<Fun>& spec,
-				const arg_forwarder<CExpr_HP, const_matrix<Tc, Mc, Nc> >& cexpr_fwd,
+				const arg_forwarder<CExpr_HP, const_array<Tc, Mc, Nc> >& cexpr_fwd,
 				const arg_forwarder<TExpr2_HP, transpose_expr<Arg2_HP, Arg2> >& texpr2_fwd)
 		{
-			const const_matrix<Tc, Mc, Nc>& cexpr = cexpr_fwd.arg;
+			const const_array<Tc, Mc, Nc>& cexpr = cexpr_fwd.arg;
 			const transpose_expr<Arg2_HP, Arg2>& texpr2 = texpr2_fwd.arg;
 
 			return make_expr(
@@ -437,7 +437,7 @@ namespace lmat
 						copy_arg(
 							make_expr(
 								ewise(spec.fun),
-								copy_arg( const_matrix<Tc, Nc, Mc>(
+								copy_arg( const_array<Tc, Nc, Mc>(
 										cexpr.ncolumns(), cexpr.nrows(), cexpr.value())
 								),
 								arg_forwarder<Arg2_HP, Arg2>(texpr2.arg())

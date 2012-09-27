@@ -18,11 +18,11 @@ const int default_m = 8;
 const int default_n = 6;
 const index_t LDim = 12;
 
-typedef dense_matrix<double> dmat_t;
+typedef tarray<double> dmat_t;
 
 
 template<int M, int N>
-void fill_ran(dense_matrix<double, M, N>& X, double a, double b)
+void fill_ran(tarray<double, M, N>& X, double a, double b)
 {
 	for (index_t i = 0; i < X.nelems(); ++i)
 	{
@@ -33,7 +33,7 @@ void fill_ran(dense_matrix<double, M, N>& X, double a, double b)
 
 MN_CASE( mat_arith, add )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -96,8 +96,8 @@ MN_CASE( mat_arith, add )
 
 MN_CASE( mat_arith, add_ex )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef ref_matrix_ex<double, M, N> mat_ex_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray_ref_ex<double, M, N> mat_ex_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -155,7 +155,7 @@ MN_CASE( mat_arith, add_ex )
 
 MN_CASE( mat_arith, add_ip )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -190,7 +190,7 @@ MN_CASE( mat_arith, add_ip )
 
 MN_CASE( mat_arith, sub )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -253,8 +253,8 @@ MN_CASE( mat_arith, sub )
 
 MN_CASE( mat_arith, sub_ex )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef ref_matrix_ex<double, M, N> mat_ex_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray_ref_ex<double, M, N> mat_ex_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -312,7 +312,7 @@ MN_CASE( mat_arith, sub_ex )
 
 MN_CASE( mat_arith, sub_ip )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -346,7 +346,7 @@ MN_CASE( mat_arith, sub_ip )
 
 MN_CASE( mat_arith, mul )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -398,8 +398,8 @@ MN_CASE( mat_arith, mul )
 
 MN_CASE( mat_arith, mul_ex )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef ref_matrix_ex<double, M, N> mat_ex_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray_ref_ex<double, M, N> mat_ex_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -457,7 +457,7 @@ MN_CASE( mat_arith, mul_ex )
 
 MN_CASE( mat_arith, mul_ip )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -491,7 +491,7 @@ MN_CASE( mat_arith, mul_ip )
 
 MN_CASE( mat_arith, div )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -543,8 +543,8 @@ MN_CASE( mat_arith, div )
 
 MN_CASE( mat_arith, div_ex )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef ref_matrix_ex<double, M, N> mat_ex_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray_ref_ex<double, M, N> mat_ex_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -601,7 +601,7 @@ MN_CASE( mat_arith, div_ex )
 
 MN_CASE( mat_arith, div_ip )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -635,7 +635,7 @@ MN_CASE( mat_arith, div_ip )
 
 MN_CASE( mat_arith, neg )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -667,8 +667,8 @@ MN_CASE( mat_arith, neg )
 
 MN_CASE( mat_arith, neg_ex )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef ref_matrix_ex<double, M, N> mat_ex_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray_ref_ex<double, M, N> mat_ex_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -698,7 +698,7 @@ MN_CASE( mat_arith, neg_ex )
 
 MN_CASE( mat_arith, abs )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -726,8 +726,8 @@ MN_CASE( mat_arith, abs )
 
 MN_CASE( mat_arith, abs_ex )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef ref_matrix_ex<double, M, N> mat_ex_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray_ref_ex<double, M, N> mat_ex_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -757,7 +757,7 @@ MN_CASE( mat_arith, abs_ex )
 
 MN_CASE( mat_arith, sqr )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -790,8 +790,8 @@ MN_CASE( mat_arith, sqr )
 
 MN_CASE( mat_arith, sqr_ex )
 {
-	typedef dense_matrix<double, M, N> mat_t;
-	typedef ref_matrix_ex<double, M, N> mat_ex_t;
+	typedef tarray<double, M, N> mat_t;
+	typedef tarray_ref_ex<double, M, N> mat_ex_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -821,7 +821,7 @@ MN_CASE( mat_arith, sqr_ex )
 
 MN_CASE( mat_arith, sqrt )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -851,7 +851,7 @@ MN_CASE( mat_arith, sqrt )
 
 MN_CASE( mat_arith, rcp )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -879,7 +879,7 @@ MN_CASE( mat_arith, rcp )
 
 MN_CASE( mat_arith, rsqrt )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -908,7 +908,7 @@ MN_CASE( mat_arith, rsqrt )
 
 MN_CASE( mat_arith, max )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;
@@ -938,7 +938,7 @@ MN_CASE( mat_arith, max )
 
 MN_CASE( mat_arith, min )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? default_m : M;
 	const index_t n = N == 0 ? default_n : N;

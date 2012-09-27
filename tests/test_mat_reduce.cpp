@@ -20,7 +20,7 @@ const index_t LDim = 8;
 
 MN_CASE( mat_reduce, sum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -43,7 +43,7 @@ MN_CASE( mat_reduce, sum )
 
 MN_CASE( mat_reduce, sum_ex )
 {
-	typedef ref_matrix_ex<double, M, N> mat_ex;
+	typedef tarray_ref_ex<double, M, N> mat_ex;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -69,7 +69,7 @@ MN_CASE( mat_reduce, sum_ex )
 
 MN_CASE( mat_reduce, mean )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -92,7 +92,7 @@ MN_CASE( mat_reduce, mean )
 
 MN_CASE( mat_reduce, maximum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -118,7 +118,7 @@ MN_CASE( mat_reduce, maximum )
 
 MN_CASE( mat_reduce, maximum_ex )
 {
-	typedef ref_matrix_ex<double, M, N> mat_ex;
+	typedef tarray_ref_ex<double, M, N> mat_ex;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -145,7 +145,7 @@ MN_CASE( mat_reduce, maximum_ex )
 
 MN_CASE( mat_reduce, minimum )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -171,7 +171,7 @@ MN_CASE( mat_reduce, minimum )
 
 MN_CASE( mat_reduce, minimum_ex )
 {
-	typedef ref_matrix_ex<double, M, N> mat_ex;
+	typedef tarray_ref_ex<double, M, N> mat_ex;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -198,7 +198,7 @@ MN_CASE( mat_reduce, minimum_ex )
 
 MN_CASE( mat_reduce, dot )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -222,7 +222,7 @@ MN_CASE( mat_reduce, dot )
 
 MN_CASE( mat_reduce, L1norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -243,7 +243,7 @@ MN_CASE( mat_reduce, L1norm )
 
 MN_CASE( mat_reduce, sqL2norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -265,7 +265,7 @@ MN_CASE( mat_reduce, sqL2norm )
 
 MN_CASE( mat_reduce, L2norm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -288,7 +288,7 @@ MN_CASE( mat_reduce, L2norm )
 
 MN_CASE( mat_reduce, Linfnorm )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;
@@ -313,7 +313,7 @@ MN_CASE( mat_reduce, Linfnorm )
 
 MN_CASE( mat_reduce, nrmdot )
 {
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, N> mat_t;
 
 	const index_t m = M == 0 ? DM : M;
 	const index_t n = N == 0 ? DN : N;

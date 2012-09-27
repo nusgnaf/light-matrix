@@ -21,11 +21,11 @@ void fill_lin(dblock<double>& arr)
 }
 
 template<typename T, class LMat>
-dense_matrix<T> extract_block(const IDenseMatrix<LMat, T>& src,
+tarray<T> extract_block(const IDenseArray<LMat, T>& src,
 		const index_t i0, const index_t bm,
 		const index_t j0, const index_t bn)
 {
-	dense_matrix<T> blk(bm, bn);
+	tarray<T> blk(bm, bn);
 	for (index_t j = 0; j < bn; ++j)
 	{
 		for (index_t i = 0; i < bm; ++i)
@@ -41,8 +41,8 @@ dense_matrix<T> extract_block(const IDenseMatrix<LMat, T>& src,
 
 MN_CASE( mat_subview, col )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -71,7 +71,7 @@ MN_CASE( mat_subview, col )
 		ASSERT_TRUE( is_equal(bc.column(j), r) );
 	}
 
-	dense_matrix<double, M, 1> c(m, 1);
+	tarray<double, M, 1> c(m, 1);
 	for (index_t i = 0; i < m; ++i) c[i] = double(2 * i + 3);
 
 	for (index_t j = 0; j < n; ++j)
@@ -84,8 +84,8 @@ MN_CASE( mat_subview, col )
 
 MN_CASE( mat_subview, row )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -114,7 +114,7 @@ MN_CASE( mat_subview, row )
 		ASSERT_TRUE( is_equal(bc.row(i), r) );
 	}
 
-	dense_matrix<double, 1, N> c(1, n);
+	tarray<double, 1, N> c(1, n);
 	for (index_t j = 0; j < n; ++j) c[j] = double(2 * j + 3);
 
 	for (index_t i = 0; i < m; ++i)
@@ -127,8 +127,8 @@ MN_CASE( mat_subview, row )
 
 MN_CASE( mat_subview, col_whole )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -157,7 +157,7 @@ MN_CASE( mat_subview, col_whole )
 		ASSERT_TRUE( is_equal(bc(whole(), j), r) );
 	}
 
-	dense_matrix<double, M, 1> c(m, 1);
+	tarray<double, M, 1> c(m, 1);
 	for (index_t i = 0; i < m; ++i) c[i] = double(2 * i + 3);
 
 	for (index_t j = 0; j < n; ++j)
@@ -170,8 +170,8 @@ MN_CASE( mat_subview, col_whole )
 
 MN_CASE( mat_subview, row_whole )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -200,7 +200,7 @@ MN_CASE( mat_subview, row_whole )
 		ASSERT_TRUE( is_equal(bc(i, whole()), r) );
 	}
 
-	dense_matrix<double, 1, N> c(1, n);
+	tarray<double, 1, N> c(1, n);
 	for (index_t j = 0; j < n; ++j) c[j] = double(2 * j + 3);
 
 	for (index_t i = 0; i < m; ++i)
@@ -213,8 +213,8 @@ MN_CASE( mat_subview, row_whole )
 
 MN_CASE( mat_subview, col_range )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -255,7 +255,7 @@ MN_CASE( mat_subview, col_range )
 		ASSERT_TRUE( is_equal(bc(colon(i0, i1), j), r) );
 	}
 
-	dense_matrix<double, 0, 1> c(i1 - i0, 1);
+	tarray<double, 0, 1> c(i1 - i0, 1);
 	for (index_t i = 0; i < i1 - i0; ++i) c[i] = double(2 * i + 3);
 
 	for (index_t j = 0; j < n; ++j)
@@ -268,8 +268,8 @@ MN_CASE( mat_subview, col_range )
 
 MN_CASE( mat_subview, row_range )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -310,7 +310,7 @@ MN_CASE( mat_subview, row_range )
 		ASSERT_TRUE( is_equal(bc(i, colon(j0, j1)), r) );
 	}
 
-	dense_matrix<double, 1, 0> c(1, j1 - j0);
+	tarray<double, 1, 0> c(1, j1 - j0);
 	for (index_t j = 0; j < j1 - j0; ++j) c[j] = double(2 * j + 3);
 
 	for (index_t i = 0; i < m; ++i)
@@ -323,8 +323,8 @@ MN_CASE( mat_subview, row_range )
 
 MN_CASE( mat_subview, whole_whole )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -355,8 +355,8 @@ MN_CASE( mat_subview, whole_whole )
 
 MN_CASE( mat_subview, whole_range )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -397,8 +397,8 @@ MN_CASE( mat_subview, whole_range )
 
 MN_CASE( mat_subview, range_whole )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;
@@ -439,8 +439,8 @@ MN_CASE( mat_subview, range_whole )
 
 MN_CASE( mat_subview, range_range )
 {
-	typedef ref_matrix<double, M, N> rmat;
-	typedef ref_matrix_ex<double, M, N> rmat_ex;
+	typedef tarray_ref<double, M, N> rmat;
+	typedef tarray_ref_ex<double, M, N> rmat_ex;
 
 	const index_t m = M == 0 ? 7 : M;
 	const index_t n = N == 0 ? 8 : N;

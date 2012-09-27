@@ -80,7 +80,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg>
 	class contcol_transpose_base
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IDenseMatrix<
+	, public IDenseArray<
 	  	  transpose_expr<Arg_HP, Arg>,
 	  	  typename matrix_traits<Arg>::value_type>
 	{
@@ -144,7 +144,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class DMat>
 	LMAT_ENSURE_INLINE
 	inline void transbase_evaluate_to(const contcol_transpose_base<Arg_HP, Arg>& s,
-			IDenseMatrix<DMat, typename matrix_traits<Arg>::value_type>& dst)
+			IDenseArray<DMat, typename matrix_traits<Arg>::value_type>& dst)
 	{
 		copy(s.ptr_data(), dst.derived());
 	}
@@ -155,7 +155,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg>
 	class controw_transpose_base
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IDenseMatrix<
+	, public IDenseArray<
 	  	  transpose_expr<Arg_HP, Arg>,
 	  	  typename matrix_traits<Arg>::value_type>
 	{
@@ -219,7 +219,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class DMat>
 	LMAT_ENSURE_INLINE
 	inline void transbase_evaluate_to(const controw_transpose_base<Arg_HP, Arg>& s,
-			IDenseMatrix<DMat, typename matrix_traits<Arg>::value_type>& dst)
+			IDenseArray<DMat, typename matrix_traits<Arg>::value_type>& dst)
 	{
 		copy(s.ptr_data(), dst.derived());
 	}
@@ -278,7 +278,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class DMat>
 	LMAT_ENSURE_INLINE
 	inline void transbase_evaluate_to(const regular_row_transpose_base<Arg_HP, Arg>& s,
-			IDenseMatrix<DMat, typename matrix_traits<Arg>::value_type>& dst)
+			IDenseArray<DMat, typename matrix_traits<Arg>::value_type>& dst)
 	{
 		const index_t m = s.nrows();
 		typename matrix_traits<Arg>::value_type *pd = dst.ptr_data();
@@ -296,7 +296,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg>
 	class dense_transpose_base
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<transpose_expr<Arg_HP, Arg>,
+	, public IArrayXpr<transpose_expr<Arg_HP, Arg>,
 		typename matrix_traits<Arg>::value_type>
 	{
 	public:
@@ -333,7 +333,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class DMat>
 	LMAT_ENSURE_INLINE
 	inline void transbase_evaluate_to(const dense_transpose_base<Arg_HP, Arg>& s,
-			IDenseMatrix<DMat, typename matrix_traits<Arg>::value_type>& dst)
+			IDenseArray<DMat, typename matrix_traits<Arg>::value_type>& dst)
 	{
 		const Arg& arg = s.arg();
 
@@ -347,7 +347,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg>
 	class colxpr_transpose_base
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<transpose_expr<Arg_HP, Arg>,
+	, public IArrayXpr<transpose_expr<Arg_HP, Arg>,
 		typename matrix_traits<Arg>::value_type>
 	{
 	public:
@@ -384,7 +384,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class DMat>
 	LMAT_ENSURE_INLINE
 	inline void transbase_evaluate_to(const colxpr_transpose_base<Arg_HP, Arg>& s,
-			IDenseMatrix<DMat, typename matrix_traits<Arg>::value_type>& dst)
+			IDenseArray<DMat, typename matrix_traits<Arg>::value_type>& dst)
 	{
 		typedef typename matrix_traits<Arg>::value_type T;
 		const int Len = binary_ctdim<ct_rows<Arg>::value, ct_cols<DMat>::value>::value;
@@ -393,12 +393,12 @@ namespace lmat
 
 		if (has_continuous_layout(dst))
 		{
-			ref_matrix<T, Len, 1> dview(dst.ptr_data(), arg.nrows(), 1);
+			tarray_ref<T, Len, 1> dview(dst.ptr_data(), arg.nrows(), 1);
 			default_evaluate(arg, dview);
 		}
 		else
 		{
-			dense_matrix<T, Len, 1> tmp(arg);
+			array2d<T, Len, 1> tmp(arg);
 			const index_t n = arg.nrows();
 			for (index_t i = 0; i < n; ++i)
 			{
@@ -413,7 +413,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg>
 	class rowxpr_transpose_base
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<transpose_expr<Arg_HP, Arg>,
+	, public IArrayXpr<transpose_expr<Arg_HP, Arg>,
 		typename matrix_traits<Arg>::value_type>
 	{
 	public:
@@ -450,13 +450,13 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class DMat>
 	LMAT_ENSURE_INLINE
 	inline void transbase_evaluate_to(const rowxpr_transpose_base<Arg_HP, Arg>& s,
-			IDenseMatrix<DMat, typename matrix_traits<Arg>::value_type>& dst)
+			IDenseArray<DMat, typename matrix_traits<Arg>::value_type>& dst)
 	{
 		typedef typename matrix_traits<Arg>::value_type T;
 		const int Len = binary_ctdim<ct_cols<Arg>::value, ct_rows<DMat>::value>::value;
 
 		const Arg& arg = s.arg();
-		ref_matrix<T, 1, Len> dview(dst.ptr_data(), 1, arg.ncolumns());
+		tarray_ref<T, 1, Len> dview(dst.ptr_data(), 1, arg.ncolumns());
 		default_evaluate(arg, dview);
 	}
 
@@ -471,7 +471,7 @@ namespace lmat
 	template<typename Arg_HP, class Arg>
 	class generic_transpose_base
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<transpose_expr<Arg_HP, Arg>,
+	, public IArrayXpr<transpose_expr<Arg_HP, Arg>,
 		typename matrix_traits<Arg>::value_type>
 	{
 	public:
@@ -508,9 +508,9 @@ namespace lmat
 	template<typename Arg_HP, class Arg, class DMat>
 	LMAT_ENSURE_INLINE
 	inline void transbase_evaluate_to(const generic_transpose_base<Arg_HP, Arg>& s,
-			IDenseMatrix<DMat, typename matrix_traits<Arg>::value_type>& dst)
+			IDenseArray<DMat, typename matrix_traits<Arg>::value_type>& dst)
 	{
-		dense_matrix<typename matrix_traits<Arg>::value_type,
+		array2d<typename matrix_traits<Arg>::value_type,
 			ct_rows<Arg>::value,
 			ct_cols<Arg>::value> mat = s.arg();
 
@@ -675,7 +675,7 @@ namespace lmat
 	struct matrix_transpose_policy { };
 
 	template<typename Arg_HP, class Arg, class Dst>
-	struct default_matrix_eval_policy<transpose_expr<Arg_HP, Arg>, Dst>
+	struct default_array_eval_policy<transpose_expr<Arg_HP, Arg>, Dst>
 	{
 		typedef matrix_transpose_policy type;
 	};
@@ -684,7 +684,7 @@ namespace lmat
 	LMAT_ENSURE_INLINE
 	inline void evaluate(
 			const transpose_expr<Arg_HP, Arg>& expr,
-			IDenseMatrix<Dst, typename matrix_traits<Arg>::value_type>& dst,
+			IDenseArray<Dst, typename matrix_traits<Arg>::value_type>& dst,
 			matrix_transpose_policy)
 	{
 		transbase_evaluate_to(expr, dst.derived());

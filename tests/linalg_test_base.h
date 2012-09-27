@@ -78,7 +78,7 @@ namespace lmat { namespace test {
 
 
 	template<typename T, class Mat>
-	void fill_rand(IDenseMatrix<Mat, T>& A, const T a, const T b)
+	void fill_rand(IDenseArray<Mat, T>& A, const T a, const T b)
 	{
 		const index_t m = A.nrows();
 		const index_t n = A.ncolumns();
@@ -96,9 +96,9 @@ namespace lmat { namespace test {
 
 	template<typename T, class MatA, class MatB, class MatC>
 	void naive_mtimes(
-			const IDenseMatrix<MatA, T>& A,
-			const IDenseMatrix<MatB, T>& B,
-			IDenseMatrix<MatC, T>& C)
+			const IDenseArray<MatA, T>& A,
+			const IDenseArray<MatB, T>& B,
+			IDenseArray<MatC, T>& C)
 	{
 		const index_t m = A.nrows();
 		const index_t k = A.ncolumns();

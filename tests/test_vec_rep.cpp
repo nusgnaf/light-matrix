@@ -18,8 +18,8 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-typedef dense_matrix<double, 0, 1> dcol_t;
-typedef dense_matrix<double, 1, 0> drow_t;
+typedef tarray<double, 0, 1> dcol_t;
+typedef tarray<double, 1, 0> drow_t;
 
 template class lmat::horizontal_repeat_expr<ref_arg_t, dcol_t, 0>;
 template class lmat::horizontal_repeat_expr<ref_arg_t, dcol_t, 6>;
@@ -32,7 +32,7 @@ N_CASE( repcols, generic )
 	const index_t m = N == 0 ? 4 : N;
 	const index_t n = 6;
 
-	typedef dense_matrix<double, N, 1> col_t;
+	typedef tarray<double, N, 1> col_t;
 	typedef horizontal_repeat_expr<ref_arg_t, col_t, 0> expr_t;
 
 	col_t a(m, 1);
@@ -55,7 +55,7 @@ MN_CASE( repcols, generic_fix )
 	const index_t m = M == 0 ? 4 : M;
 	const index_t n = N;
 
-	typedef dense_matrix<double, M, 1> col_t;
+	typedef tarray<double, M, 1> col_t;
 	typedef horizontal_repeat_expr<ref_arg_t, col_t, N> expr_t;
 
 	col_t a(m, 1);
@@ -77,8 +77,8 @@ N_CASE( repcols, const )
 	const index_t n = 6;
 	const double val = 12.5;
 
-	typedef const_matrix<double, N, 1> col_t;
-	typedef const_matrix<double, N, 0> expr_t;
+	typedef const_array<double, N, 1> col_t;
+	typedef const_array<double, N, 0> expr_t;
 
 	col_t a(m, 1, val);
 
@@ -101,8 +101,8 @@ MN_CASE( repcols, const_fix )
 	const index_t n = N;
 	const double val = 12.5;
 
-	typedef const_matrix<double, M, 1> col_t;
-	typedef const_matrix<double, M, N> expr_t;
+	typedef const_array<double, M, 1> col_t;
+	typedef const_array<double, M, N> expr_t;
 
 	col_t a(m, 1, val);
 
@@ -122,7 +122,7 @@ N_CASE( reprows, generic )
 	const index_t m = 4;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef dense_matrix<double, 1, N> row_t;
+	typedef tarray<double, 1, N> row_t;
 	typedef vertical_repeat_expr<ref_arg_t, row_t, 0> expr_t;
 
 	row_t a(1, n);
@@ -145,7 +145,7 @@ MN_CASE( reprows, generic_fix )
 	const index_t m = M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef dense_matrix<double, 1, N> row_t;
+	typedef tarray<double, 1, N> row_t;
 	typedef vertical_repeat_expr<ref_arg_t, row_t, M> expr_t;
 
 	row_t a(1, n);
@@ -167,8 +167,8 @@ N_CASE( reprows, const )
 	const index_t n = N == 0 ? 6 : N;
 	const double val = 12.5;
 
-	typedef const_matrix<double, 1, N> row_t;
-	typedef const_matrix<double, 0, N> expr_t;
+	typedef const_array<double, 1, N> row_t;
+	typedef const_array<double, 0, N> expr_t;
 
 	row_t a(1, n, val);
 	expr_t expr = vrep(a, m);
@@ -189,8 +189,8 @@ MN_CASE( reprows, const_fix )
 	const index_t n = N == 0 ? 6 : N;
 	const double val = 12.5;
 
-	typedef const_matrix<double, 1, N> row_t;
-	typedef const_matrix<double, M, N> expr_t;
+	typedef const_array<double, 1, N> row_t;
+	typedef const_array<double, M, N> expr_t;
 
 	row_t a(1, n, val);
 	expr_t expr = vrep(a, fix_int<M>());
@@ -209,7 +209,7 @@ MN_CASE( repcols, eval )
 	const index_t m = M == 0 ? 4 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef dense_matrix<double, M, 1> col_t;
+	typedef tarray<double, M, 1> col_t;
 
 	col_t col(m, 1);
 	for (index_t i = 0; i < m; ++i) col[i] = double(i + 2);
@@ -220,7 +220,7 @@ MN_CASE( repcols, eval )
 	ASSERT_EQ( expr.nrows(), m );
 	ASSERT_EQ( expr.ncolumns(), n );
 
-	dense_matrix<double, M, N> R( expr );
+	tarray<double, M, N> R( expr );
 
 	typedef horizontal_repeat_expr<copy_arg_t, col_t, N> expr_et;
 	expr_et expr_e = make_expr(hrep_t<N>(n), copy_arg(col));
@@ -228,9 +228,9 @@ MN_CASE( repcols, eval )
 	ASSERT_EQ( expr_e.nrows(), m );
 	ASSERT_EQ( expr_e.ncolumns(), n );
 
-	dense_matrix<double, M, N> Re(expr_e);
+	tarray<double, M, N> Re(expr_e);
 
-	dense_matrix<double, M, N> R_r(m, n);
+	tarray<double, M, N> R_r(m, n);
 	for (index_t j = 0; j < n; ++j)
 	{
 		for (index_t i = 0; i < m; ++i) R_r(i, j) = col(i, 0);
@@ -246,7 +246,7 @@ MN_CASE( reprows, eval )
 	const index_t m = M == 0 ? 4 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef dense_matrix<double, 1, N> row_t;
+	typedef tarray<double, 1, N> row_t;
 
 	row_t row(1, n);
 	for (index_t j = 0; j < n; ++j) row[j] = double(j + 2);
@@ -257,7 +257,7 @@ MN_CASE( reprows, eval )
 	ASSERT_EQ( expr.nrows(), m );
 	ASSERT_EQ( expr.ncolumns(), n );
 
-	dense_matrix<double, M, N> R( expr );
+	tarray<double, M, N> R( expr );
 
 	typedef vertical_repeat_expr<copy_arg_t, row_t, M> expr_et;
 	expr_et expr_e = make_expr(vrep_t<M>(m), copy_arg(row));
@@ -265,9 +265,9 @@ MN_CASE( reprows, eval )
 	ASSERT_EQ( expr_e.nrows(), m );
 	ASSERT_EQ( expr_e.ncolumns(), n );
 
-	dense_matrix<double, M, N> Re(expr_e);
+	tarray<double, M, N> Re(expr_e);
 
-	dense_matrix<double, M, N> R_r(m, n);
+	tarray<double, M, N> R_r(m, n);
 	for (index_t j = 0; j < n; ++j)
 	{
 		for (index_t i = 0; i < m; ++i) R_r(i, j) = row(0, j);
@@ -282,8 +282,8 @@ MN_CASE( repcols, vec_eval )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef dense_matrix<double, M, 1> col_t;
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, M, 1> col_t;
+	typedef tarray<double, M, N> mat_t;
 
 	col_t col(m, 1);
 	for (index_t i = 0; i < m; ++i) col[i] = double(i+2);
@@ -325,8 +325,8 @@ MN_CASE( reprows, vec_eval )
 	const index_t m = M == 0 ? 5 : M;
 	const index_t n = N == 0 ? 6 : N;
 
-	typedef dense_matrix<double, 1, N> row_t;
-	typedef dense_matrix<double, M, N> mat_t;
+	typedef tarray<double, 1, N> row_t;
+	typedef tarray<double, M, N> mat_t;
 
 	row_t row(1, n);
 	for (index_t j = 0; j < n; ++j) row[j] = double(j+2);

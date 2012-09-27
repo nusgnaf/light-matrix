@@ -31,8 +31,8 @@ namespace lmat
 	struct matrix_traits<horizontal_repeat_expr<Arg_HP, Arg, N> >
 	{
 		static const int num_dimensions = 2;
-		static const int compile_time_num_rows = ct_rows<Arg>::value;
-		static const int compile_time_num_cols = ct_cols<Arg>::value * N;
+		static const int compile_time_num_rows = ct_nrows<Arg>::value;
+		static const int compile_time_num_cols = ct_ncols<Arg>::value * N;
 
 		static const bool is_readonly = true;
 
@@ -44,8 +44,8 @@ namespace lmat
 	struct matrix_traits<vertical_repeat_expr<Arg_HP, Arg, M> >
 	{
 		static const int num_dimensions = 2;
-		static const int compile_time_num_rows = ct_rows<Arg>::value * M;
-		static const int compile_time_num_cols = ct_cols<Arg>::value;
+		static const int compile_time_num_rows = ct_nrows<Arg>::value * M;
+		static const int compile_time_num_cols = ct_ncols<Arg>::value;
 
 		static const bool is_readonly = true;
 
@@ -59,14 +59,14 @@ namespace lmat
 	template<typename Arg_HP, class Arg, int N>
 	class horizontal_repeat_expr
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<
+	, public IArrayXpr<
 		horizontal_repeat_expr<Arg_HP, Arg, N>,
 		typename matrix_traits<Arg>::value_type>
 	{
 		typedef unary_expr_base<Arg_HP, Arg> base_t;
 
 #ifdef LMAT_USE_STATIC_ASSERT
-		static_assert(is_mat_xpr<Arg>::value, "Arg must be a matrix expression class.");
+		static_assert(is_array_xpr<Arg>::value, "Arg must be a matrix expression class.");
 #endif
 
 	public:
@@ -108,14 +108,14 @@ namespace lmat
 	template<typename Arg_HP, class Arg, int M>
 	class vertical_repeat_expr
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<
+	, public IArrayXpr<
 		vertical_repeat_expr<Arg_HP, Arg, M>,
 		typename matrix_traits<Arg>::value_type>
 	{
 		typedef unary_expr_base<Arg_HP, Arg> base_t;
 
 #ifdef LMAT_USE_STATIC_ASSERT
-		static_assert(is_mat_xpr<Arg>::value, "Arg must be a matrix expression class.");
+		static_assert(is_array_xpr<Arg>::value, "Arg must be a matrix expression class.");
 #endif
 
 	public:
@@ -222,13 +222,13 @@ namespace lmat
 	template<class Arg, int N>
 	struct unary_expr_verifier<hrep_t<N>, Arg>
 	{
-		static const bool value = is_mat_xpr<Arg>::value;
+		static const bool value = is_array_xpr<Arg>::value;
 	};
 
 	template<class Arg, int M>
 	struct unary_expr_verifier<vrep_t<M>, Arg>
 	{
-		static const bool value = is_mat_xpr<Arg>::value;
+		static const bool value = is_array_xpr<Arg>::value;
 	};
 
 
@@ -259,15 +259,15 @@ namespace lmat
 	};
 
 	template<typename Arg_HP, typename T, int Mc, int Nc, int N>
-	struct unary_expr_map<hrep_t<N>, Arg_HP, const_matrix<T, Mc, Nc> >
+	struct unary_expr_map<hrep_t<N>, Arg_HP, const_array<T, Mc, Nc> >
 	{
-		typedef const_matrix<T, Mc, N> type;
+		typedef const_array<T, Mc, N> type;
 
 		LMAT_ENSURE_INLINE
 		static type get(const hrep_t<N>& spec,
-				const arg_forwarder<Arg_HP, const_matrix<T, Mc, Nc> >& arg_fwd)
+				const arg_forwarder<Arg_HP, const_array<T, Mc, Nc> >& arg_fwd)
 		{
-			typedef const_matrix<T, Mc, Nc> arg_t;
+			typedef const_array<T, Mc, Nc> arg_t;
 			const arg_t& arg = arg_fwd.arg;
 
 			return type(arg.nrows(), spec.get_n(), arg.value());
@@ -276,15 +276,15 @@ namespace lmat
 
 
 	template<typename Arg_HP, typename T, int Mc, int Nc, int M>
-	struct unary_expr_map<vrep_t<M>, Arg_HP, const_matrix<T, Mc, Nc> >
+	struct unary_expr_map<vrep_t<M>, Arg_HP, const_array<T, Mc, Nc> >
 	{
-		typedef const_matrix<T, M, Nc> type;
+		typedef const_array<T, M, Nc> type;
 
 		LMAT_ENSURE_INLINE
 		static type get(const vrep_t<M>& spec,
-				const arg_forwarder<Arg_HP, const_matrix<T, Mc, Nc> >& arg_fwd)
+				const arg_forwarder<Arg_HP, const_array<T, Mc, Nc> >& arg_fwd)
 		{
-			typedef const_matrix<T, Mc, Nc> arg_t;
+			typedef const_array<T, Mc, Nc> arg_t;
 			const arg_t& arg = arg_fwd.arg;
 
 			return type(spec.get_m(), arg.ncolumns(), arg.value());
@@ -296,7 +296,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename unary_expr_map<hrep_t<0>, ref_arg_t, Arg>::type
-	hrep(const IMatrixXpr<Arg, T>& arg, const index_t n)
+	hrep(const IArrayXpr<Arg, T>& arg, const index_t n)
 	{
 		return make_expr(hrep_t<0>(n), ref_arg(arg.derived()));
 	}
@@ -304,7 +304,7 @@ namespace lmat
 	template<typename T, class Arg, int N>
 	LMAT_ENSURE_INLINE
 	inline typename unary_expr_map<hrep_t<N>, ref_arg_t, Arg>::type
-	hrep(const IMatrixXpr<Arg, T>& arg, fix_int<N>)
+	hrep(const IArrayXpr<Arg, T>& arg, fix_int<N>)
 	{
 		return make_expr(hrep_t<N>(), ref_arg(arg.derived()));
 	}
@@ -312,7 +312,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename unary_expr_map<vrep_t<0>, ref_arg_t, Arg>::type
-	vrep(const IMatrixXpr<Arg, T>& arg, const index_t m)
+	vrep(const IArrayXpr<Arg, T>& arg, const index_t m)
 	{
 		return make_expr(vrep_t<0>(m), ref_arg(arg.derived()));
 	}
@@ -320,7 +320,7 @@ namespace lmat
 	template<typename T, class Arg, int M>
 	LMAT_ENSURE_INLINE
 	inline typename unary_expr_map<vrep_t<M>, ref_arg_t, Arg>::type
-	vrep(const IMatrixXpr<Arg, T>& arg, fix_int<M>)
+	vrep(const IArrayXpr<Arg, T>& arg, fix_int<M>)
 	{
 		return make_expr(vrep_t<M>(), ref_arg(arg.derived()));
 	}

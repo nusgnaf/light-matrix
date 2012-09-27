@@ -25,8 +25,8 @@ MN_CASE( mat_copy, copy )
 
 	for (index_t i = 0; i < m * n; ++i) src[i] = double(i + 2);
 
-	ref_matrix<double, M, N> a(src.ptr_data(), m, n);
-	ref_matrix<double, M, N> b(dst.ptr_data(), m, n);
+	tarray_ref<double, M, N> a(src.ptr_data(), m, n);
+	tarray_ref<double, M, N> b(dst.ptr_data(), m, n);
 
 	copy(a, b);
 
@@ -48,8 +48,8 @@ MN_CASE( mat_copy, copy_ex )
 
 	for (index_t i = 0; i < ldim_a * n; ++i) src[i] = double(i + 2);
 
-	ref_matrix_ex<double, M, N> a(src.ptr_data(), m, n, ldim_a);
-	ref_matrix_ex<double, M, N> b(dst.ptr_data(), m, n, ldim_b);
+	tarray_ref_ex<double, M, N> a(src.ptr_data(), m, n, ldim_a);
+	tarray_ref_ex<double, M, N> b(dst.ptr_data(), m, n, ldim_b);
 
 	copy(a, b);
 

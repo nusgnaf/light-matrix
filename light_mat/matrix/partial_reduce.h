@@ -32,7 +32,7 @@ namespace lmat
 	{
 		static const int num_dimensions = 2;
 		static const int compile_time_num_rows = 1;
-		static const int compile_time_num_cols = ct_cols<Arg>::value;
+		static const int compile_time_num_cols = ct_ncols<Arg>::value;
 
 		static const bool is_readonly = true;
 
@@ -44,7 +44,7 @@ namespace lmat
 	struct matrix_traits<rowwise_reduce_expr<Fun, Arg_HP, Arg> >
 	{
 		static const int num_dimensions = 2;
-		static const int compile_time_num_rows = ct_rows<Arg>::value;
+		static const int compile_time_num_rows = ct_nrows<Arg>::value;
 		static const int compile_time_num_cols = 1;
 
 		static const bool is_readonly = true;
@@ -57,13 +57,13 @@ namespace lmat
 	template<class Fun, typename Arg_HP, class Arg>
 	class colwise_reduce_expr
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<
+	, public IArrayXpr<
 	  	  colwise_reduce_expr<Fun, Arg_HP, Arg>,
 	  	  typename Fun::result_type>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_reduction_functor<Fun>::value, "Fun must be a reduction_functor");
-		static_assert(is_mat_xpr<Arg>::value, "Arg must be a matrix expression class.");
+		static_assert(is_array_xpr<Arg>::value, "Arg must be a matrix expression class.");
 #endif
 
 	public:
@@ -107,11 +107,11 @@ namespace lmat
 	template<class Fun, typename Arg_HP, class Arg>
 	class rowwise_reduce_expr
 	: public unary_expr_base<Arg_HP, Arg>
-	, public IMatrixXpr<rowwise_reduce_expr<Fun, Arg_HP, Arg>, typename Fun::result_type>
+	, public IArrayXpr<rowwise_reduce_expr<Fun, Arg_HP, Arg>, typename Fun::result_type>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_reduction_functor<Fun>::value, "Fun must be a reduction_functor");
-		static_assert(is_mat_xpr<Arg>::value, "Arg must be a matrix expression class.");
+		static_assert(is_array_xpr<Arg>::value, "Arg must be a matrix expression class.");
 #endif
 
 	public:
@@ -194,13 +194,13 @@ namespace lmat
 	template<class Fun, class Arg>
 	struct unary_expr_verifier<colwise_reduce_t<Fun>, Arg>
 	{
-		static const bool value = is_mat_xpr<Arg>::value;
+		static const bool value = is_array_xpr<Arg>::value;
 	};
 
 	template<class Fun, class Arg>
 	struct unary_expr_verifier<rowwise_reduce_t<Fun>, Arg>
 	{
-		static const bool value = is_mat_xpr<Arg>::value;
+		static const bool value = is_array_xpr<Arg>::value;
 	};
 
 	template<class Fun, typename Arg_HP, class Arg>
@@ -239,13 +239,13 @@ namespace lmat
 	struct partial_reduce_policy { };
 
 	template<class Fun, typename Arg_HP, class Arg, class Dst>
-	struct default_matrix_eval_policy< colwise_reduce_expr<Fun, Arg_HP, Arg>, Dst >
+	struct default_array_eval_policy< colwise_reduce_expr<Fun, Arg_HP, Arg>, Dst >
 	{
 		typedef partial_reduce_policy type;
 	};
 
 	template<class Fun, typename Arg_HP, class Arg, class Dst>
-	struct default_matrix_eval_policy< rowwise_reduce_expr<Fun, Arg_HP, Arg>, Dst >
+	struct default_array_eval_policy< rowwise_reduce_expr<Fun, Arg_HP, Arg>, Dst >
 	{
 		typedef partial_reduce_policy type;
 	};
@@ -253,7 +253,7 @@ namespace lmat
 	template<class Fun, typename Arg_HP, class Arg, class Dst>
 	LMAT_ENSURE_INLINE
 	inline void evaluate(const colwise_reduce_expr<Fun, Arg_HP, Arg>& expr,
-			IDenseMatrix<Dst, typename Fun::result_type>& dst,
+			IDenseArray<Dst, typename Fun::result_type>& dst,
 			partial_reduce_policy)
 	{
 		detail::colwise_reduce_internal<scalar_kernel_t>::eval(
@@ -263,7 +263,7 @@ namespace lmat
 	template<class Fun, typename Arg_HP, class Arg, class Dst>
 	LMAT_ENSURE_INLINE
 	inline void evaluate(const rowwise_reduce_expr<Fun, Arg_HP, Arg>& expr,
-			IDenseMatrix<Dst, typename Fun::result_type>& dst,
+			IDenseArray<Dst, typename Fun::result_type>& dst,
 			partial_reduce_policy)
 	{
 		detail::rowwise_reduce_internal<scalar_kernel_t>::eval(
@@ -282,7 +282,7 @@ namespace lmat
 	LMAT_ENSURE_INLINE
 	inline typename unary_expr_map<colwise_reduce_t<Fun>, ref_arg_t, Arg>::type
 	reduce( const Fun& fun,
-			const IMatrixXpr<Arg, typename Fun::arg_type>& arg,
+			const IArrayXpr<Arg, typename Fun::arg_type>& arg,
 			colwise )
 	{
 		return unary_expr_map<colwise_reduce_t<Fun>, ref_arg_t, Arg>::get(
@@ -294,7 +294,7 @@ namespace lmat
 	LMAT_ENSURE_INLINE
 	inline typename unary_expr_map<rowwise_reduce_t<Fun>, ref_arg_t, Arg>::type
 	reduce( const Fun& fun,
-			const IMatrixXpr<Arg, typename Fun::arg_type>& arg,
+			const IArrayXpr<Arg, typename Fun::arg_type>& arg,
 			rowwise )
 	{
 		return unary_expr_map<rowwise_reduce_t<Fun>, ref_arg_t, Arg>::get(
@@ -334,7 +334,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_sum_expr_map<ref_arg_t, Arg>::type
-	sum(const IMatrixXpr<Arg, T>& arg, colwise)
+	sum(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return reduce(sum_fun<T>(), arg.derived(), colwise());
 	}
@@ -342,7 +342,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_sum_expr_map<ref_arg_t, Arg>::type
-	sum(const IMatrixXpr<Arg, T>& arg, rowwise)
+	sum(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return reduce(sum_fun<T>(), arg.derived(), rowwise());
 	}
@@ -377,9 +377,9 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_mean_expr_map<ref_arg_t, Arg>::type
-	mean(const IMatrixXpr<Arg, T>& arg, colwise)
+	mean(const IArrayXpr<Arg, T>& arg, colwise)
 	{
-		const_matrix<T, 1, ct_cols<Arg>::value>
+		const_array<T, 1, ct_ncols<Arg>::value>
 		s( 1, arg.ncolumns(), math::rcp(T(arg.nrows())) );
 
 		return make_expr(
@@ -397,9 +397,9 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_mean_expr_map<ref_arg_t, Arg>::type
-	mean(const IMatrixXpr<Arg, T>& arg, rowwise)
+	mean(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
-		const_matrix<T, ct_rows<Arg>::value, 1>
+		const_array<T, ct_nrows<Arg>::value, 1>
 		s( arg.nrows(), 1, math::rcp(T(arg.ncolumns())) );
 
 		return make_expr(
@@ -438,7 +438,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_prod_expr_map<ref_arg_t, Arg>::type
-	prod(const IMatrixXpr<Arg, T>& arg, colwise)
+	prod(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return reduce(prod_fun<T>(), arg.derived(), colwise());
 	}
@@ -446,7 +446,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_prod_expr_map<ref_arg_t, Arg>::type
-	prod(const IMatrixXpr<Arg, T>& arg, rowwise)
+	prod(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return reduce(prod_fun<T>(), arg.derived(), rowwise());
 	}
@@ -479,7 +479,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_maximum_expr_map<ref_arg_t, Arg>::type
-	maximum(const IMatrixXpr<Arg, T>& arg, colwise)
+	maximum(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return reduce(maximum_fun<T>(), arg.derived(), colwise());
 	}
@@ -487,7 +487,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_maximum_expr_map<ref_arg_t, Arg>::type
-	maximum(const IMatrixXpr<Arg, T>& arg, rowwise)
+	maximum(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return reduce(maximum_fun<T>(), arg.derived(), rowwise());
 	}
@@ -520,7 +520,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_minimum_expr_map<ref_arg_t, Arg>::type
-	minimum(const IMatrixXpr<Arg, T>& arg, colwise)
+	minimum(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return reduce(minimum_fun<T>(), arg.derived(), colwise());
 	}
@@ -528,7 +528,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_minimum_expr_map<ref_arg_t, Arg>::type
-	minimum(const IMatrixXpr<Arg, T>& arg, rowwise)
+	minimum(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return reduce(minimum_fun<T>(), arg.derived(), rowwise());
 	}
@@ -567,7 +567,7 @@ namespace lmat
 	template<typename T, class LArg, class RArg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_dot_expr_map<ref_arg_t, LArg, ref_arg_t, RArg>::type
-	dot(const IMatrixXpr<LArg, T>& a, const IMatrixXpr<RArg, T>& b, colwise)
+	dot(const IArrayXpr<LArg, T>& a, const IArrayXpr<RArg, T>& b, colwise)
 	{
 		return make_expr(colwise_reduce(sum_fun<T>()),
 				copy_arg(a.derived() * b.derived()));
@@ -576,7 +576,7 @@ namespace lmat
 	template<typename T, class LArg, class RArg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_dot_expr_map<ref_arg_t, LArg, ref_arg_t, RArg>::type
-	dot(const IMatrixXpr<LArg, T>& a, const IMatrixXpr<RArg, T>& b, rowwise)
+	dot(const IArrayXpr<LArg, T>& a, const IArrayXpr<RArg, T>& b, rowwise)
 	{
 		return make_expr(rowwise_reduce(sum_fun<T>()),
 				copy_arg(a.derived() * b.derived()));
@@ -616,7 +616,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_L1norm_expr_map<ref_arg_t, Arg>::type
-	L1norm(const IMatrixXpr<Arg, T>& arg, colwise)
+	L1norm(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return make_expr(
 					colwise_reduce(sum_fun<T>()),
@@ -627,7 +627,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_L1norm_expr_map<ref_arg_t, Arg>::type
-	L1norm(const IMatrixXpr<Arg, T>& arg, rowwise)
+	L1norm(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return make_expr(
 					rowwise_reduce(sum_fun<T>()),
@@ -669,7 +669,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_sqL2norm_expr_map<ref_arg_t, Arg>::type
-	sqL2norm(const IMatrixXpr<Arg, T>& arg, colwise)
+	sqL2norm(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return make_expr(
 					colwise_reduce(sum_fun<T>()),
@@ -680,7 +680,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_sqL2norm_expr_map<ref_arg_t, Arg>::type
-	sqL2norm(const IMatrixXpr<Arg, T>& arg, rowwise)
+	sqL2norm(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return make_expr(
 					rowwise_reduce(sum_fun<T>()),
@@ -718,7 +718,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_L2norm_expr_map<ref_arg_t, Arg>::type
-	L2norm(const IMatrixXpr<Arg, T>& arg, colwise)
+	L2norm(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return make_expr(
 					ewise(sqrt_fun<T>()),
@@ -734,7 +734,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_L2norm_expr_map<ref_arg_t, Arg>::type
-	L2norm(const IMatrixXpr<Arg, T>& arg, rowwise)
+	L2norm(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return make_expr(
 					ewise(sqrt_fun<T>()),
@@ -775,7 +775,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_Linfnorm_expr_map<ref_arg_t, Arg>::type
-	Linfnorm(const IMatrixXpr<Arg, T>& arg, colwise)
+	Linfnorm(const IArrayXpr<Arg, T>& arg, colwise)
 	{
 		return make_expr(
 					colwise_reduce(maximum_fun<T>()),
@@ -786,7 +786,7 @@ namespace lmat
 	template<typename T, class Arg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_Linfnorm_expr_map<ref_arg_t, Arg>::type
-	Linfnorm(const IMatrixXpr<Arg, T>& arg, rowwise)
+	Linfnorm(const IArrayXpr<Arg, T>& arg, rowwise)
 	{
 		return make_expr(
 					rowwise_reduce(maximum_fun<T>()),
@@ -836,7 +836,7 @@ namespace lmat
 	template<typename T, class LArg, class RArg>
 	LMAT_ENSURE_INLINE
 	inline typename colwise_nrmdot_expr_map<ref_arg_t, LArg, ref_arg_t, RArg>::type
-	nrmdot(const IMatrixXpr<LArg, T>& a, const IMatrixXpr<RArg, T>& b, colwise)
+	nrmdot(const IArrayXpr<LArg, T>& a, const IArrayXpr<RArg, T>& b, colwise)
 	{
 		return make_expr(
 					ewise(div_op<T>()),
@@ -854,7 +854,7 @@ namespace lmat
 	template<typename T, class LArg, class RArg>
 	LMAT_ENSURE_INLINE
 	inline typename rowwise_nrmdot_expr_map<ref_arg_t, LArg, ref_arg_t, RArg>::type
-	nrmdot(const IMatrixXpr<LArg, T>& a, const IMatrixXpr<RArg, T>& b, rowwise)
+	nrmdot(const IArrayXpr<LArg, T>& a, const IArrayXpr<RArg, T>& b, rowwise)
 	{
 		return make_expr(
 					ewise(div_op<T>()),
