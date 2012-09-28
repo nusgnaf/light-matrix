@@ -139,7 +139,7 @@ namespace lmat
 		}
 
 	private:
-		const index_t m_d1;
+		index_t m_d1;
 
 	}; // array_shape<M, 0>
 
@@ -203,7 +203,7 @@ namespace lmat
 		}
 
 	private:
-		const index_t m_d0;
+		index_t m_d0;
 
 	}; // array_shape<0, N>
 
@@ -264,7 +264,7 @@ namespace lmat
 		}
 
 	private:
-		const index_t m_d0, m_d1;
+		index_t m_d0, m_d1;
 
 	}; // array_shape<0, 0>
 
@@ -501,6 +501,7 @@ namespace lmat
 	class continuous_column_major_layout
 	: public array_layout_base<array_shape<M, N> >
 	{
+		typedef array_shape<M, N> shape_t;
 		typedef array_layout_base<array_shape<M, N> > base_t;
 
 	public:
@@ -536,6 +537,12 @@ namespace lmat
 			LMAT_CHECK_SUBS2(i, j, this->nrows(), this->ncolumns());
 			return i + lead_dim() * j;
 		}
+
+		LMAT_ENSURE_INLINE
+		void set_shape(const shape_t& new_shape)
+		{
+			this->m_shape = new_shape;
+		}
 	};
 
 
@@ -543,6 +550,7 @@ namespace lmat
 	class continuous_column_major_layout<M, 1>
 	: public array_layout_base<array_shape<M, 1> >
 	{
+		typedef array_shape<M, 1> shape_t;
 		typedef array_layout_base<array_shape<M, 1> > base_t;
 
 	public:
@@ -578,6 +586,12 @@ namespace lmat
 			LMAT_CHECK_SUBS2(i, j, this->nrows(), this->ncolumns());
 			return i;
 		}
+
+		LMAT_ENSURE_INLINE
+		void set_shape(const shape_t& new_shape)
+		{
+			this->m_shape = new_shape;
+		}
 	};
 
 
@@ -585,6 +599,7 @@ namespace lmat
 	class continuous_column_major_layout<1, N>
 	: public array_layout_base<array_shape<1, N> >
 	{
+		typedef array_shape<1, N> shape_t;
 		typedef array_layout_base<array_shape<1, N> > base_t;
 
 	public:
@@ -620,6 +635,12 @@ namespace lmat
 			LMAT_CHECK_SUBS2(i, j, this->nrows(), this->ncolumns());
 			return j;
 		}
+
+		LMAT_ENSURE_INLINE
+		void set_shape(const shape_t& new_shape)
+		{
+			this->m_shape = new_shape;
+		}
 	};
 
 
@@ -627,6 +648,7 @@ namespace lmat
 	class continuous_column_major_layout<1, 1>
 	: public array_layout_base<array_shape<1, 1> >
 	{
+		typedef array_shape<1, 1> shape_t;
 		typedef array_layout_base<array_shape<1, 1> > base_t;
 
 	public:
@@ -661,6 +683,12 @@ namespace lmat
 		{
 			LMAT_CHECK_SUBS2(i, j, this->nrows(), this->ncolumns());
 			return 0;
+		}
+
+		LMAT_ENSURE_INLINE
+		void set_shape(const shape_t& new_shape)
+		{
+			this->m_shape = new_shape;
 		}
 	};
 

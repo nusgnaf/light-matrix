@@ -1,14 +1,14 @@
 /**
- * @file test_dense_mat.cpp
+ * @file test_tarray.cpp
  *
- * Unit testing of dense matrix
+ * Unit testing of tarray classes
  *
  * @author Dahua Lin
  */
 
 #include "test_base.h"
 
-#include <light_mat/matrix/dense_matrix.h>
+#include <light_mat/array/tarray.h>
 
 using namespace lmat;
 using namespace lmat::test;
@@ -23,7 +23,6 @@ template class lmat::tarray<double, 3, 4>;
 #ifdef LMAT_USE_STATIC_ASSERT
 
 static_assert(lmat::is_array_xpr<lmat::tarray<double> >::value, "Interface verification failed.");
-static_assert(lmat::is_mat_view<lmat::tarray<double> >::value, "Interface verification failed.");
 static_assert(lmat::is_dense_array<lmat::tarray<double> >::value, "Interface verification failed.");
 
 #endif
@@ -85,7 +84,7 @@ MN_CASE( dense_mat, generates )
 	ASSERT_EQ(a0.ncolumns(), n);
 	ASSERT_EQ(a0.nelems(), m * n);
 	ASSERT_EQ(a0.lead_dim(), m);
-	ASSERT_VEC_EQ(m * n, a0, ref);
+	ASSERT_VEC_EQ(m * n, a0.ptr_data(), ref);
 
 	// fill_value
 
@@ -97,7 +96,7 @@ MN_CASE( dense_mat, generates )
 	ASSERT_EQ(a1.ncolumns(), n);
 	ASSERT_EQ(a1.nelems(), m * n);
 	ASSERT_EQ(a1.lead_dim(), m);
-	ASSERT_VEC_EQ(m * n, a1, ref);
+	ASSERT_VEC_EQ(m * n, a1.ptr_data(), ref);
 
 	// copy_value
 
@@ -108,7 +107,7 @@ MN_CASE( dense_mat, generates )
 	ASSERT_EQ(a2.ncolumns(), n);
 	ASSERT_EQ(a2.nelems(), m * n);
 	ASSERT_EQ(a2.lead_dim(), m);
-	ASSERT_VEC_EQ(m * n, a2, ref);
+	ASSERT_VEC_EQ(m * n, a2.ptr_data(), ref);
 }
 
 
@@ -131,7 +130,7 @@ MN_CASE( dense_mat, copy_constructs )
 
 	ASSERT_NE(a.ptr_data(), a2.ptr_data());
 
-	ASSERT_VEC_EQ(m * n, a, a2);
+	ASSERT_VEC_EQ(m * n, a.ptr_data(), a2.ptr_data());
 }
 
 
@@ -146,28 +145,23 @@ MN_CASE( dense_mat, access )
 	tarray<double, M, N> a(m, n, copy_from(ref.ptr_data()));
 	const tarray<double, M, N>& ac = a;
 
-	ASSERT_VEC_EQ(m * n, a, ref);
+	ASSERT_VEC_EQ(m * n, a.ptr_data(), ref);
 
 	for (index_t j = 0; j < n; ++j)
 	{
-		ASSERT_EQ(a.ptr_col(j), a.ptr_data() + j * m);
-		ASSERT_EQ(ac.ptr_col(j), ac.ptr_data() + j * m);
-
 		for (index_t i = 0; i < m; ++i)
 		{
 			double v0 = ref[i + j * m];
 
-			ASSERT_EQ( a.elem(i, j), v0 );
 			ASSERT_EQ( a(i, j), v0 );
-			ASSERT_EQ( ac.elem(i, j), v0 );
 			ASSERT_EQ( ac(i, j), v0 );
 		}
 	}
 
 	for (index_t i = 0; i < m * n; ++i)
 	{
-		ASSERT_EQ( a[i], ref[i] );
-		ASSERT_EQ( ac[i], ref[i] );
+		ASSERT_EQ( a(i), ref[i] );
+		ASSERT_EQ( ac(i), ref[i] );
 	}
 }
 
@@ -191,7 +185,7 @@ MN_CASE( dense_mat, resize )
 
 	const double *p1 = a.ptr_data();
 
-	a.require_size(m2, n2);
+	a.require_shape(m2, n2);
 
 	ASSERT_EQ(a.nrows(), m2);
 	ASSERT_EQ(a.ncolumns(), n2);
@@ -209,7 +203,7 @@ MN_CASE( dense_mat, resize )
 		ASSERT_NE( p2, p1 );
 	}
 
-	a.require_size(m3, n3);
+	a.require_shape(m3, n3);
 
 	ASSERT_EQ(a.nrows(), m3);
 	ASSERT_EQ(a.ncolumns(), n3);
@@ -250,7 +244,7 @@ MN_CASE( dense_mat, assign )
 	ASSERT_EQ( a.nelems(), m * n);
 	ASSERT_EQ( a.lead_dim(), m);
 
-	ASSERT_VEC_EQ( m * n, a, s );
+	ASSERT_VEC_EQ( m * n, a.ptr_data(), s.ptr_data() );
 
 	tarray<double, M, N> b(m, n, zero());
 
@@ -267,7 +261,7 @@ MN_CASE( dense_mat, assign )
 	ASSERT_EQ( b.nelems(), m * n);
 	ASSERT_EQ( b.lead_dim(), m);
 
-	ASSERT_VEC_EQ( m * n, b, s );
+	ASSERT_VEC_EQ( m * n, b.ptr_data(), s.ptr_data() );
 
 	const index_t m2 = M == 0 ? 5 : M;
 	const index_t n2 = N == 0 ? 6 : N;
@@ -283,7 +277,7 @@ MN_CASE( dense_mat, assign )
 	ASSERT_EQ( c.nelems(), m * n);
 	ASSERT_EQ( c.lead_dim(), m);
 
-	ASSERT_VEC_EQ( m * n, c, s );
+	ASSERT_VEC_EQ( m * n, c.ptr_data(), s.ptr_data() );
 }
 
 
@@ -305,7 +299,7 @@ MN_CASE( dense_mat, import )
 	ASSERT_EQ(a.ncolumns(), n);
 	ASSERT_EQ(a.nelems(), m * n);
 	ASSERT_EQ(a.lead_dim(), m);
-	ASSERT_VEC_EQ(m * n, a, ref);
+	ASSERT_VEC_EQ(m * n, a.ptr_data(), ref);
 
 	// copy_value
 
@@ -316,7 +310,7 @@ MN_CASE( dense_mat, import )
 	ASSERT_EQ(a.ncolumns(), n);
 	ASSERT_EQ(a.nelems(), m * n);
 	ASSERT_EQ(a.lead_dim(), m);
-	ASSERT_VEC_EQ(m * n, a, ref);
+	ASSERT_VEC_EQ(m * n, a.ptr_data(), ref);
 }
 
 MN_CASE( dense_mat, swap )
@@ -360,8 +354,8 @@ MN_CASE( dense_mat, swap )
 		ASSERT_EQ( a2.ptr_data(), p2 );
 	}
 
-	ASSERT_VEC_EQ( m2 * n2, a, s2 );
-	ASSERT_VEC_EQ( m * n, a2, s );
+	ASSERT_VEC_EQ( m2 * n2, a.ptr_data(), s2 );
+	ASSERT_VEC_EQ( m * n, a2.ptr_data(), s );
 }
 
 

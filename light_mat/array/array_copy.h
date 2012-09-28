@@ -18,15 +18,14 @@
 
 namespace lmat
 {
-	template<typename T, class RMat>
+	template<typename T, class RArr>
 	LMAT_ENSURE_INLINE
-	void copy(const T *ps, IDenseArray<RMat, T>& dst)
+	void copy(const T *ps, IDenseArray<RArr, T>& dst)
 	{
-		typedef typename detail::mat_copier<T,
-				ct_nrows<RMat>::value,
-				ct_ncols<RMat>::value>::type copier_t;
+		typedef typename detail::array_copier<T,
+				typename array_traits<RArr>::shape_type>::type copier_t;
 
-		if (has_continuous_layout(dst))
+		if (dst.has_continuous_layout())
 		{
 			copier_t::copy(dst.nrows(), dst.ncolumns(),
 					ps, dst.ptr_data());
@@ -38,15 +37,14 @@ namespace lmat
 		}
 	}
 
-	template<typename T, class LMat>
+	template<typename T, class LArr>
 	LMAT_ENSURE_INLINE
-	void copy(const IDenseArray<LMat, T>& src, T* pd)
+	void copy(const IDenseArray<LArr, T>& src, T* pd)
 	{
-		typedef typename detail::mat_copier<T,
-				ct_nrows<LMat>::value,
-				ct_ncols<LMat>::value>::type copier_t;
+		typedef typename detail::array_copier<T,
+				typename array_traits<LArr>::shape_type>::type copier_t;
 
-		if (has_continuous_layout(src))
+		if (src.has_continuous_layout())
 		{
 			copier_t::copy(src.nrows(), src.ncolumns(),
 					src.ptr_data(), pd);
@@ -59,19 +57,18 @@ namespace lmat
 	}
 
 
-	template<typename T, class LMat, class RMat>
+	template<typename T, class LArr, class RArr>
 	inline
-	void copy(const IDenseArray<LMat, T>& src, IDenseArray<RMat, T>& dst)
+	void copy(const IDenseArray<LArr, T>& src, IDenseArray<RArr, T>& dst)
 	{
-		check_same_size(src, dst, "copy: inconsistent sizes of src and dst.");
+		LMAT_CHECK_SAME_SHAPE(src, dst)
 
-		typedef typename detail::mat_copier<T,
-				binary_ct_rows<LMat, RMat>::value,
-				binary_ct_cols<LMat, RMat>::value>::type copier_t;
+		typedef typename detail::array_copier<T,
+				typename ct_binary_shape_of_arrays<LArr, RArr>::type>::type copier_t;
 
-		if (has_continuous_layout(src))
+		if (src.has_continuous_layout())
 		{
-			if (has_continuous_layout(dst))
+			if (dst.has_continuous_layout())
 			{
 				copier_t::copy(src.nrows(), src.ncolumns(),
 						src.ptr_data(), dst.ptr_data());
@@ -84,7 +81,7 @@ namespace lmat
 		}
 		else
 		{
-			if (has_continuous_layout(dst))
+			if (dst.has_continuous_layout())
 			{
 				copier_t::copy(src.nrows(), src.ncolumns(),
 						src.ptr_data(), src.lead_dim(), dst.ptr_data());
@@ -110,9 +107,9 @@ namespace lmat
 
 	struct matrix_copy_policy { };
 
-	template<typename T, class LMat, class RMat>
+	template<typename T, class LArr, class RArr>
 	LMAT_ENSURE_INLINE
-	void evaluate(const IDenseArray<LMat, T>& src, IDenseArray<RMat, T>& dst, matrix_copy_policy)
+	void evaluate(const IDenseArray<LArr, T>& src, IDenseArray<RArr, T>& dst, matrix_copy_policy)
 	{
 		copy(src.derived(), dst.derived());
 	}

@@ -43,6 +43,14 @@
 	typedef index_t difference_type;
 
 
+#ifdef LMAT_EXPR_SIZE_CHECKING
+#define LMAT_CHECK_SAME_SHAPE(a, b) \
+	check_arg(a.shape() == b.shape(), "Inconsistent argument array shapes.");
+#else
+#define LMAT_CHECK_SAME_SHAPE(a, b)
+#endif
+
+
 namespace lmat
 {
 
@@ -172,24 +180,29 @@ namespace lmat
 			return layout().lead_dim();
 		}
 
+		LMAT_ENSURE_INLINE bool has_continuous_layout() const
+		{
+			return layout().is_continuous();
+		}
+
 		LMAT_ENSURE_INLINE const_reference operator() (const index_t i) const
 		{
-			return ptr_data() + layout().offset(i);
+			return ptr_data()[layout().offset(i)];
 		}
 
 		LMAT_ENSURE_INLINE reference operator() (const index_t i)
 		{
-			return ptr_data() + layout().offset(i);
+			return ptr_data()[layout().offset(i)];
 		}
 
 		LMAT_ENSURE_INLINE const_reference operator() (const index_t i, const index_t j) const
 		{
-			return ptr_data() + layout().offset(i, j);
+			return ptr_data()[layout().offset(i, j)];
 		}
 
 		LMAT_ENSURE_INLINE reference operator() (const index_t i, const index_t j)
 		{
-			return ptr_data() + layout().offset(i, j);
+			return ptr_data()[layout().offset(i, j)];
 		}
 
 	}; // end class IDenseMatrixBlock
@@ -232,6 +245,6 @@ namespace lmat
 
 }
 
-#endif /* MATRIX_CONCEPTS_H_ */
+#endif
 
 

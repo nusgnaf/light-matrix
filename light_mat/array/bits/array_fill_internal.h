@@ -1,7 +1,7 @@
 /**
- * @file matrix_fill_internal.h
+ * @file array_fill_internal.h
  *
- * Internal implementation of matrix filling
+ * Internal implementation of array filling
  *
  * @author Dahua Lin
  */
@@ -10,8 +10,8 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_MATRIX_FILL_INTERNAL_H_
-#define LIGHTMAT_MATRIX_FILL_INTERNAL_H_
+#ifndef LIGHTMAT_ARRAY_FILL_INTERNAL_H_
+#define LIGHTMAT_ARRAY_FILL_INTERNAL_H_
 
 #include <light_mat/common/memory.h>
 
@@ -185,9 +185,12 @@ namespace lmat { namespace detail {
 		}
 	};
 
-	template<typename T, int M, int N>
-	struct mat_filler
+	template<typename T, class Shape>
+	struct array_filler
 	{
+		static const int M = ct_shape_nrows<Shape>::value;
+		static const int N = ct_shape_ncols<Shape>::value;
+
 		typedef typename
 				if_c<(N == 1),
 					typename
@@ -209,6 +212,6 @@ namespace lmat { namespace detail {
 
 } }
 
-#endif /* MATRIX_FILL_INTERNAL_H_ */
+#endif
 
 

@@ -1,7 +1,7 @@
 /**
- * @file matrix_compare_internal.h
+ * @file array_compare_internal.h
  *
- * Internal implementation of matrix comparison
+ * Internal implementation of array comparison
  *
  * @author Dahua Lin
  */
@@ -10,8 +10,8 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_MATRIX_COMPARE_INTERNAL_H_
-#define LIGHTMAT_MATRIX_COMPARE_INTERNAL_H_
+#ifndef LIGHTMAT_ARRAY_COMPARE_INTERNAL_H_
+#define LIGHTMAT_ARRAY_COMPARE_INTERNAL_H_
 
 #include <light_mat/common/memory.h>
 
@@ -135,9 +135,12 @@ namespace lmat { namespace detail {
 	};
 
 
-	template<typename T, int M, int N>
-	struct mat_comparer
+	template<typename T, class Shape>
+	struct array_comparer
 	{
+		static const int M = ct_nrows<Shape>::value;
+		static const int N = ct_ncols<Shape>::value;
+
 		typedef typename
 				if_c<(N == 1),
 					typename

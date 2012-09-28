@@ -15,10 +15,10 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-template class array_shape<0, 0>;
-template class array_shape<0, 4>;
-template class array_shape<3, 0>;
-template class array_shape<3, 4>;
+template class lmat::array_shape<0, 0>;
+template class lmat::array_shape<0, 4>;
+template class lmat::array_shape<3, 0>;
+template class lmat::array_shape<3, 4>;
 
 MN_CASE( arr_shape, basics )
 {

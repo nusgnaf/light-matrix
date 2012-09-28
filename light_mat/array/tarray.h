@@ -1,7 +1,7 @@
 /*
- * @file dense_matrix.h
+ * @file tarray.h
  *
- * The matrix to represent a dense matrix.
+ * The class to represent a dense array
  *
  * @author Dahua Lin
  */
@@ -10,13 +10,72 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_DENSE_MATRIX_H_
-#define LIGHTMAT_DENSE_MATRIX_H_
+#ifndef LIGHTMAT_TARRAY_H_
+#define LIGHTMAT_TARRAY_H_
 
-#include "bits/dense_matrix_internal.h"
+#include <light_mat/array/array_base.h>
+#include <light_mat/common/block.h>
 
 namespace lmat
 {
+
+	namespace detail
+	{
+		template<typename T, int CTSize>
+		struct tarray_storage
+		{
+			typedef sblock<T, CTSize> block_type;
+
+			block_type block;
+
+			LMAT_ENSURE_INLINE explicit tarray_storage() : block() { }
+
+			LMAT_ENSURE_INLINE tarray_storage(index_t, index_t) : block() { }
+
+			LMAT_ENSURE_INLINE const T* pdata() const { return block.ptr_data(); }
+
+			LMAT_ENSURE_INLINE T* pdata() { return block.ptr_data(); }
+
+			LMAT_ENSURE_INLINE void resize(index_t siz)
+			{
+				throw invalid_operation("Attempted to resize an static array.");
+			}
+
+			LMAT_ENSURE_INLINE void swap(tarray_storage& other)
+			{
+				block.swap(other.block);
+			}
+		};
+
+		template<typename T>
+		struct tarray_storage<T, 0>
+		{
+			typedef dblock<T> block_type;
+
+			block_type block;
+
+			LMAT_ENSURE_INLINE explicit tarray_storage() : block() { }
+
+			LMAT_ENSURE_INLINE tarray_storage(index_t m, index_t n) : block(m * n) { }
+
+			LMAT_ENSURE_INLINE const T* pdata() const { return block.ptr_data(); }
+
+			LMAT_ENSURE_INLINE T* pdata() { return block.ptr_data(); }
+
+			LMAT_ENSURE_INLINE void resize(index_t siz)
+			{
+				block.resize(siz);
+			}
+
+			LMAT_ENSURE_INLINE void swap(tarray_storage& other)
+			{
+				block.swap(other.block);
+			}
+		};
+
+	};
+
+
 
 	/********************************************
 	 *
@@ -24,45 +83,25 @@ namespace lmat
 	 *
 	 ********************************************/
 
-	template<typename T, int CTRows, int CTCols, typename Align>
-	struct matrix_traits<tarray<T, CTRows, CTCols, Align> >
+	template<typename T, int CTRows, int CTCols>
+	struct array_traits<tarray<T, CTRows, CTCols> >
 	{
-		static const int num_dimensions = 2;
-		static const int compile_time_num_rows = CTRows;
-		static const int compile_time_num_cols = CTCols;
-
-		static const bool is_readonly = false;
+		typedef array_shape<CTRows, CTCols> shape_type;
+		typedef continuous_column_major_layout<CTRows, CTCols> layout_type;
 
 		typedef T value_type;
+		typedef T access_type;
 		typedef cpu_domain domain;
 	};
 
-	template<typename T, int CTRows, int CTCols, typename Align>
-	struct ct_has_continuous_layout<tarray<T, CTRows, CTCols, Align> >
+	template<typename T, int CTRows, int CTCols>
+	struct ct_has_continuous_layout<tarray<T, CTRows, CTCols> >
 	{
 		static const bool value = true;
 	};
 
-	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_base_aligned<tarray<T, CTRows, CTCols, Align> >
-	{
-		static const bool value = true;
-	};
-
-	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_percol_aligned<tarray<T, CTRows, CTCols, Align> >
-	{
-		static const bool value = is_same<Align, percol_aligned>::value;
-	};
-
-	template<typename T, int CTRows, int CTCols, typename Align>
-	struct is_linear_accessible<tarray<T, CTRows, CTCols, Align> >
-	{
-		static const bool value = true;
-	};
-
-	template<typename T, int CTRows, int CTCols, typename Align, class DMat>
-	struct default_array_eval_policy<tarray<T, CTRows, CTCols, Align>, DMat>
+	template<typename T, int CTRows, int CTCols, class DMat>
+	struct default_array_eval_policy<tarray<T, CTRows, CTCols>, DMat>
 	{
 		typedef matrix_copy_policy type;
 	};
@@ -74,8 +113,8 @@ namespace lmat
 	 *
 	 ********************************************/
 
-	template<typename T, int CTRows, int CTCols, typename Align>
-	class tarray : public IDenseArray<tarray<T, CTRows, CTCols, Align>, T>
+	template<typename T, int CTRows, int CTCols>
+	class tarray : public IDenseArray<tarray<T, CTRows, CTCols>, T>
 	{
 #ifdef LMAT_USE_STATIC_ASSERT
 		static_assert(is_supported_matrix_value_type<T>::value,
@@ -83,54 +122,54 @@ namespace lmat
 
 		static_assert(CTRows >= 0 && CTCols >= 0,
 				"CTRows and CTCols must be non-negative numbers.");
-
-		static_assert(is_same<Align, base_aligned>::value,
-				"Align must be base_aligned in current version.");
 #endif
 
 	public:
-		LMAT_MAT_TRAITS_DEFS(T)
+		LMAT_ARR_TRAITS_DEFS(T)
+
+		typedef array_shape<CTRows, CTCols> shape_type;
+		typedef continuous_column_major_layout<CTRows, CTCols> layout_type;
 
 	public:
 		LMAT_ENSURE_INLINE tarray()
-		: m_internal()
+		: m_store()
 		{
 		}
 
 		LMAT_ENSURE_INLINE tarray(index_t m, index_t n)
-		: m_internal(m, n)
+		: m_store(m, n)
 		{
 		}
 
 		LMAT_ENSURE_INLINE tarray(index_t m, index_t n, zero_t)
-		: m_internal(m, n)
+		: m_store(m, n)
 		{
-			zero_mem(m * n, m_internal.ptr_data());
+			zero_mem(m * n, m_store.pdata());
 		}
 
 		template<class Setter>
-		LMAT_ENSURE_INLINE dense_matrix(index_t m, index_t n,
+		LMAT_ENSURE_INLINE tarray(index_t m, index_t n,
 				const IMemorySetter<Setter, T>& setter)
-		: m_internal(m, n)
+		: m_store(m, n)
 		{
-			setter.set(m * n, m_internal.ptr_data());
+			setter.set(m * n, m_store.pdata());
 		}
 
 		LMAT_ENSURE_INLINE tarray(const tarray& s)
-		: m_internal(s.m_internal)
+		: m_store(s.m_store)
 		{
 		}
 
 		template<class Expr>
-		LMAT_ENSURE_INLINE dense_matrix(const IArrayXpr<Expr, T>& r)
-		: m_internal(r.nrows(), r.ncolumns())
+		LMAT_ENSURE_INLINE tarray(const IArrayXpr<Expr, T>& r)
+		: m_store(r.nrows(), r.ncolumns())
 		{
 			default_evaluate(r, *this);
 		}
 
 		LMAT_ENSURE_INLINE void swap(tarray& s)
 		{
-			m_internal.swap(s.m_internal);
+			m_store.swap(s.m_store);
 		}
 
 	public:
@@ -153,83 +192,43 @@ namespace lmat
 		}
 
 	public:
-		LMAT_ENSURE_INLINE index_type nelems() const
+		const shape_type& shape() const
 		{
-			return m_internal.nelems();
+			return m_layout.shape();
 		}
 
-		LMAT_ENSURE_INLINE size_type size() const
+		const layout_type& layout() const
 		{
-			return static_cast<size_type>(nelems());
+			return m_layout;
 		}
 
-		LMAT_ENSURE_INLINE index_type nrows() const
+		const T* ptr_data() const
 		{
-			return m_internal.nrows();
+			return m_store.pdata();
 		}
 
-		LMAT_ENSURE_INLINE index_type ncolumns() const
+		T *ptr_data()
 		{
-			return m_internal.ncolumns();
+			return m_store.pdata();
 		}
 
-		LMAT_ENSURE_INLINE index_type lead_dim() const
+		void require_shape(index_t m, index_t n)
 		{
-			return m_internal.nrows();
-		}
+			shape_type new_shape(m, n);
 
-		LMAT_ENSURE_INLINE const_pointer ptr_data() const
-		{
-			return m_internal.ptr_data();
-		}
+			if (new_shape != shape())
+			{
+				index_t new_size = new_shape.nelems();
+				if (new_size != this->nelems())
+					m_store.resize(new_size);
 
-		LMAT_ENSURE_INLINE pointer ptr_data()
-		{
-			return m_internal.ptr_data();
-		}
-
-		LMAT_ENSURE_INLINE const_pointer ptr_col(const index_type j) const
-		{
-			return ptr_data() + j * lead_dim();
-		}
-
-		LMAT_ENSURE_INLINE pointer ptr_col(const index_type j)
-		{
-			return ptr_data() + j * lead_dim();
-		}
-
-		LMAT_ENSURE_INLINE index_type offset(const index_type i, const index_type j) const
-		{
-			return m_internal.offset(i, j);
-		}
-
-		LMAT_ENSURE_INLINE const_reference elem(const index_type i, const index_type j) const
-		{
-			return ptr_data()[offset(i, j)];
-		}
-
-		LMAT_ENSURE_INLINE reference elem(const index_type i, const index_type j)
-		{
-			return ptr_data()[offset(i, j)];
-		}
-
-		LMAT_ENSURE_INLINE const_reference operator[] (const index_type i) const
-		{
-			return ptr_data()[i];
-		}
-
-		LMAT_ENSURE_INLINE reference operator[] (const index_type i)
-		{
-			return ptr_data()[i];
-		}
-
-		LMAT_ENSURE_INLINE void require_size(index_type m, index_type n)
-		{
-			m_internal.resize(m, n);
+				m_layout.set_shape(new_shape);
+			}
 		}
 
 	private:
-		detail::dense_matrix_internal<T, CTRows, CTCols> m_internal;
+		detail::tarray_storage<T, CTRows * CTCols> m_store;
+		layout_type m_layout;
 	};
 
 
@@ -247,10 +246,10 @@ namespace lmat
 	 *
 	 ********************************************/
 
-	template<typename T, int CTRows, typename Align>
-	class tcol : public tarray<T, CTRows, 1, Align>
+	template<typename T, int CTRows>
+	class tcol : public tarray<T, CTRows, 1>
 	{
-		typedef tarray<T, CTRows, 1, Align> base_mat_t;
+		typedef tarray<T, CTRows, 1> base_mat_t;
 
 	public:
 		LMAT_ENSURE_INLINE tcol() : base_mat_t(CTRows, 1) { }
@@ -266,9 +265,6 @@ namespace lmat
 		LMAT_ENSURE_INLINE tcol(const base_mat_t& s) : base_mat_t(s) { }
 
 		LMAT_ENSURE_INLINE tcol(const tcol& s) : base_mat_t(s) { }
-
-		template<class Other>
-		LMAT_ENSURE_INLINE tcol(const IMatrixView<Other, T>& r) : base_mat_t(r) { }
 
 		template<class Expr>
 		LMAT_ENSURE_INLINE tcol(const IArrayXpr<Expr, T>& r) : base_mat_t(r) { }
@@ -287,26 +283,13 @@ namespace lmat
 			base_mat_t::operator = (r);
 			return *this;
 		}
-
-	public:
-		LMAT_ENSURE_INLINE
-		void require_size(index_t m, index_t n)
-		{
-			base_mat_t::require_size(m, n);
-		}
-
-		LMAT_ENSURE_INLINE
-		void require_size(index_t n)
-		{
-			base_mat_t::require_size(n, 1);
-		}
 	};
 
 
-	template<typename T, int CTCols, typename Align>
-	class trow : public tarray<T, 1, CTCols, Align>
+	template<typename T, int CTCols>
+	class trow : public tarray<T, 1, CTCols>
 	{
-		typedef tarray<T, 1, CTCols, Align> base_mat_t;
+		typedef tarray<T, 1, CTCols> base_mat_t;
 
 	public:
 		LMAT_ENSURE_INLINE trow() : base_mat_t(1, CTCols) { }
@@ -340,19 +323,6 @@ namespace lmat
 			base_mat_t::operator = (r);
 			return *this;
 		}
-
-	public:
-		LMAT_ENSURE_INLINE
-		void require_size(index_t m, index_t n)
-		{
-			base_mat_t::require_size(m, n);
-		}
-
-		LMAT_ENSURE_INLINE
-		void require_size(index_t n)
-		{
-			base_mat_t::require_size(1, n);
-		}
 	};
 
 
@@ -385,7 +355,7 @@ namespace lmat
 	T to_scalar(const IArrayXpr<Expr, T>& expr)
 	{
 		tarray<T,1,1> r(expr);
-		return r[0];
+		return *(r.ptr_data());
 	}
 
 

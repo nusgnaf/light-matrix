@@ -1,7 +1,7 @@
 /**
- * @file matrix_print.h
+ * @file array_print.h
  *
- * Functions to print matrices
+ * Functions to print arrays
  *
  * @author Dahua Lin
  */
@@ -10,16 +10,16 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_MATRIX_PRINT_H_
-#define LIGHTMAT_MATRIX_PRINT_H_
+#ifndef LIGHTMAT_ARRAY_PRINT_H_
+#define LIGHTMAT_ARRAY_PRINT_H_
 
-#include <light_mat/matrix/matrix_concepts.h>
+#include <light_mat/array/array_interf.h>
 #include <cstdio>
 
 namespace lmat
 {
-	template<typename T, class Mat>
-	inline void printf_mat(const char *fmt, const IMatrixView<Mat, T>& X,
+	template<typename T, class Arr>
+	inline void printf_arr(const char *fmt, const IDenseArray<Arr, T>& X,
 			const char *pre_line=LMAT_NULL, const char *delim="\n")
 	{
 		index_t m = X.nrows();

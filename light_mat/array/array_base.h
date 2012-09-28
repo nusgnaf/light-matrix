@@ -16,9 +16,9 @@
 #include <light_mat/array/array_interf.h>
 
 #include <light_mat/array/array_copy.h>
-#include <light_mat/matrix/matrix_fill.h>
-#include <light_mat/matrix/matrix_compare.h>
-#include <light_mat/matrix/matrix_print.h>
+#include <light_mat/array/array_fill.h>
+#include <light_mat/array/array_compare.h>
+#include <light_mat/array/array_print.h>
 
 // #include <light_mat/matrix/matrix_transpose.h>
 // #include <light_mat/matrix/matrix_subviews.h>

@@ -1,7 +1,7 @@
 /*
- * @file matrix_copy_internal.h
+ * @file array_copy_internal.h
  *
- * Internal implementation of matrix copy
+ * Internal implementation of array copy
  *
  * @author Dahua Lin
  */
@@ -10,8 +10,8 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_MATRIX_COPY_INTERNAL_H_
-#define LIGHTMAT_MATRIX_COPY_INTERNAL_H_
+#ifndef LIGHTMAT_ARRAY_COPY_INTERNAL_H_
+#define LIGHTMAT_ARRAY_COPY_INTERNAL_H_
 
 #include <light_mat/common/memory.h>
 
@@ -261,9 +261,12 @@ namespace lmat { namespace detail {
 	};
 
 
-	template<typename T, int M, int N>
-	struct mat_copier
+	template<typename T, class Shape>
+	struct array_copier
 	{
+		static const int M = ct_shape_nrows<Shape>::value;
+		static const int N = ct_shape_ncols<Shape>::value;
+
 		typedef typename
 				if_c<(N == 1),
 					typename

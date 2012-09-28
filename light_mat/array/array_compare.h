@@ -1,7 +1,7 @@
 /**
- * @file matrix_compare.h
+ * @file array_compare.h
  *
- * Functions for matrix comparison
+ * Functions for array comparison
  *
  * @author Dahua Lin
  */
@@ -10,24 +10,23 @@
 #pragma once
 #endif
 
-#ifndef LIGHTMAT_MATRIX_COMPARE_H_
-#define LIGHTMAT_MATRIX_COMPARE_H_
+#ifndef LIGHTMAT_ARRAY_COMPARE_H_
+#define LIGHTMAT_ARRAY_COMPARE_H_
 
-#include <light_mat/matrix/matrix_properties.h>
-#include "bits/matrix_compare_internal.h"
+#include <light_mat/array/array_interf.h>
+#include "bits/array_compare_internal.h"
 #include <cmath>
 
 namespace lmat
 {
-	template<typename T, class LMat, class RMat>
+	template<typename T, class LArr, class RArr>
 	LMAT_ENSURE_INLINE
-	bool is_equal(const IDenseArray<LMat, T>& a, const IDenseArray<RMat, T>& b)
+	bool is_equal(const IDenseArray<LArr, T>& a, const IDenseArray<RArr, T>& b)
 	{
-		const int M = binary_ct_rows<LMat, RMat>::value;
-		const int N = binary_ct_cols<LMat, RMat>::value;
-		typedef typename detail::mat_comparer<T, M, N>::type comparer_t;
+		typedef typename detail::array_comparer<T,
+				typename ct_binary_shape_of_arrays<LArr, RArr>::type>::type comparer_t;
 
-		return has_same_size(a, b) &&
+		return (a.shape() == b.shape()) &&
 				comparer_t::is_equal(a.nrows(), a.ncolumns(),
 				a.ptr_data(), a.lead_dim(),
 				b.ptr_data(), b.lead_dim());
@@ -40,11 +39,11 @@ namespace lmat
 		return std::fabs(a - b) <= tol;
 	}
 
-	template<typename T, class LMat, class RMat>
+	template<typename T, class LArr, class RArr>
 	inline
-	bool is_approx(const IDenseArray<LMat, T>& a, const IDenseArray<RMat, T>& b, const T& tol)
+	bool is_approx(const IDenseArray<LArr, T>& a, const IDenseArray<RArr, T>& b, const T& tol)
 	{
-		if (has_same_size(a, b))
+		if (a.shape() == b.shape())
 		{
 			const index_t m = a.nrows();
 			const index_t n = a.ncolumns();

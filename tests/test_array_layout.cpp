@@ -15,15 +15,15 @@ using namespace lmat::test;
 
 // explicit instantiation
 
-template class continuous_column_major_layout<0, 0>;
-template class continuous_column_major_layout<0, 1>;
-template class continuous_column_major_layout<1, 0>;
-template class continuous_column_major_layout<1, 1>;
+template class lmat::continuous_column_major_layout<0, 0>;
+template class lmat::continuous_column_major_layout<0, 1>;
+template class lmat::continuous_column_major_layout<1, 0>;
+template class lmat::continuous_column_major_layout<1, 1>;
 
-template class column_major_layout<0, 0>;
-template class column_major_layout<0, 1>;
-template class column_major_layout<1, 0>;
-template class column_major_layout<1, 1>;
+template class lmat::column_major_layout<0, 0>;
+template class lmat::column_major_layout<0, 1>;
+template class lmat::column_major_layout<1, 0>;
+template class lmat::column_major_layout<1, 1>;
 
 
 MN_CASE( cont_cm_layout, basics )

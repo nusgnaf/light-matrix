@@ -51,30 +51,29 @@ set(COMMON_HS
     ${INC}/common/expr_base.h)
     
 set(ARRAY_BASE_HS
-    ${INC}/array/array_layout.h)
+    ${INC}/array/array_layout.h
+    ${INC}/array/array_fwd.h
+    ${INC}/array/array_meta.h
+    ${INC}/array/array_interf.h
+    ${INC}/array/array_copy.h
+    ${INC}/array/array_fill.h
+    ${INC}/array/array_compare.h
+    ${INC}/array/array_print.h
+    ${INC}/array/bits/array_copy_internal.h
+    ${INC}/array/bits/array_fill_internal.h
+    ${INC}/array/bits/array_compare_internal.h
+    ${INC}/array/array_base.h)
     
+set(ARRAY_CLASS_HS
+    ${INC}/array/tarray.h) 
+   
 set(MATRIX_BASE_HS
-    ${INC}/matrix/matrix_fwd.h 
-    ${INC}/matrix/matrix_meta.h
-    ${INC}/matrix/matrix_shape.h
-    ${INC}/matrix/matrix_concepts.h
-    ${INC}/matrix/matrix_properties.h
-    ${INC}/matrix/bits/matrix_fill_internal.h
-    ${INC}/matrix/bits/matrix_copy_internal.h
-    ${INC}/matrix/bits/matrix_compare_internal.h
     ${INC}/matrix/bits/mat_transpose_impl.h
-    ${INC}/matrix/matrix_fill.h
-    ${INC}/matrix/matrix_copy.h
-    ${INC}/matrix/matrix_compare.h
-    ${INC}/matrix/matrix_print.h
     ${INC}/matrix/matrix_transpose.h
     ${INC}/matrix/matrix_subviews.h
-    ${INC}/matrix/matrix_ewise_expr.h
-    ${INC}/matrix/matrix_base.h)
+    ${INC}/matrix/matrix_ewise_expr.h)
     
 set(MATRIX_CLASS_HS
-    ${INC}/matrix/dense_matrix.h
-    ${INC}/matrix/bits/dense_matrix_internal.h
     ${INC}/matrix/ref_matrix.h
     ${INC}/matrix/ref_matrix_ex.h
     ${INC}/matrix/const_matrix.h
@@ -148,15 +147,12 @@ set(ARRAY_LAYOUT_HS
 add_executable(test_array_shape ${ARRAY_LAYOUT_HS} test_array_shape.cpp) 
 add_executable(test_array_layout ${ARRAY_LAYOUT_HS} test_array_layout.cpp) 
 
-set(DENSE_MAT_HS
+set(TARRAY_HS
     ${COMMON_HS}
-    ${MATRIX_BASE_HS}
-    ${INC}/matrix/dense_matrix.h
-    ${INC}/matrix/bits/dense_matrix_internal.h)
+    ${ARRAY_BASE_HS}
+    ${INC}/array/tarray.h)
 
-add_executable(test_dense_mat ${DENSE_MAT_HS} test_dense_mat.cpp)
-add_executable(test_dense_col ${DENSE_MAT_HS} test_dense_col.cpp)
-add_executable(test_dense_row ${DENSE_MAT_HS} test_dense_row.cpp)  
+add_executable(test_tarray ${TARRAY_HS} test_tarray.cpp)
 
 set(CONST_MAT_HS
     ${COMMON_HS}
@@ -164,7 +160,7 @@ set(CONST_MAT_HS
     ${INC}/matrix/const_matrix.h
     ${INC}/matrix/dense_matrix.h)
 
-add_executable(test_const_mat ${CONST_MAT_HS} test_const_mat.cpp)
+# add_executable(test_const_mat ${CONST_MAT_HS} test_const_mat.cpp)
 
 set(REF_MAT_HS
     ${COMMON_HS}
@@ -172,51 +168,51 @@ set(REF_MAT_HS
     ${INC}/matrix/ref_matrix.h
     ${INC}/matrix/ref_matrix_ex.h)
     
-add_executable(test_ref_mat ${REF_MAT_HS} test_ref_mat.cpp)
-add_executable(test_ref_col ${REF_MAT_HS} test_ref_col.cpp)
-add_executable(test_ref_row ${REF_MAT_HS} test_ref_row.cpp)
-add_executable(test_ref_mat_ex ${REF_MAT_HS} test_ref_mat_ex.cpp)
+# add_executable(test_ref_mat ${REF_MAT_HS} test_ref_mat.cpp)
+# add_executable(test_ref_col ${REF_MAT_HS} test_ref_col.cpp)
+# add_executable(test_ref_row ${REF_MAT_HS} test_ref_row.cpp)
+# add_executable(test_ref_mat_ex ${REF_MAT_HS} test_ref_mat_ex.cpp)
 
-add_executable(test_mat_copy ${REF_MAT_HS} test_mat_copy.cpp)
-add_executable(test_mat_compare ${REF_MAT_HS} test_mat_compare.cpp)
+# add_executable(test_mat_copy ${REF_MAT_HS} test_mat_copy.cpp)
+# add_executable(test_mat_compare ${REF_MAT_HS} test_mat_compare.cpp)
 
-add_executable(test_dense_eval ${MATRIX_HS} test_dense_eval.cpp)
-add_executable(test_mat_subviews ${MATRIX_HS} test_mat_subviews.cpp)
-add_executable(test_mat_transpose ${MATRIX_HS} test_mat_transpose.cpp)
+# add_executable(test_dense_eval ${MATRIX_HS} test_dense_eval.cpp)
+# add_executable(test_mat_subviews ${MATRIX_HS} test_mat_subviews.cpp)
+# add_executable(test_mat_transpose ${MATRIX_HS} test_mat_transpose.cpp)
 
 set(BASIC_MAT_EVAL_HS
     ${MATRIX_HS}
     ${MATRIX_EVAL_BASE_HS})
     
-add_executable(test_dense_veval ${BASIC_MAT_EVAL_HS} test_dense_veval.cpp)
+# add_executable(test_dense_veval ${BASIC_MAT_EVAL_HS} test_dense_veval.cpp)
 
 set(EWISE_MAT_EVAL_HS
     ${MATRIX_HS}
     ${MATRIX_EVAL_BASE_HS}
     ${MATRIX_EWISE_HS})
 
-add_executable(test_dense_cast ${EWISE_MAT_EVAL_HS} test_dense_cast.cpp)   
-add_executable(test_mat_arith ${EWISE_MAT_EVAL_HS} test_mat_arith.cpp)
-add_executable(test_mat_emath ${EWISE_MAT_EVAL_HS} test_mat_emath.cpp)
-add_executable(test_mat_ecomp ${EWISE_MAT_EVAL_HS} test_mat_ecomp.cpp)
-add_executable(test_mat_elogical ${EWISE_MAT_EVAL_HS} test_mat_elogical.cpp)
+# add_executable(test_dense_cast ${EWISE_MAT_EVAL_HS} test_dense_cast.cpp)   
+# add_executable(test_mat_arith ${EWISE_MAT_EVAL_HS} test_mat_arith.cpp)
+# add_executable(test_mat_emath ${EWISE_MAT_EVAL_HS} test_mat_emath.cpp)
+# add_executable(test_mat_ecomp ${EWISE_MAT_EVAL_HS} test_mat_ecomp.cpp)
+# add_executable(test_mat_elogical ${EWISE_MAT_EVAL_HS} test_mat_elogical.cpp)
 
 set(MAT_REPEAT_HS
     ${MATRIX_HS}
     ${MATRIX_EVAL_BASE_HS}
     ${MATRIX_REPEAT_HS})
     
-add_executable(test_vec_rep ${MAT_REPEAT_HS} test_vec_rep.cpp)
+# add_executable(test_vec_rep ${MAT_REPEAT_HS} test_vec_rep.cpp)
 
-add_executable(test_cpd_ewise ${MATRIX_EVAL_HS} test_cpd_ewise.cpp)
+# add_executable(test_cpd_ewise ${MATRIX_EVAL_HS} test_cpd_ewise.cpp)
 
 set(MAT_REDUC_HS
     ${MATRIX_HS}
     ${MATRIX_EVAL_BASE_HS}
     ${MATRIX_REDUC_HS})
     
-add_executable(test_mat_reduce ${MAT_REDUC_HS} test_mat_reduce.cpp) 
-add_executable(test_partial_reduce ${MAT_REDUC_HS} test_partial_reduce.cpp) 
+# add_executable(test_mat_reduce ${MAT_REDUC_HS} test_mat_reduce.cpp) 
+# add_executable(test_partial_reduce ${MAT_REDUC_HS} test_partial_reduce.cpp) 
 
 # Link to test_main
 
@@ -224,29 +220,27 @@ set(LMAT_TEST_NAMES
 	test_blocks
 	test_array_shape
 	test_array_layout
-	test_dense_mat
-	test_dense_col
-	test_dense_row
-	test_const_mat
-	test_ref_mat
-	test_ref_col
-	test_ref_row
-	test_ref_mat_ex
-	test_mat_copy
-	test_mat_compare
-	test_dense_eval
-	test_mat_subviews
-	test_mat_transpose
-	test_dense_veval
-	test_dense_cast
-	test_mat_arith
-	test_mat_emath
-	test_mat_ecomp
-	test_mat_elogical
-	test_vec_rep
-    test_cpd_ewise
-	test_mat_reduce
-	test_partial_reduce
+	test_tarray
+	# test_const_mat
+	# test_ref_mat
+	# test_ref_col
+	# test_ref_row
+	# test_ref_mat_ex
+	# test_mat_copy
+	# test_mat_compare
+	# test_dense_eval
+	# test_mat_subviews
+	# test_mat_transpose
+	# test_dense_veval
+	# test_dense_cast
+	# test_mat_arith
+	# test_mat_emath
+	# test_mat_ecomp
+	# test_mat_elogical
+	# test_vec_rep
+    # test_cpd_ewise
+	# test_mat_reduce
+	# test_partial_reduce
 )
 	
 foreach(tname ${LMAT_TEST_NAMES})

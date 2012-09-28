@@ -189,6 +189,15 @@ namespace lmat
 				are_compatible_shapes<left_shape_t, right_shape_t>::value;
 	};
 
+	template<class LArr, class RArr>
+	struct ct_binary_shape_of_arrays
+	{
+		typedef typename array_traits<LArr>::shape_type left_shape_t;
+		typedef typename array_traits<RArr>::shape_type right_shape_t;
+
+		typedef typename ct_binary_shape<left_shape_t, right_shape_t>::type type;
+	};
+
 
 	/********************************************
 	 *
@@ -206,4 +215,4 @@ namespace lmat
 
 }
 
-#endif /* MATRIX_META_H_ */
+#endif
