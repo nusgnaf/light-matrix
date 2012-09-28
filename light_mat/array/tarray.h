@@ -133,16 +133,19 @@ namespace lmat
 	public:
 		LMAT_ENSURE_INLINE tarray()
 		: m_store()
+		, m_layout()
 		{
 		}
 
 		LMAT_ENSURE_INLINE tarray(index_t m, index_t n)
 		: m_store(m, n)
+		, m_layout(m, n)
 		{
 		}
 
 		LMAT_ENSURE_INLINE tarray(index_t m, index_t n, zero_t)
 		: m_store(m, n)
+		, m_layout(m, n)
 		{
 			zero_mem(m * n, m_store.pdata());
 		}
@@ -151,18 +154,21 @@ namespace lmat
 		LMAT_ENSURE_INLINE tarray(index_t m, index_t n,
 				const IMemorySetter<Setter, T>& setter)
 		: m_store(m, n)
+		, m_layout(m, n)
 		{
 			setter.set(m * n, m_store.pdata());
 		}
 
 		LMAT_ENSURE_INLINE tarray(const tarray& s)
 		: m_store(s.m_store)
+		, m_layout(s.m_layout)
 		{
 		}
 
 		template<class Expr>
 		LMAT_ENSURE_INLINE tarray(const IArrayXpr<Expr, T>& r)
 		: m_store(r.nrows(), r.ncolumns())
+		, m_layout(r.nrows(), r.ncolumns())
 		{
 			default_evaluate(r, *this);
 		}
@@ -170,6 +176,9 @@ namespace lmat
 		LMAT_ENSURE_INLINE void swap(tarray& s)
 		{
 			m_store.swap(s.m_store);
+
+			using std::swap;
+			swap(m_layout, s.m_layout);
 		}
 
 	public:

@@ -10,7 +10,7 @@ include_directories($ENV{LIGHT_TEST_HOME})
 
 # Compiler configuration
 
-set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 
 if (MSVC)
 	set(LANG_FLAGS "/arch:SSE2 /EHsc")
